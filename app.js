@@ -27,9 +27,10 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-// Routes
+// Routes - automatically uses ./routes/index.js unless other routes file specified
 
 app.get('/', routes.index);
+app.get('/test', routes.test);
 
 //app.listen(3000);
 // Change by CH 1/27/2012
