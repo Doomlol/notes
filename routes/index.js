@@ -8,5 +8,5 @@ exports.index = function(req, res){
 };
 
 exports.test = function(req, res){
-    res.render('test', { title: 'Test!!' })
+    res.render('test.pjs', { title: 'Test!!', layout: false })
 };
