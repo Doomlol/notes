@@ -4,7 +4,8 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
+  , router = require('./config/router.js')
+  //, routes = require('./routes')
 
 var app = module.exports = express.createServer();
 
@@ -12,7 +13,7 @@ var app = module.exports = express.createServer();
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'pjs');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -27,12 +28,14 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-app.register ('.pjs', require ('pubjs'));
+app.register('.pjs', require('pubjs'));
 
 // Routes - automatically uses ./routes/index.js unless other routes file specified
 
-app.get('/', routes.index);
-app.get('/test', routes.test);
+router.setupRoutes(app);
+
+//app.get('/', routes.index);
+//app.get('/test', routes.test);
 
 //app.listen(3000);
 // Change by CH 1/27/2012
