@@ -7,13 +7,13 @@ function isMobile(req) {
 function render(req, res, path, options) {
     if (isMobile(req)) {
         if (options.layout === true || typeof options.layout == 'undefined') {
-            options.layout = 'layout-mobile';
+            options.layout = 'layouts/mobile';
         }
         path = 'mobile/' + path;
     }
     else {
         if (options.layout === true || typeof options.layout == 'undefined') {
-            options.layout = 'layout-main';
+            options.layout = 'layouts/main';
         }
         path = 'main/' + path;
     }
