@@ -1,8 +1,9 @@
 
 function isMobile(req) {
-    var useragent = req.header('user-agent');
-    console.log('req:', req);
-    return (/mobile/i.test(useragent));
+    var useragent = /mobile/i.test(req.header('user-agent'));
+    var domain = req.headers.host.indexOf('m.') == 0;
+    var queryparam = req.query.mobile == 1;
+    return useragent || domain || queryparam;
 }
 
 function render(req, res, path, options) {
