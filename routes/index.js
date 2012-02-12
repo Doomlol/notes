@@ -1,6 +1,7 @@
 
 function isMobile(req) {
     var useragent = req.header('user-agent');
+    console.log('req:', req);
     return (/mobile/i.test(useragent));
 }
 
