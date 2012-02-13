@@ -1,0 +1,19 @@
+!!! 5
+html(lang="en")
+    head
+        title Sandbox
+        link(rel="stylesheet", type="text/css", href="/stylesheets/sandbox/mobile-test.css")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+        script
+            var MobileTest = {
+                refresh: function(frame_id) {
+                    var frame_el = $('#' + frame_id + '_frame');
+                    var src = frame_el.attr('src');
+                    frame_el.attr('src', src);
+                }
+            };
+    body
+        div.page
+            p.title Mobile site
+            iframe(id='app_frame', src='/?mobile=1')
+            a.refresh(href="javascript:MobileTest.refresh('app')") Refresh

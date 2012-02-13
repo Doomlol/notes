@@ -5,4 +5,10 @@ html(lang="en")
         meta(name="viewport", content="width=320, initial-scale=1, maximum-scale=1, user_scalable=0")
         link(rel="stylesheet", type="text/css", href="/stylesheets/mobile.css")
         script(src="/javascript/main.js")
-    body!= body
+    body
+        ul#menu
+            li: a(href="#") One
+            li: a(href="#") Two
+            li: a(href="#") Three
+        div#content(contenteditable="true")
+            !{body}

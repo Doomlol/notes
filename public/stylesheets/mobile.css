@@ -1,1 +1,8 @@
-body{padding:10px;font:18px "Lucida Grande",Helvetica,Arial,sans-serif;color:#555}
+html,body{margin:0;padding:0}
+body{font:13px Helvetica,Arial,sans-serif;background:#fff}
+ul#menu{display:-webkit-box;display:-moz-box;display:box;-webkit-box-align:stretch;-moz-box-align:stretch;box-align:stretch;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;box-orient:horizontal;margin:0;padding:0;list-style:none;background:#f6f6f6;border-bottom:1px solid #ddd;}
+ul#menu li{margin:0;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;text-align:center;}
+ul#menu li a{display:block;font-size:15px;line-height:40px;text-decoration:none;color:#555;}
+ul#menu li a:hover,ul#menu li a:active{background:#eee}
+div#content{padding:10px;font-size:16px;color:#555;}
+div#content p{margin:0 0 5px}

@@ -1,0 +1,10 @@
+html,body{margin:0;padding:0}
+body{font:15px Helvetica,Arial,sans-serif;color:#555}
+a{text-decoration:none;color:#338ebd;}
+a:hover{color:#25749e}
+div#content{margin:20px auto;width:600px;}
+div#content h1{margin:0;font-weight:normal}
+div#content ul{margin:0;padding:0;list-style:none;border-top:1px solid #555;}
+div#content ul li{display:block;margin:0 0 1px;}
+div#content ul li a{display:block;padding:0 12px;font-size:18px;line-height:40px;color:#888;background:#f8f8f8;}
+div#content ul li a:hover{background:#f4f4f4}

@@ -1,4 +1,69 @@
+// Functions
+
+box-shadow()
+    -webkit-box-shadow arguments
+    -moz-box-shadow arguments
+    box-shadow arguments
+
+box-align()
+    -webkit-box-align arguments
+    -moz-box-align arguments
+    box-align arguments
+
+box-orient()
+    -webkit-box-orient arguments
+    -moz-box-orient arguments
+    box-orient arguments
+
+box-flex()
+    -webkit-box-flex arguments
+    -moz-box-flex arguments
+    box-flex arguments
+
+// Styles
+
+html, body
+    margin 0
+    padding 0
+
 body
+    font 13px Helvetica, Arial, sans-serif
+    background #fff
+
+ul#menu
+    display -webkit-box
+    display -moz-box
+    display box
+    box-align stretch
+    box-orient horizontal
+    margin 0
+    padding 0
+    list-style none
+    background #f6f6f6
+    border-bottom 1px solid #ddd
+    
+    li
+        margin 0
+        box-flex 1
+        text-align center
+
+        a
+            display block
+            font-size 15px
+            line-height 40px
+            text-decoration none
+            color #555
+            &:hover, &:active
+                background #eee
+
+div#content
     padding 10px
-    font 18px "Lucida Grande", Helvetica, Arial, sans-serif
+    font-size 16px
     color #555
+
+    // Eventually there will be no 'p' tags in here since it'll be content editable
+    p
+        margin 0 0 5px
+
+
+
