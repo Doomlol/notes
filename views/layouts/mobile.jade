@@ -1,14 +1,15 @@
 !!! 5
 html(lang="en")
     head
-        title Testing
+        title notes.fm
         meta(name="viewport", content="width=320, initial-scale=1, maximum-scale=1, user_scalable=0")
         link(rel="stylesheet", type="text/css", href="/stylesheets/mobile.css")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
         script(src="/javascript/main.js")
     body
-        ul#menu
-            li: a(href="#") One
-            li: a(href="#") Two
-            li: a(href="#") Three
+        ul#menu-top.menu
+            li: a(href="#") nfm
         div#content(contenteditable="true")
             !{body}
+        ul#menu-bottom.menu
+            li: a(href="#") email-address

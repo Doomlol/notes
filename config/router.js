@@ -3,8 +3,8 @@
 var routes = require('../routes');
 
 var paths_to_routes = {
-    '/': routes.index,
-    '/test': routes.test,
+    '/': routes.pad,
+    '/pad': routes.pad_inner,
     
     // Sandbox
     '/sandbox': routes.sandbox,

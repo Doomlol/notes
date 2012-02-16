@@ -24,12 +24,12 @@ function render(req, res, path, options) {
     res.render(path, options);
 }
 
-exports.index = function(req, res) {
-    render(req, res, 'index', { title: 'Express' });
+exports.pad = function(req, res) {
+    render(req, res, 'pad', {page_class: 'pad'});
 };
 
-exports.test = function(req, res) {
-    render(req, res, 'test', { title: 'Test!!' });
+exports.pad_inner = function(req, res) {
+    render(req, res, 'pad_inner', {layout: false});
 };
 
 exports.sandbox = function(req, res) {
