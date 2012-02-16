@@ -4,4 +4,6 @@ html(lang="en")
         title Testing
         link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
         script(src="/javascript/main.js")
-    body!= body
+    body
+        !{body}
+        include ../components/analytics.html
