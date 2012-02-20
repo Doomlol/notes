@@ -1,1 +1,202 @@
-p This is index.jade
+!!! 5
+html(lang="en")
+    head
+        title notes.fm
+        meta(name="description", content="Online notes for mobile and desktop")
+        meta(name="keywords", content="notes, notepad, note pad, note taking, online notes, desktop notes, mobile notes, web notes, sync")
+        //link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
+
+        style
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+            body {
+                position: relative;
+                font-size: 14px;
+                font-family: helvetica, arial, sans-serif;
+                color: #555;
+                background: #A4A6AA;
+                overflow: hidden;
+            }
+            span.tip {
+                position: absolute;
+                padding: 0 6px;
+                font-size: 12px;
+                line-height: 20px;
+                color: #fff;
+                background: #333;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            }
+            span.tip.right {
+                padding-left: 3px;
+            }
+            /* look up "css triangle" */
+            span.tip.right span {
+                position: absolute;
+                top: 0;
+                left: -10px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-right: 10px solid #333;
+            }
+            ul.note-list {
+                position: absolute;
+                margin: 10px 0;
+                padding: 0;
+                top: 40px;
+                left: 30px;
+                width: 84px;
+                list-style: none;
+            }
+            ul.note-list li {
+            }
+            ul.note-list li a {
+                display: block;
+                padding: 0 8px;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.375);
+                text-decoration: none;
+                line-height: 24px;
+                color: #fff;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                border-radius: 3px;
+            }
+            ul.note-list li a:hover,
+            ul.note-list li a:active {
+                background: rgba(255,255,255,0.1);
+            }
+            ul.note-list li.selected a {
+                font-weight: bold;
+            }
+            textarea.pad {
+                position: absolute;
+                margin: 0;
+                padding: 10px;
+                top: 40px;
+                left: 140px;
+                right: 40px;
+                bottom: 40px;
+                font-size: 14px;
+                font-family: helvetica, arial, sans-serif;
+                color: #555;
+                border: none;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+                resize: none;
+                -webkit-transition-property: top, left, right, bottom;
+                -webkit-transition-duration: 0.15s;
+                -webkit-transition-timing-function: ease-out;
+            }
+            textarea.pad:focus {
+                outline: none;
+            }
+            body.fullscreen textarea.pad {
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+            div.footer {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 40px;
+                text-align: center;
+            }
+            div.footer ul.save-targets {
+                position: absolute;
+                margin: 0 0 0 -85px;
+                padding: 0;
+                top: -100px;
+                left: 50%;
+                width: 170px;
+                list-style: none;
+                background: #333;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+            }
+            div.footer ul.save-targets li {
+                border-bottom: 1px solid #555;
+            }
+            div.footer ul.save-targets li:nth-last-child(2) {
+                border: none;
+            }
+            div.footer ul.save-targets li:last-child {
+                position: absolute;
+                left: 75px;
+                bottom: -10px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid #333;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: none;
+            }
+            div.footer ul.save-targets li a {
+                display: block;
+                padding: 0 10px;
+                font-size: 11px;
+                line-height: 30px;
+                color: #fff;
+                text-decoration: none;
+            }
+            div.footer ul.save-targets li a:hover {
+                background: #444;
+            }
+            div.footer p.status {
+                position: relative;
+                display: inline-block;
+                margin: 0;
+                font-size: 12px;
+                line-height: 40px;
+                text-align: center;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+                color: #ddd;
+            }
+            div.footer p.status.unsaved {
+                
+            }
+            div.options {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                height: 150px;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.375);
+                text-decoration: none;
+                color: #fff;
+                background: #70747b;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.5) inset;
+                -webkit-transition: -webkit-transform 0.25s ease-out;
+            }
+            div.options.show {
+                -webkit-transform: translate(0,-150px);
+            }
+
+    body
+        ul.note-list
+            li: a(href="#") Desktop
+            li: a(href="#") Phone
+            li: a(href="#") Tablet
+        textarea#pad.pad
+        div.footer
+            ul.save-targets
+                li: a(href="#") Sync
+                li: a(href="#") Local storage
+                li
+            p#status.status local storage
+        div.options
+            test
+
+    footer
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+        script(src="/javascript/main.js")
+        script
+            $(Notes.initialize.bind(Notes));
+
+        include ../components/analytics.html

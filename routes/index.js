@@ -25,11 +25,11 @@ function render(req, res, path, options) {
 }
 
 exports.pad = function(req, res) {
-    render(req, res, 'pad', {page_class: 'pad'});
+    render(req, res, 'pad', {layout: false});
 };
 
-exports.pad_inner = function(req, res) {
-    render(req, res, 'pad_inner', {layout: false});
+exports.about = function(req, res) {
+    render(req, res, 'about');
 };
 
 exports.sandbox = function(req, res) {

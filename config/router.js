@@ -4,7 +4,7 @@ var routes = require('../routes');
 
 var paths_to_routes = {
     '/': routes.pad,
-    '/pad': routes.pad_inner,
+    '/about': routes.about,
     
     // Sandbox
     '/sandbox': routes.sandbox,
