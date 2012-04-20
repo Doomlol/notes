@@ -11,6 +11,7 @@ var Notes = {
 	},
 	setupListeners: function() {
 		$('#pad').keyup(this.padKeyup.bind(this));
+		$('#account_link').click(this.toggleAccount.bind(this));
 	},
 	padKeyup: function(e) {
 		clearInterval(this.pad_timer);
@@ -41,5 +42,10 @@ var Notes = {
 	getObject: function(key) {
 		var item = localStorage.getItem(key);
 		return JSON.parse(item);
+	},
+	toggleAccount: function() {
+		console.log('toggle account');
 	}
 };
+
+$(Notes.initialize.bind(Notes));
