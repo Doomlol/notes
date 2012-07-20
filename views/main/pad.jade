@@ -1,0 +1,26 @@
+!!! 5
+html(lang="en")
+    head
+        title Notes.fm
+        meta(name="description", content="Online notes for mobile and desktop")
+        meta(name="keywords", content="notes, notepad, note pad, note taking, online notes, desktop notes, mobile notes, web notes, sync")
+        link(rel="stylesheet", type="text/css", href="http://fonts.googleapis.com/css?family=Open+Sans")
+        link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
+
+    body
+        div.pad
+            div.list
+                div.opts
+                    a.btn(href="#") New
+                    input(type="text", placeholder="Search")
+                p Test 1    
+
+            div.editor
+                div.opts
+                    p Stuff
+                p Test 2
+
+    footer
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
+        script(src="/javascript/main.js")
+        include ../components/analytics.html

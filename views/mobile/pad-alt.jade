@@ -1,0 +1,21 @@
+!!! 5
+html(lang="en")
+    head
+        title Notes.fm
+        meta(name="description", content="Online notes for mobile and desktop")
+        meta(name="keywords", content="notes, notepad, note pad, note taking, online notes, desktop notes, mobile notes, web notes, sync")
+        meta(name="viewport", content="width=320, initial-scale=1, maximum-scale=1, user_scalable=0")
+        link(rel="stylesheet", type="text/css", href="/stylesheets/mobile-pad-alt.css")
+    
+    body
+        ul#menu-top.menu
+            li: a(href="#") notes.fm
+        div#content
+            textarea(placeholder="My notes")
+        ul#menu-bottom.menu
+            li: a(href="#") cilphex@gmail.com
+
+    footer
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+        script(src="/javascript/mobile-pad-alt.js")
+        include ../components/analytics.html

@@ -1,0 +1,39 @@
+!!! 5
+html(lang="en")
+    head
+        title Notes.fm
+        meta(name="description", content="Online notes for mobile and desktop")
+        meta(name="keywords", content="notes, notepad, note pad, note taking, online notes, desktop notes, mobile notes, web notes, sync")
+        link(rel="stylesheet", type="text/css", href="/stylesheets/pad-alt.css")
+
+    body
+        a#account_link.account(href="javascript:void(0)") dummy@domain.com
+        ul.note-list
+            li.selected: a(href="#") Desktop
+            li: a(href="#") Phone
+            li: a(href="#") Tablet
+            li: a(href="#") Temporary
+        textarea#pad.pad(placeholder="My notes")
+        div.footer
+            div.save-targets
+                ul.save-targets.dropdown
+                    li: a(href="#") Sync
+                    li: a(href="#") Local storage
+                    li
+                p#status.status local storage
+            div.more
+                ul.dropdown
+                    li: a(href="#") About notes.fm
+                    li: a(href="#") Extras
+                    li
+                p &raquo;
+        div.options
+            test
+
+        div#test.test
+            div A test
+
+    footer
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
+        script(src="/javascript/pad-alt.js")
+        include ../components/analytics.html
