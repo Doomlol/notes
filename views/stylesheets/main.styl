@@ -45,146 +45,147 @@ perspective()
 
 // styles
 
-html, body
-	margin 0
-	padding 0
-	height 100%
-
-body
-	position relative
-	font-size 14px
-	font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-	color #555
-	overflow hidden
-
-a.btn
-	display inline-block
-	margin 0
-	padding 0 10px
-	font-family verdana, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-	font-size 12px
-	font-weight bold
-	line-height 28px
-	text-decoration none
-	text-transform capitalize
-	text-shadow 0 1px 1px rgba(0,0,0,0.1)
-	color #fff
-	background #D74635
-	background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DD4B39), to(#D14836))
-	border-radius 3px
-	border 1px solid #DD4B39
-
-	&:hover
-		background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E05D4C), to(#D65A4A))
-
-div.pad
-	display -webkit-box
-	position absolute
-	top 0
-	left 0
-	right 0
-	bottom 0
-	overflow hidden
-
-	div.list
-		width 280px        
-		height 100%
-		border-right 1px solid #eee
-
-		ul#notes
-			margin 0
-			padding 0
-			list-style none
-			background #f9f9f9
-
-			li
-				padding 10px
-				border-bottom 1px solid #eee
-				cursor pointer
-
-				&:hover
-					background #fcfcfc
-
-				span
-					display block
-
-					&.title
-						font-size 12px
-						font-weight bold
-
-					&.time
-						font-size 11px
-						color #aaa
-
-	div.editor
-		position relative
-		height 100%
-		-webkit-box-flex 1
-
-		div.text
-			position absolute
-			padding 12px
-			top 47px
-			left 0
-			right 0
-			bottom 0
-			outline none
-
-	div.list > div.opts,
-	div.editor > div.opts
-		display -webkit-box
-		padding 8px
-		height 30px
-		background #f6f6f6
-		border-bottom 1px solid #eee
-
-		input
-			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-
-	div.list > div.opts input[type="text"]
-		display block
-		margin 0 0 0 8px
-		padding 5px
-		line-height 18px
-		border 1px solid rgb(230,230,230)
-		border-top 1px solid rgb(205,205,205)
-		-webkit-box-flex 1
-		outline none
-    
-	div.editor > div.opts input[type="text"]
-		display block
+//
+	html, body
 		margin 0
-		padding 5px
-		line-height 18px
-		height 18px
-		border 1px solid transparent
-		background none
-		-webkit-box-flex 1
-		outline none
+		padding 0
+		height 100%
+
+	body
+		position relative
+		font-size 14px
+		font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+		color #555
+		overflow hidden
+
+	a.btn
+		display inline-block
+		margin 0
+		padding 0 10px
+		font-family verdana, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+		font-size 12px
+		font-weight bold
+		line-height 28px
+		text-decoration none
+		text-transform capitalize
+		text-shadow 0 1px 1px rgba(0,0,0,0.1)
+		color #fff
+		background #D74635
+		background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DD4B39), to(#D14836))
+		border-radius 3px
+		border 1px solid #DD4B39
 
 		&:hover
-			border 1px solid rgba(230,230,230, 0.5)
-			border-top 1px solid rgba(205,205,205, 0.5)
-			background rgba(255,255,255,0.5)
-
-		&:focus
-			border 1px solid rgb(230,230,230)
-			border-top 1px solid rgb(205,205,205)
-			background #fff
-
-@media (max-width: 800px)
+			background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#E05D4C), to(#D65A4A))
 
 	div.pad
+		display -webkit-box
+		position absolute
+		top 0
+		left 0
+		right 0
+		bottom 0
+		overflow hidden
+
 		div.list
-			width 100%
+			width 280px        
+			height 100%
+			border-right 1px solid #eee
 
 			ul#notes
+				margin 0
+				padding 0
+				list-style none
+				background #f9f9f9
+
 				li
+					padding 10px
+					border-bottom 1px solid #eee
+					cursor pointer
+
+					&:hover
+						background #fcfcfc
+
 					span
+						display block
+
 						&.title
-							font-size 16px
+							font-size 12px
+							font-weight bold
+
 						&.time
-							font-size 14px
+							font-size 11px
+							color #aaa
+
+		div.editor
+			position relative
+			height 100%
+			-webkit-box-flex 1
+
+			div.text
+				position absolute
+				padding 12px
+				top 47px
+				left 0
+				right 0
+				bottom 0
+				outline none
+
+		div.list > div.opts,
+		div.editor > div.opts
+			display -webkit-box
+			padding 8px
+			height 30px
+			background #f6f6f6
+			border-bottom 1px solid #eee
+
+			input
+				font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+
+		div.list > div.opts input[type="text"]
+			display block
+			margin 0 0 0 8px
+			padding 5px
+			line-height 18px
+			border 1px solid rgb(230,230,230)
+			border-top 1px solid rgb(205,205,205)
+			-webkit-box-flex 1
+			outline none
+	    
+		div.editor > div.opts input[type="text"]
+			display block
+			margin 0
+			padding 5px
+			line-height 18px
+			height 18px
+			border 1px solid transparent
+			background none
+			-webkit-box-flex 1
+			outline none
+
+			&:hover
+				border 1px solid rgba(230,230,230, 0.5)
+				border-top 1px solid rgba(205,205,205, 0.5)
+				background rgba(255,255,255,0.5)
+
+			&:focus
+				border 1px solid rgb(230,230,230)
+				border-top 1px solid rgb(205,205,205)
+				background #fff
+
+	@media (max-width: 800px)
+
+		div.pad
+			div.list
+				width 100%
+
+				ul#notes
+					li
+						span
+							&.title
+								font-size 16px
+							&.time
+								font-size 14px
 
 
 
