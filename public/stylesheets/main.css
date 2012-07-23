@@ -22,3 +22,5 @@ div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;pa
 div.pad div.editor > div.opts input[type="text"]{display:block;margin:0;padding:5px;line-height:18px;height:18px;border:1px solid transparent;background:none;-webkit-box-flex:1;outline:none;}
 div.pad div.editor > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,230,0.50);border-top:1px solid rgba(205,205,205,0.50);background:rgba(255,255,255,0.50)}
 div.pad div.editor > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
+@media (max-width: 800px){div.pad div.list{width:100%}
+}
