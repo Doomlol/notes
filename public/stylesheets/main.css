@@ -6,7 +6,7 @@ html,body{margin:0;padding:0;height:100%}
 body{position:relative;font-size:14px;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;color:#555;overflow:hidden}
 a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:capitalize;text-shadow:0 1px 1px rgba(0,0,0,0.10);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#dd4b39),to(#d14836));border-radius:3px;border:1px solid #dd4b39;}
 a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#e05d4c),to(#d65a4a))}
-div.pad{display:-webkit-box;position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;}
+div.pad{display:-webkit-box;position:absolute;width:100%;height:100%;overflow:hidden;}
 div.pad div.list{width:280px;height:100%;border-right:1px solid #eee;}
 div.pad div.list ul#notes{margin:0;padding:0;list-style:none;background:#f9f9f9;}
 div.pad div.list ul#notes li{padding:10px;border-bottom:1px solid #eee;cursor:pointer;}
