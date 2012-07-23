@@ -4,8 +4,8 @@ transition-duration{-webkit-transition-duration:arguments}
 transition-timing-function{-webkit-transition-timing-function:arguments}
 html,body{margin:0;padding:0;height:100%}
 body{position:relative;font-size:14px;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;color:#555;overflow:hidden}
-a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.10);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#dd4b39),to(#d14836));border-radius:3px;border:1px solid #dd4b39;}
-a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#e05d4c),to(#d65a4a))}
+a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.20);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#09a8ef),to(#0494dd));border-radius:3px;border:1px solid #079fe6;}
+a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7))}
 div.pad{display:-webkit-box;position:absolute;width:100%;height:100%;overflow:hidden;}
 div.pad div.list{width:280px;height:100%;border-right:1px solid #eee;}
 div.pad div.list ul#notes{margin:0;padding:0;list-style:none;background:#f9f9f9;}
@@ -28,7 +28,7 @@ div.pad div.list{width:100%;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
 div.pad div.list > div.opts,div.pad div.editor > div.opts{padding:8px;height:38px;}
-div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{font-size:18px;}
+div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{font-size:19px;}
 div.pad div.list > div.opts input[type="text"][type="text"],div.pad div.editor > div.opts input[type="text"][type="text"]{padding:5px 7px}
 div.pad div.list > div.opts input[type="text"]{margin:0 0 0 8px;height:26px;line-height:26px}
 div.pad div.editor > div.opts input[type="text"]{margin:0;height:26px;line-height:26px}
