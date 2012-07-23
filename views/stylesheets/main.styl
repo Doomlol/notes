@@ -62,11 +62,11 @@ a.btn
 	margin 0
 	padding 0 10px
 	font-family verdana, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-	font-size 12px
+	font-size 10px
 	font-weight bold
 	line-height 28px
 	text-decoration none
-	text-transform capitalize
+	text-transform uppercase
 	text-shadow 0 1px 1px rgba(0,0,0,0.1)
 	color #fff
 	background #D74635
@@ -143,6 +143,7 @@ div.pad
 		display block
 		margin 0 0 0 8px
 		padding 5px
+		height 18px
 		line-height 18px
 		border 1px solid rgb(230,230,230)
 		border-top 1px solid rgb(205,205,205)
@@ -153,8 +154,8 @@ div.pad
 		display block
 		margin 0
 		padding 5px
-		line-height 18px
 		height 18px
+		line-height 18px
 		border 1px solid transparent
 		background none
 		-webkit-box-flex 1
@@ -172,6 +173,11 @@ div.pad
 
 @media (max-width: 800px)
 
+	a.btn
+		padding 0 10px
+		font-size 14px
+		line-height 32px
+
 	div.pad
 		div.list
 			width 100%
@@ -183,6 +189,26 @@ div.pad
 							font-size 16px
 						&.time
 							font-size 14px
+
+		div.list > div.opts,
+		div.editor > div.opts
+			padding 8px
+			height 34px
+
+			input[type="text"]
+				font-size 16px
+
+		div.list > div.opts input[type="text"]
+			margin 0 0 0 8px
+			padding 5px
+			height 22px
+			line-height 22px
+
+		div.editor > div.opts input[type="text"]
+			margin 0
+			padding 5px
+			height 22px
+			line-height 22px
 
 
 
