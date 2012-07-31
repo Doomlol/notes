@@ -67,7 +67,7 @@ a.btn
 	line-height 28px
 	text-decoration none
 	text-transform uppercase
-	text-shadow 0 1px 1px rgba(0,0,0,0.2)
+	text-shadow 0 1px 1px rgba(0,0,0,0.25)
 	color #fff
 	background #D74635
 	background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#09a8ef), to(#0494dd))
@@ -78,13 +78,30 @@ a.btn
 		background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0ab4f5), to(#049ee7))
 
 div.pad
+	display -moz-box
 	display -webkit-box
 	position absolute
 	width 100%
 	height 100%
 	overflow hidden
 
+	div.main_error
+		display none
+		position absolute
+		padding 10px
+		left 10px
+		right 10px
+		bottom 10px
+		font-size 13px
+		text-align center
+		text-shadow 0 1px 1px rgba(0,0,0,0.25)
+		color #fff
+		background #a00009
+		border-radius 3px
+		box-shadow 0 1px 3px rgba(0,0,0,0.25)
+
 	div.list
+		position relative
 		width 280px        
 		height 100%
 		border-right 1px solid #eee
@@ -96,27 +113,98 @@ div.pad
 			background #f9f9f9
 
 			li
-				padding 10px
+				position relative
+				padding 10px 15px
 				border-bottom 1px solid #eee
 				cursor pointer
-
-				&:hover
-					background #fcfcfc
 
 				span
 					display block
 
+					&.highlight
+						position absolute
+						top 0
+						right -1px
+						bottom 0
+						width 1px
+
 					&.title
+						margin-right 40px
 						font-size 12px
 						font-weight bold
+						text-overflow ellipsis
+						white-space nowrap
+						overflow hidden
 
 					&.time
 						font-size 11px
 						color #aaa
 
+					&.delete
+						position absolute
+						top 0
+						right 0
+						bottom 0
+						padding 0 10px
+						line-height 50px
+						display none
+
+						a
+							font-size 10px
+							text-decoration none
+							color #aaa
+
+							&:hover
+								text-decoration underline
+
+				&:hover
+					background #fcfcfc
+
+					span
+						&.delete
+							display block
+
+				&.selected
+
+					span
+						&.highlight
+							background #0494DD
+						&.title
+							color #0494DD
+						&.time
+							color #7EB6D4
+
+		div.controls
+			position absolute
+			padding 8px 10px
+			left 0
+			right 0
+			bottom 0
+			//height 50px
+			font-family "Courier New"
+			font-size 12px
+			color #fff
+			background rgba(0,0,0,0.75)
+
+			p
+				margin 0 0 5px
+				padding 0
+
+				&:last-child
+					margin-bottom 0
+
+				a
+					text-decoration none
+					color #fff
+
+					&:hover
+						text-decoration underline
+
+
 	div.editor
 		position relative
 		height 100%
+		-moz-box-flex 1
 		-webkit-box-flex 1
 
 		div.text
@@ -127,9 +215,11 @@ div.pad
 			right 0
 			bottom 0
 			outline none
+			overflow-y scroll
 
 	div.list > div.opts,
 	div.editor > div.opts
+		display -moz-box
 		display -webkit-box
 		padding 8px
 		height 30px
@@ -149,6 +239,7 @@ div.pad
 		line-height 18px
 		border 1px solid rgb(230,230,230)
 		border-top 1px solid rgb(205,205,205)
+		-moz-box-flex 1
 		-webkit-box-flex 1
 		outline none
     
@@ -159,6 +250,7 @@ div.pad
 		line-height 18px
 		border 1px solid transparent
 		background none
+		-moz-box-flex 1
 		-webkit-box-flex 1
 		outline none
 
@@ -167,6 +259,7 @@ div.pad
 			border-top 1px solid rgba(205,205,205, 0.5)
 			background rgba(255,255,255,0.5)
 
+		&:hover,
 		&:focus
 			border 1px solid rgb(230,230,230)
 			border-top 1px solid rgb(205,205,205)
@@ -198,9 +291,7 @@ div.pad
 
 			input[type="text"]
 				font-size 19px
-
-				&[type="text"]
-					padding 5px 7px
+				padding 5px 7px
 
 		div.list > div.opts input[type="text"]
 			margin 0 0 0 8px

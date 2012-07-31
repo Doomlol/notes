@@ -4,32 +4,45 @@ transition-duration{-webkit-transition-duration:arguments}
 transition-timing-function{-webkit-transition-timing-function:arguments}
 html,body{margin:0;padding:0;height:100%}
 body{position:relative;font-size:14px;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;color:#555;overflow:hidden}
-a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.20);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#09a8ef),to(#0494dd));border-radius:3px;border:1px solid #079fe6;}
+a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#09a8ef),to(#0494dd));border-radius:3px;border:1px solid #079fe6;}
 a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7))}
-div.pad{display:-webkit-box;position:absolute;width:100%;height:100%;overflow:hidden;}
-div.pad div.list{width:280px;height:100%;border-right:1px solid #eee;}
+div.pad{display:-moz-box;display:-webkit-box;position:absolute;width:100%;height:100%;overflow:hidden;}
+div.pad div.main_error{display:none;position:absolute;padding:10px;left:10px;right:10px;bottom:10px;font-size:13px;text-align:center;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#a00009;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
+div.pad div.list{position:relative;width:280px;height:100%;border-right:1px solid #eee;}
 div.pad div.list ul#notes{margin:0;padding:0;list-style:none;background:#f9f9f9;}
-div.pad div.list ul#notes li{padding:10px;border-bottom:1px solid #eee;cursor:pointer;}
-div.pad div.list ul#notes li:hover{background:#fcfcfc}
+div.pad div.list ul#notes li{position:relative;padding:10px 15px;border-bottom:1px solid #eee;cursor:pointer;}
 div.pad div.list ul#notes li span{display:block;}
-div.pad div.list ul#notes li span.title{font-size:12px;font-weight:bold}
+div.pad div.list ul#notes li span.highlight{position:absolute;top:0;right:-1px;bottom:0;width:1px}
+div.pad div.list ul#notes li span.title{margin-right:40px;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
 div.pad div.list ul#notes li span.time{font-size:11px;color:#aaa}
-div.pad div.editor{position:relative;height:100%;-webkit-box-flex:1;}
-div.pad div.editor div.text{position:absolute;padding:12px;top:47px;left:0;right:0;bottom:0;outline:none}
-div.pad div.list > div.opts,div.pad div.editor > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
+div.pad div.list ul#notes li span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
+div.pad div.list ul#notes li span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
+div.pad div.list ul#notes li span.delete a:hover{text-decoration:underline}
+div.pad div.list ul#notes li:hover{background:#fcfcfc;}
+div.pad div.list ul#notes li:hover span.delete{display:block}
+div.pad div.list ul#notes li.selected span.highlight{background:#0494dd}
+div.pad div.list ul#notes li.selected span.title{color:#0494dd}
+div.pad div.list ul#notes li.selected span.time{color:#7eb6d4}
+div.pad div.list div.controls{position:absolute;padding:8px 10px;left:0;right:0;bottom:0;font-family:"Courier New";font-size:12px;color:#fff;background:rgba(0,0,0,0.75);}
+div.pad div.list div.controls p{margin:0 0 5px;padding:0;}
+div.pad div.list div.controls p:last-child{margin-bottom:0}
+div.pad div.list div.controls p a{text-decoration:none;color:#fff;}
+div.pad div.list div.controls p a:hover{text-decoration:underline}
+div.pad div.editor{position:relative;height:100%;-moz-box-flex:1;-webkit-box-flex:1;}
+div.pad div.editor div.text{position:absolute;padding:12px;top:47px;left:0;right:0;bottom:0;outline:none;overflow-y:scroll}
+div.pad div.list > div.opts,div.pad div.editor > div.opts{display:-moz-box;display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
 div.pad div.list > div.opts input,div.pad div.editor > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
 div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{padding:5px}
-div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-webkit-box-flex:1;outline:none}
-div.pad div.editor > div.opts input[type="text"]{display:block;margin:0;height:18px;line-height:18px;border:1px solid transparent;background:none;-webkit-box-flex:1;outline:none;}
+div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-moz-box-flex:1;-webkit-box-flex:1;outline:none}
+div.pad div.editor > div.opts input[type="text"]{display:block;margin:0;height:18px;line-height:18px;border:1px solid transparent;background:none;-moz-box-flex:1;-webkit-box-flex:1;outline:none;}
 div.pad div.editor > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,230,0.50);border-top:1px solid rgba(205,205,205,0.50);background:rgba(255,255,255,0.50)}
-div.pad div.editor > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
+div.pad div.editor > div.opts input[type="text"]:hover,div.pad div.editor > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
 div.pad div.list{width:100%;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
 div.pad div.list > div.opts,div.pad div.editor > div.opts{padding:8px;height:38px;}
-div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{font-size:19px;}
-div.pad div.list > div.opts input[type="text"][type="text"],div.pad div.editor > div.opts input[type="text"][type="text"]{padding:5px 7px}
+div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{font-size:19px;padding:5px 7px}
 div.pad div.list > div.opts input[type="text"]{margin:0 0 0 8px;height:26px;line-height:26px}
 div.pad div.editor > div.opts input[type="text"]{margin:0;height:26px;line-height:26px}
 }

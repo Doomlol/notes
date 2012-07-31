@@ -9,31 +9,34 @@ html(lang="en")
 		link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
+		script(id="note_item_tmpl", type="text/x-jquery-tmpl")
+			li(id="note_item_${id}", note="${id}")
+				span.highlight
+				span.title ${title}
+				span.time ${date}
+				span.delete: a(href="javascript:false;") delete
+
 	body
 		div.pad
+			div.main_error
 			div.list
 				div.opts
-					a.btn(href="#") New
+					a.btn(href="javascript:Notes.createNote()") New
 					input(type="text", id="search", placeholder="Search")
 				ul#notes
-					li
-						span.title Bacon is Good
-						span.time 9:30 pm
-					li
-						span.title Spaceships fly high
-						span.time July 18
-					li
-						span.title Smashing Hurricanes
-						span.time Oct 10, 2011
+
+				div.controls
+					p: a(href="javascript:Notes.saveNote()") Save current note
 
 			div.editor
 				div.opts
 					input(type="text", id="note_title", placeholder="Untitled")
-				div.text(contenteditable="true")
-					| This is text
+				div#note_text.text(contenteditable="true")
+					//| This is text
 
 	footer
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
+		script(src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js")
 		script(src="http://www.parsecdn.com/js/parse-1.0.10.min.js")
 		script(src="/javascript/main.js")
 		include ../components/analytics.html
