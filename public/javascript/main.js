@@ -85,9 +85,9 @@ var NotesDB = {
 	// and db_onabort will be called
 	upgrade: function() {
 		var notes_store = this.db.createObjectStore('notes', {keyPath: 'id', autoIncrement: true});
-		object_store.createIndex('title', 'title', {unique: false});
-		object_store.createIndex('body', 'body', {unique: false});
-		object_store.createIndex('updated_at', 'updated_at', {unique: false});
+		notes_store.createIndex('title', 'title', {unique: false});
+		notes_store.createIndex('body', 'body', {unique: false});
+		notes_store.createIndex('updated_at', 'updated_at', {unique: false});
 	},
 	getNotes: function(cb) {
 		var notes = [];
@@ -175,6 +175,7 @@ var Notes = {
 	// Initialize the DB, and do anything else that doesn't rely on the DB
 	initialize: function() {
 		this.setupElements();
+		// This should be the last line in the function
 		NotesDB.initialize(this.initialize_cb.bind(this));
 		//Parse.initialize(this.parse.app_id, this.parse.js_key);
 	},
@@ -200,7 +201,9 @@ var Notes = {
 	},
 	refreshNoteList_cb: function(notes) {
 		if (!notes.length) {
-			notes.push({id: 'default', title: this.default_note.title, date: this.default_note.updated_at});
+			//notes.push({id: 'default', title: this.default_note.title, date: this.default_note.updated_at});
+			this.createNote();
+			return;
 		}
 		$.each(notes, function(i, v) {
 			var title = v.title || 'Untitled';
@@ -235,10 +238,11 @@ var Notes = {
 	},
 	createNote_cb: function(note_id, updated_at) {
 		var title = 'Untitled';
+		updated_at = this.formatDate(updated_at);
 		var note_el = this.templates.note_item.tmpl({id: note_id, title: title, date: updated_at});
 		var delete_el = note_el.find('.delete');
 		note_el.click(this.loadNote.bind(this, note_id));
-		delete_el.click(this.deleteNote.bind(this, v.id));
+		delete_el.click(this.deleteNote.bind(this, note_id));
 		this.elements.note_list.append(note_el);
 	},
 
@@ -282,10 +286,20 @@ var Notes = {
 
 	formatDate: function(timestamp) {
 		var date = new Date (timestamp);
-		var hours = date.getHours() % 12;
-		var minutes = date.getMinutes();
+		var hours = date.getHours() % 12 + 1;
+		var minutes = this.digits(2, date.getMinutes());
 		var am_pm = date.getHours() < 12 ? 'am' : 'pm';
 		return [hours, ':', minutes, ' ', am_pm].join('');
+	},
+
+	// pad a number with leading zeroes
+	digits: function(n, number) {
+		var zeroes = '';
+		var number_digits = Math.ceil(Math.log(number+1)/Math.LN10);
+		if (number_digits < n)
+			for (var i = 0; i < n - number_digits; i++)
+				zeroes += '0';
+		return zeroes + number;
 	}
 };
 

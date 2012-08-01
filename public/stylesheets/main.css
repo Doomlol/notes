@@ -37,6 +37,9 @@ div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;he
 div.pad div.editor > div.opts input[type="text"]{display:block;margin:0;height:18px;line-height:18px;border:1px solid transparent;background:none;-moz-box-flex:1;-webkit-box-flex:1;outline:none;}
 div.pad div.editor > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,230,0.50);border-top:1px solid rgba(205,205,205,0.50);background:rgba(255,255,255,0.50)}
 div.pad div.editor > div.opts input[type="text"]:hover,div.pad div.editor > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#eee}
+::-webkit-scrollbar-thumb{background:#09a8ef}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
 div.pad div.list{width:100%;}
 div.pad div.list ul#notes li span.title{font-size:16px}
