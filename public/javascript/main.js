@@ -286,7 +286,7 @@ var Notes = {
 
 	formatDate: function(timestamp) {
 		var date = new Date (timestamp);
-		var hours = date.getHours() % 12 + 1;
+		var hours = date.getHours() % 12 + (date.getHours()%12==0?1:0);
 		var minutes = this.digits(2, date.getMinutes());
 		var am_pm = date.getHours() < 12 ? 'am' : 'pm';
 		return [hours, ':', minutes, ' ', am_pm].join('');
