@@ -97,7 +97,8 @@ var NotesDB = {
 		req.onsuccess = function(event) {
 			var cursor = event.target.result;
 			if (cursor) {
-				notes.push(cursor.value);   // cursor.key, cursor.value available
+				var note = new Note(cursor.value);
+				notes.push(note);   // cursor.key, cursor.value available
 				cursor.continue();
 			}
 			else {
@@ -110,7 +111,10 @@ var NotesDB = {
 		var req = notes_store.get(note_id);
 		req.onerror = function(event) {console.log('getNote req error', event);}
 		req.onsuccess = function(event) {
-			if (cb) cb(req.result);
+			var note;
+			if (req.result)
+				note = new Note(req.result);
+			if (cb) cb(note);
 		}
 	},
 	addNote: function(cb) {
@@ -119,7 +123,8 @@ var NotesDB = {
 		var req = notes_store.add({updated_at: date});
 		req.onerror = function(event) {console.log('addNote req error', event);}
 		req.onsuccess = function(event) {
-			if (cb) cb(req.result, date); // The 'id', not the whole note
+			var note = new Note({id: req.result});
+			if (cb) cb(note); // The 'id', not the whole note
 		}
 	},
 	// Can pass back either a note id or null
@@ -130,14 +135,41 @@ var NotesDB = {
 		}
 		note.updated_at = (new Date()).valueOf();
 		var notes_store = this.getNotesStore();
-		var req = notes_store.put(note);
+		var req = notes_store.put(note.getData());
 		req.onerror = function(event) {console.log('addNote req error', event);}
 		req.onsuccess = function(event) {
-			if (cb) cb(req.result, note.title, note.updated_at);
+			if (cb) cb(note);
 		}
 	}
 };
 
+// Note class
+function Note (note_data) {
+
+	// The right-hand values must map to the DB properties
+	this.id = note_data.id;
+	this.title = note_data.title;
+	this.body = note_data.body;
+	this.updated_at = note_data.updated_at || (new Date()).valueOf();
+
+	// Return the attributes as an object, not a class, so it can be inserted into DB
+	this.getData = function() {
+		return {
+			id: this.id,
+			title: this.title,
+			body: this.body,
+			updated_at: this.updated_at
+		};
+	};
+
+	this.getTitle = function(use_default) {
+		return this.title || (use_default ? 'Untitled' : '');
+	};
+
+	this.getFormattedTime = function() {
+		return Utils.formatDate(this.updated_at);
+	}
+};
 
 var Notes = {
 
@@ -199,22 +231,19 @@ var Notes = {
 	refreshNoteList: function() {
 		NotesDB.getNotes(this.refreshNoteList_cb.bind(this));
 	},
-	refreshNoteList_cb: function(notes) {
-		if (!notes.length) {
-			//notes.push({id: 'default', title: this.default_note.title, date: this.default_note.updated_at});
+	refreshNoteList_cb: function(db_notes) {
+		if (!db_notes.length) {
 			this.createNote();
 			return;
 		}
-		$.each(notes, function(i, v) {
-			var title = v.title || 'Untitled';
-			var updated_at = this.formatDate(v.updated_at);
-			var note_el = this.templates.note_item.tmpl({id: v.id, title: title, date: updated_at});
+		$.each(db_notes, function(i, note) {
+			var note_el = this.templates.note_item.tmpl({id: note.id, title: note.getTitle(true), date: note.getFormattedTime()});
 			var delete_el = note_el.find('.delete');
-			note_el.click(this.loadNote.bind(this, v.id));
-			delete_el.click(this.deleteNote.bind(this, v.id));
+			note_el.click(this.loadNote.bind(this, note.id));
+			delete_el.click(this.deleteNote.bind(this, note.id));
 			this.elements.note_list.append(note_el);
 		}.bind(this));
-		this.loadNote(notes[0].id);
+		this.loadNote(db_notes[0].id);
 	},
 
 	loadNote: function(note_id, event) {
@@ -229,20 +258,20 @@ var Notes = {
 	loadNote_cb: function(note) {
 		this.current_note_id = note.id;
 		this.getCurrentNoteItem().addClass('selected');
-		this.elements.note_title.attr('value', note.title || '');
+		this.elements.note_title.attr('value', note.getTitle(false));
 		this.elements.note_text.html(note.body || '');
 	},
 
 	createNote: function() {
 		NotesDB.addNote(this.createNote_cb.bind(this));
 	},
-	createNote_cb: function(note_id, updated_at) {
-		var title = 'Untitled';
-		updated_at = this.formatDate(updated_at);
-		var note_el = this.templates.note_item.tmpl({id: note_id, title: title, date: updated_at});
+	createNote_cb: function(note) {
+		//var title = 'Untitled';
+		//updated_at = this.formatDate(updated_at);
+		var note_el = this.templates.note_item.tmpl({id: note.id, title: note.getTitle(true), date: note.getFormattedTime()});
 		var delete_el = note_el.find('.delete');
-		note_el.click(this.loadNote.bind(this, note_id));
-		delete_el.click(this.deleteNote.bind(this, note_id));
+		note_el.click(this.loadNote.bind(this, note.id));
+		delete_el.click(this.deleteNote.bind(this, note.id));
 		this.elements.note_list.append(note_el);
 	},
 
@@ -256,17 +285,17 @@ var Notes = {
 	saveNote: function() {
 		if (!this.current_note_id)
 			return;
-		var note = {
+		var note = new Note({
 			id: this.current_note_id,
 			title: this.elements.note_title.attr('value'),
 			body: this.elements.note_text.html()
-		};
+		});
 		NotesDB.editNote(note, this.saveNote_cb.bind(this));
 	},
-	saveNote_cb: function(id, title, updated_at) {
-		updated_at = this.formatDate(updated_at, 'simple');
-		$('#note_item_' + id + ' span.title').html(title);
-		$('#note_item_' + id + ' span.time').html(updated_at);
+	saveNote_cb: function(note) {
+		console.log('saved note:', note);
+		$('#note_item_' + note.id + ' span.title').html(note.getTitle(true));
+		$('#note_item_' + note.id + ' span.time').html(note.getFormattedTime());
 	},
 
 	// ===========================================================
@@ -282,7 +311,10 @@ var Notes = {
 
 	hideError: function() {
 		$('.main_error').fadeOut(250);
-	},
+	}
+};
+
+var Utils = {
 
 	formatDate: function(timestamp) {
 		var date = new Date (timestamp);
@@ -301,6 +333,7 @@ var Notes = {
 				zeroes += '0';
 		return zeroes + number;
 	}
+
 };
 
 $(Notes.initialize.bind(Notes));

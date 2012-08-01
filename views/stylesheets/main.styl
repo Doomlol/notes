@@ -243,28 +243,42 @@ div.pad
 		-webkit-box-flex 1
 		outline none
     
-	div.editor > div.opts input[type="text"]
-		display block
-		margin 0
-		height 18px
-		line-height 18px
-		border 1px solid transparent
-		background none
-		-moz-box-flex 1
-		-webkit-box-flex 1
-		outline none
+	div.editor > div.opts
+		position relative
 
-		&:hover
-			border 1px solid rgba(230,230,230, 0.5)
-			border-top 1px solid rgba(205,205,205, 0.5)
-			background rgba(255,255,255,0.5)
+		input[type="text"]
+			display block
+			margin 0
+			height 18px
+			line-height 18px
+			border 1px solid transparent
+			background none
+			-moz-box-flex 1
+			-webkit-box-flex 1
+			outline none
 
-		&:hover,
-		&:focus
-			border 1px solid rgb(230,230,230)
-			border-top 1px solid rgb(205,205,205)
-			background #fff
+			&:hover
+				border 1px solid rgba(230,230,230, 0.5)
+				border-top 1px solid rgba(205,205,205, 0.5)
+				background rgba(255,255,255,0.5)
 
+			&:hover,
+			&:focus
+				border 1px solid rgb(230,230,230)
+				border-top 1px solid rgb(205,205,205)
+				background #fff
+
+		div.save_status
+			position absolute
+			top 20px
+			right 15px
+			width 6px
+			height 6px
+			background #ccc
+			border-radius 3px
+
+			&.saved
+				background #5edc20
 
 ::-webkit-scrollbar
 	width 6px
