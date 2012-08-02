@@ -97,8 +97,7 @@ var NotesDB = {
 		req.onsuccess = function(event) {
 			var cursor = event.target.result;
 			if (cursor) {
-				var note = new Note(cursor.value);
-				notes.push(note);   // cursor.key, cursor.value available
+				notes.push(new Note(cursor.value));   // cursor.key, cursor.value available
 				cursor.continue();
 			}
 			else {
@@ -140,6 +139,14 @@ var NotesDB = {
 		req.onsuccess = function(event) {
 			if (cb) cb(note);
 		}
+	},
+	deleteNote: function(note_id, cb) {
+		var notes_store = this.getNotesStore();
+		var req = notes_store.delete(note_id);
+		req.onerror = function(event) {console.log('deleteNote req error', event);}
+		req.onsuccess = function(event) {
+			if (cb) cb(note_id);
+		}
 	}
 };
 
@@ -151,6 +158,30 @@ function Note (note_data) {
 	this.title = note_data.title;
 	this.body = note_data.body;
 	this.updated_at = note_data.updated_at || (new Date()).valueOf();
+
+	this.elements = {
+		note_item: null,
+		delete_link: null
+	};
+
+	this.init = function() {
+		this.setupElements();
+	};
+
+	this.setupElements = function() {
+		this.elements.note_item = $('#note_item_tmpl').tmpl({id: this.id, title: this.getTitle(true), date: this.getFormattedTime()});
+		this.elements.delete_link = this.elements.note_item.find('.delete');
+		this.elements.note_item.click(Notes.loadNote.bind(Notes, this.id));
+		this.elements.delete_link.click(Notes.deleteNote.bind(Notes, this.id));
+	};
+
+	this.appendToList = function() {
+		Notes.elements.note_list.append(this.elements.note_item);
+	};
+
+	this.removeFromList = function() {
+		this.elements.note_item.remove();
+	};
 
 	// Return the attributes as an object, not a class, so it can be inserted into DB
 	this.getData = function() {
@@ -169,6 +200,8 @@ function Note (note_data) {
 	this.getFormattedTime = function() {
 		return Utils.formatDate(this.updated_at);
 	}
+
+	this.init();
 };
 
 var Notes = {
@@ -193,10 +226,6 @@ var Notes = {
 		note_text: '#note_text'
 	},
 
-	templates: {
-		note_item: '#note_item_tmpl'
-	},
-
 	default_note: {
 		title: 'Your first note',
 		updated_at: (new Date()).valueOf()
@@ -215,16 +244,11 @@ var Notes = {
 	// Initialization steps that need to be done after the DB initialized go here
 	initialize_cb: function() {
 		this.refreshNoteList();
-
-		// ... Load the first note ...
 	},
 
 	setupElements: function() {
 		for (var el in this.elements) {
 			this.elements[el] = $(this.elements[el]);
-		}
-		for (var template in this.templates) {
-			this.templates[template] = $(this.templates[template]);
 		}
 	},
 
@@ -237,11 +261,7 @@ var Notes = {
 			return;
 		}
 		$.each(db_notes, function(i, note) {
-			var note_el = this.templates.note_item.tmpl({id: note.id, title: note.getTitle(true), date: note.getFormattedTime()});
-			var delete_el = note_el.find('.delete');
-			note_el.click(this.loadNote.bind(this, note.id));
-			delete_el.click(this.deleteNote.bind(this, note.id));
-			this.elements.note_list.append(note_el);
+			note.appendToList();
 		}.bind(this));
 		this.loadNote(db_notes[0].id);
 	},
@@ -266,20 +286,17 @@ var Notes = {
 		NotesDB.addNote(this.createNote_cb.bind(this));
 	},
 	createNote_cb: function(note) {
-		//var title = 'Untitled';
-		//updated_at = this.formatDate(updated_at);
-		var note_el = this.templates.note_item.tmpl({id: note.id, title: note.getTitle(true), date: note.getFormattedTime()});
-		var delete_el = note_el.find('.delete');
-		note_el.click(this.loadNote.bind(this, note.id));
-		delete_el.click(this.deleteNote.bind(this, note.id));
-		this.elements.note_list.append(note_el);
+		note.appendToList();
 	},
 
 	deleteNote: function(note_id, event) {
 		event.stopPropagation();
+		NotesDB.deleteNote(note_id, this.deleteNote_cb.bind(this));
 	},
-	deleteNote_cb: function() {
+	deleteNote_cb: function(note_id) {
+		$('#note_item_' + note_id).remove();
 
+		// ... Load the first note ...
 	},
 
 	saveNote: function() {
@@ -293,7 +310,6 @@ var Notes = {
 		NotesDB.editNote(note, this.saveNote_cb.bind(this));
 	},
 	saveNote_cb: function(note) {
-		console.log('saved note:', note);
 		$('#note_item_' + note.id + ' span.title').html(note.getTitle(true));
 		$('#note_item_' + note.id + ' span.time').html(note.getFormattedTime());
 	},
