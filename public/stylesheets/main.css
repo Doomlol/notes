@@ -12,7 +12,7 @@ div.pad div.list{position:relative;width:280px;height:100%;border-right:1px soli
 div.pad div.list ul#notes{position:absolute;margin:0;padding:0;top:47px;left:0;right:0;bottom:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
 div.pad div.list ul#notes li{position:relative;padding:10px 15px;background:#f9f9f9;border-bottom:1px solid #eee;cursor:pointer;}
 div.pad div.list ul#notes li span{display:block;}
-div.pad div.list ul#notes li span.highlight{position:absolute;top:0;right:-1px;bottom:0;width:1px}
+div.pad div.list ul#notes li span.highlight{position:absolute;top:0;left:0;bottom:0;width:2px}
 div.pad div.list ul#notes li span.title{margin-right:40px;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
 div.pad div.list ul#notes li span.time{font-size:11px;color:#aaa}
 div.pad div.list ul#notes li span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
