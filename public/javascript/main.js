@@ -10,6 +10,77 @@
 })();
 
 
+// Note class
+function Note(note_data) {
+
+	// The right-hand values must map to the DB properties
+	this.id          = note_data.id;
+	this.title       = note_data.title;
+	this.body        = note_data.body;
+	this.updated_at  = note_data.updated_at || (new Date()).valueOf();
+
+	this.elements    = {
+		note_item: null,
+		title: null,
+		delete_link: null
+	};
+
+	this.init = function() {
+		this.setupElements();
+	};
+	this.setupElements = function() {
+		this.elements.note_item = this.generateListElement();
+		this.elements.title = this.elements.note_item.find('.title');
+		this.elements.delete_link = this.elements.note_item.find('.delete');
+		this.elements.note_item.click(App.loadNote.bind(App, this.id));
+		this.elements.delete_link.click(App.deleteNote.bind(App, this.id));
+	};
+	this.generateListElement = function() {
+		if ($('#note_item_' + this.id).length)
+			return $($('#note_item_' + this.id)[0]);
+		else
+			return $('#note_item_tmpl').tmpl({id: this.id, title: this.getTitle(true), date: this.getFormattedTime()});
+	};
+	// Uncomfortable about a reference to App here
+	this.appendToList = function() {
+		this.elements.note_item.appendTo(App.elements.note_list);
+	};
+	this.removeFromList = function() {
+		this.elements.note_item.remove();
+	};
+
+	// GETTERS
+	this.getData = function() {
+		return {
+			id: this.id,
+			title: this.title,
+			body: this.body,
+			updated_at: this.updated_at
+		};
+	};
+	this.getTitle = function(use_default) {
+		return this.title || (use_default ? 'Untitled' : '');
+	};
+	this.getBody = function() {
+		return this.body;
+	};
+	this.getFormattedTime = function() {
+		return Utils.formatDate(this.updated_at);
+	};
+
+	// SETTERS
+	this.setTitle = function(title) {
+		this.title = title;
+		this.elements.title.html(this.title);
+	};
+	this.setBody = function(body) {
+		this.body = body;
+	};
+
+	this.init();
+};
+
+
 var NotesDB = {
 	db: null,
 	settings: {
@@ -122,8 +193,7 @@ var NotesDB = {
 		var req = notes_store.add({updated_at: date});
 		req.onerror = function(event) {console.log('addNote req error', event);}
 		req.onsuccess = function(event) {
-			var note = new Note({id: req.result});
-			if (cb) cb(note); // The 'id', not the whole note
+			if (cb) cb(new Note({id: req.result}));
 		}
 	},
 	// Can pass back either a note id or null
@@ -135,9 +205,10 @@ var NotesDB = {
 		note.updated_at = (new Date()).valueOf();
 		var notes_store = this.getNotesStore();
 		var req = notes_store.put(note.getData());
+		var note_data = note.getData();
 		req.onerror = function(event) {console.log('addNote req error', event);}
 		req.onsuccess = function(event) {
-			if (cb) cb(note);
+			if (cb) cb(note_data);
 		}
 	},
 	deleteNote: function(note_id, cb) {
@@ -150,92 +221,38 @@ var NotesDB = {
 	}
 };
 
-// Note class
-function Note (note_data) {
 
-	// The right-hand values must map to the DB properties
-	this.id = note_data.id;
-	this.title = note_data.title;
-	this.body = note_data.body;
-	this.updated_at = note_data.updated_at || (new Date()).valueOf();
-
-	this.elements = {
-		note_item: null,
-		delete_link: null
-	};
-
-	this.init = function() {
-		this.setupElements();
-	};
-
-	this.setupElements = function() {
-		this.elements.note_item = $('#note_item_tmpl').tmpl({id: this.id, title: this.getTitle(true), date: this.getFormattedTime()});
-		this.elements.delete_link = this.elements.note_item.find('.delete');
-		this.elements.note_item.click(Notes.loadNote.bind(Notes, this.id));
-		this.elements.delete_link.click(Notes.deleteNote.bind(Notes, this.id));
-	};
-
-	this.appendToList = function() {
-		Notes.elements.note_list.append(this.elements.note_item);
-	};
-
-	this.removeFromList = function() {
-		this.elements.note_item.remove();
-	};
-
-	// Return the attributes as an object, not a class, so it can be inserted into DB
-	this.getData = function() {
-		return {
-			id: this.id,
-			title: this.title,
-			body: this.body,
-			updated_at: this.updated_at
-		};
-	};
-
-	this.getTitle = function(use_default) {
-		return this.title || (use_default ? 'Untitled' : '');
-	};
-
-	this.getFormattedTime = function() {
-		return Utils.formatDate(this.updated_at);
-	}
-
-	this.init();
-};
-
-var Notes = {
+var App = {
 
 	errors: {
 		db_connect_fail: 'Could not connect to the local database. Your browser may be in privacy mode.',
 		db_generic: 'There was a problem with the database.'
 	},
-
 	parse: {
 		app_id: 'BjMBtcrI8aQOGvWXPgysjccUXANpBvheK2mFyLSM',
 		js_key: 'YdnMLhDKkrISbqVdxAi73Y9GBAKisTmivSWa9YHF'
 	},
-
 	firebase: {
 
 	},
-
 	elements: {
 		note_list: '#notes',
 		note_title: '#note_title',
-		note_text: '#note_text'
+		note_text: '#note_text',
+		save_status: '#save_status'
 	},
-
 	default_note: {
 		title: 'Your first note',
 		updated_at: (new Date()).valueOf()
 	},
 
-	current_note_id: null,
+	current_note: null,
+	save_timeout: null,
 
 	// Initialize the DB, and do anything else that doesn't rely on the DB
 	initialize: function() {
 		this.setupElements();
+		this.setupListeners();
 		// This should be the last line in the function
 		NotesDB.initialize(this.initialize_cb.bind(this));
 		//Parse.initialize(this.parse.app_id, this.parse.js_key);
@@ -251,8 +268,40 @@ var Notes = {
 			this.elements[el] = $(this.elements[el]);
 		}
 	},
+	setupListeners: function() {
+		this.elements.note_title.keydown(this.titleKeydown.bind(this));
+		this.elements.note_title.keyup(this.titleKeyup.bind(this));
+		this.elements.note_text.keydown(this.bodyKeydown.bind(this));
+		this.elements.note_text.keyup(this.bodyKeyup.bind(this));
+	},
+
+	titleKeydown: function(event) {
+		this.saved(false);
+	},
+	titleKeyup: function(event) {
+		if (this.current_note)
+			this.current_note.setTitle(event.target.value);
+	},
+	bodyKeydown: function(event) {
+		this.saved(false);
+	},
+	bodyKeyup: function(event) {
+
+	},
+
+	saved: function(is_saved) {
+		if (is_saved) {
+			this.elements.save_status.addClass('saved').attr('title', 'Saved');
+		}
+		else {
+			this.elements.save_status.removeClass('saved').attr('title', 'Not saved');
+			clearTimeout(this.save_timeout);
+			this.save_timeout = setTimeout(this.saveNote.bind(this), 1000);
+		}
+	},
 
 	refreshNoteList: function() {
+		this.elements.note_list.empty();
 		NotesDB.getNotes(this.refreshNoteList_cb.bind(this));
 	},
 	refreshNoteList_cb: function(db_notes) {
@@ -267,18 +316,17 @@ var Notes = {
 	},
 
 	loadNote: function(note_id, event) {
-		if (this.current_note_id) {
+		if (this.current_note)
 			this.getCurrentNoteItem().removeClass('selected');
-		}
-		this.current_note_id = null;
-		this.elements.note_title.attr('value', '');
+		this.current_note = null;
+		this.elements.note_title.val('');
 		this.elements.note_text.html('');
 		NotesDB.getNote(note_id, this.loadNote_cb.bind(this));
 	},
 	loadNote_cb: function(note) {
-		this.current_note_id = note.id;
+		this.current_note = note;
 		this.getCurrentNoteItem().addClass('selected');
-		this.elements.note_title.attr('value', note.getTitle(false));
+		this.elements.note_title.val(note.getTitle(false));
 		this.elements.note_text.html(note.body || '');
 	},
 
@@ -289,36 +337,36 @@ var Notes = {
 		note.appendToList();
 	},
 
+	// Possibly change from this to "note.delete()"
+	// No - because you can click delete on unloaded notes.
+	// Keep save the same way for symmetry
 	deleteNote: function(note_id, event) {
 		event.stopPropagation();
 		NotesDB.deleteNote(note_id, this.deleteNote_cb.bind(this));
 	},
 	deleteNote_cb: function(note_id) {
 		$('#note_item_' + note_id).remove();
-
-		// ... Load the first note ...
+		this.refreshNoteList();
 	},
 
 	saveNote: function() {
-		if (!this.current_note_id)
+		if (!this.current_note)
 			return;
-		var note = new Note({
-			id: this.current_note_id,
-			title: this.elements.note_title.attr('value'),
-			body: this.elements.note_text.html()
-		});
-		NotesDB.editNote(note, this.saveNote_cb.bind(this));
+		this.current_note.setTitle(this.elements.note_title.val());
+		this.current_note.setBody(this.elements.note_text.html());
+		NotesDB.editNote(this.current_note, this.saveNote_cb.bind(this));
 	},
-	saveNote_cb: function(note) {
-		$('#note_item_' + note.id + ' span.title').html(note.getTitle(true));
-		$('#note_item_' + note.id + ' span.time').html(note.getFormattedTime());
+	saveNote_cb: function(note_data) {
+		$('#note_item_' + note_data.id + ' span.time').html(Utils.formatDate(note_data.updated_at));
+		if (this.current_note.body == note_data.body)
+			this.saved(true);
 	},
 
-	// ===========================================================
-	// Utility functions
+	// =========================================================================
+	// Utility functions =======================================================
 
 	getCurrentNoteItem: function() {
-		return $('#note_item_' + this.current_note_id);
+		return $('#note_item_' + this.current_note.id);
 	},
 
 	showError: function(text) {
@@ -352,7 +400,7 @@ var Utils = {
 
 };
 
-$(Notes.initialize.bind(Notes));
+$(App.initialize.bind(App));
 
 
 

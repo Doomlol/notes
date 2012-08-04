@@ -21,17 +21,18 @@ html(lang="en")
 			div.main_error
 			div.list
 				div.opts
-					a.btn(href="javascript:Notes.createNote()") New
+					a.btn(href="javascript:App.createNote()") New
 					input(type="text", id="search", placeholder="Search")
 				ul#notes
 
-				div.controls
-					p: a(href="javascript:Notes.saveNote()") Save current note
+				//
+					div.controls
+						p: a(href="javascript:App.saveNote()") Save current note
 
 			div.editor
 				div.opts
 					input(type="text", id="note_title", placeholder="Untitled")
-					div.save_status
+					div#save_status.save_status.saved(title="Saved")
 				div#note_text.text(contenteditable="true")
 					//| This is text
 
