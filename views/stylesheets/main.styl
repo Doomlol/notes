@@ -120,49 +120,51 @@ div.pad
 
 			li
 				position relative
-				padding 10px 15px
 				background #f9f9f9
 				border-bottom 1px solid #eee
 				cursor pointer
 
-				span
-					display block
+				div
+					padding 10px 15px
 
-					&.highlight
-						position absolute
-						top 0
-						left 0
-						bottom 0
-						width 2px
+					span
+						display block
 
-					&.title
-						margin-right 40px
-						font-size 12px
-						font-weight bold
-						text-overflow ellipsis
-						white-space nowrap
-						overflow hidden
+						&.highlight
+							position absolute
+							top 0
+							left 0
+							bottom 0
+							width 2px
 
-					&.time
-						font-size 11px
-						color #aaa
+						&.title
+							margin-right 40px
+							font-size 12px
+							font-weight bold
+							text-overflow ellipsis
+							white-space nowrap
+							overflow hidden
 
-					&.delete
-						position absolute
-						top 0
-						right 0
-						bottom 0
-						padding 0 10px
-						line-height 50px
-						display none
-
-						a
-							font-size 10px
-							text-decoration none
+						&.time
+							font-size 11px
 							color #aaa
 
-							&:hover
-								text-decoration underline
+						&.delete
+							position absolute
+							top 0
+							right 0
+							bottom 0
+							padding 0 10px
+							line-height 50px
+							display none
+
+							a
+								font-size 10px
+								text-decoration none
+								color #aaa
+
+								&:hover
+									text-decoration underline
 
 				&:hover
 					background #fcfcfc
@@ -214,13 +216,19 @@ div.pad
 		-moz-box-flex 1
 		-webkit-box-flex 1
 
-		div.text
+		div.text,
+		textarea
 			position absolute
+			margin 0
 			padding 12px
 			top 47px
 			left 0
 			right 0
 			bottom 0
+			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+			font-size 14px
+			color #555
+			border none
 			outline none
 			overflow-y scroll
 

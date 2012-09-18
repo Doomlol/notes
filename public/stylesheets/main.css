@@ -10,14 +10,15 @@ div.pad{display:-moz-box;display:-webkit-box;position:absolute;width:100%;height
 div.pad div.main_error{display:none;position:absolute;padding:10px;left:10px;right:10px;bottom:10px;font-size:13px;text-align:center;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#a00009;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
 div.pad div.list{position:relative;width:280px;height:100%;border-right:1px solid #eee;}
 div.pad div.list ul#notes{position:absolute;margin:0;padding:0;top:47px;left:0;right:0;bottom:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
-div.pad div.list ul#notes li{position:relative;padding:10px 15px;background:#f9f9f9;border-bottom:1px solid #eee;cursor:pointer;}
-div.pad div.list ul#notes li span{display:block;}
-div.pad div.list ul#notes li span.highlight{position:absolute;top:0;left:0;bottom:0;width:2px}
-div.pad div.list ul#notes li span.title{margin-right:40px;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
-div.pad div.list ul#notes li span.time{font-size:11px;color:#aaa}
-div.pad div.list ul#notes li span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
-div.pad div.list ul#notes li span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
-div.pad div.list ul#notes li span.delete a:hover{text-decoration:underline}
+div.pad div.list ul#notes li{position:relative;background:#f9f9f9;border-bottom:1px solid #eee;cursor:pointer;}
+div.pad div.list ul#notes li div{padding:10px 15px;}
+div.pad div.list ul#notes li div span{display:block;}
+div.pad div.list ul#notes li div span.highlight{position:absolute;top:0;left:0;bottom:0;width:2px}
+div.pad div.list ul#notes li div span.title{margin-right:40px;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+div.pad div.list ul#notes li div span.time{font-size:11px;color:#aaa}
+div.pad div.list ul#notes li div span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
+div.pad div.list ul#notes li div span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
+div.pad div.list ul#notes li div span.delete a:hover{text-decoration:underline}
 div.pad div.list ul#notes li:hover{background:#fcfcfc;}
 div.pad div.list ul#notes li:hover span.delete{display:block}
 div.pad div.list ul#notes li.selected span.highlight{background:#0494dd}
@@ -29,7 +30,7 @@ div.pad div.list div.controls p:last-child{margin-bottom:0}
 div.pad div.list div.controls p a{text-decoration:none;color:#fff;}
 div.pad div.list div.controls p a:hover{text-decoration:underline}
 div.pad div.editor{position:relative;height:100%;-moz-box-flex:1;-webkit-box-flex:1;}
-div.pad div.editor div.text{position:absolute;padding:12px;top:47px;left:0;right:0;bottom:0;outline:none;overflow-y:scroll}
+div.pad div.editor div.text,div.pad div.editor textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;color:#555;border:none;outline:none;overflow-y:scroll}
 div.pad div.list > div.opts,div.pad div.editor > div.opts{display:-moz-box;display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
 div.pad div.list > div.opts input,div.pad div.editor > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
 div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{padding:5px}

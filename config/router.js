@@ -6,6 +6,7 @@ var paths_to_routes = {
     '/': routes.pad,
     '/alt': routes.alt,
     '/about': routes.about,
+    '/partials/:path': routes.partials,
     
     // Sandbox
     '/sandbox': routes.sandbox,

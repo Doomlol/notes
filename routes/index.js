@@ -36,6 +36,11 @@ exports.about = function(req, res) {
     render(req, res, 'about');
 };
 
+exports.partials = function(req, res) {
+    var path = req.params.path || 'index';
+    render(req, res, 'partials/' + path, {layout: false});
+};
+
 exports.sandbox = function(req, res) {
     var path = req.params.path || 'index';
     res.render('sandbox/' + path, {layout: false});

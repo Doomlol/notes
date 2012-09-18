@@ -1,0 +1,5 @@
+div.opts
+	input(type="text", placeholder="Untitled", ng-model="note.value.title")
+	div#save_status.save_status.saved(title="Saved", ng-click="save()")
+textarea(ng-model="note.value.body")
+	| {{note.value.body}}

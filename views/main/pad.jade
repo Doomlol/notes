@@ -1,5 +1,5 @@
 !!! 5
-html(lang="en")
+html(lang="en", ng-app="NotesApp")
 	head
 		title Notes.fm
 		meta(name="description", content="Online notes for mobile and desktop")
@@ -17,28 +17,34 @@ html(lang="en")
 				span.delete: a(href="javascript:false;") delete
 
 	body
-		div.pad
+
+		div.pad(ng-controller="PadCtrl")
 			div.main_error
 			div.list
 				div.opts
-					a.btn(href="javascript:App.createNote()") New
+					a#new.btn(ng-click="addNote()") New
 					input(type="text", id="search", placeholder="Search")
 				ul#notes
+					li(ng-repeat="note in notes")
+						div(ng-click="loadNote(note.getId())")
+							span.highlight
+							span.title {{note.getTitle() || 'Untitled'}}
+							span.time {{note.getTime()}}
+							span.delete: a(ng-click="deleteNote(note.getId())") delete
+				
+				div.controls
+					p Total notes: {{getTotalNotes()}}
 
-				//
-					div.controls
-						p: a(href="javascript:App.saveNote()") Save current note
-
-			div.editor
-				div.opts
-					input(type="text", id="note_title", placeholder="Untitled")
-					div#save_status.save_status.saved(title="Saved")
-				div#note_text.text(contenteditable="true")
-					//| This is text
+			div.editor(ng-view)
 
 	footer
-		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
-		script(src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js")
-		script(src="http://www.parsecdn.com/js/parse-1.0.10.min.js")
-		script(src="/javascript/main.js")
+		script(src="/javascript/jquery.min.js")
+		script(src="/javascript/angular/angular-1.0.1.min.js")
+		script(src="/javascript/angular/angular-resource-1.0.1.min.js")
+		script(src="https://static.firebase.com/v0/firebase.js")
+		//script(src="/javascript/jquery.tmpl.min.js")
+		//script(src="/javascript/underscore-min.js")
+		//script(src="/javascript/backbone-min.js")
+		//script(src="/javascript/parse-1.0.10.min.js")
+		script(src="/javascript/app.js")
 		include ../components/analytics.html
