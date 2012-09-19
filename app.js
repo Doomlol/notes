@@ -43,8 +43,6 @@ app.configure('production', function(){
     app.use(express.errorHandler()); 
 });
 
-app.register('.pjs', require('pubjs'));
-
 // Routes - automatically uses ./routes/index.js unless other routes file specified
 
 router.setupRoutes(app);
