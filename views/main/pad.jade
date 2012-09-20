@@ -9,13 +9,6 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
-		script(id="note_item_tmpl", type="text/x-jquery-tmpl")
-			li(id="note_item_${id}", note="${id}")
-				span.highlight
-				span.title ${title}
-				span.time ${date}
-				span.delete: a(href="javascript:false;") delete
-
 	body
 
 		div.pad(ng-controller="PadCtrl")
@@ -25,12 +18,11 @@ html(lang="en", ng-app="NotesApp")
 					a#new.btn(ng-click="addNote()") New
 					input(type="text", id="search", placeholder="Search")
 				ul#notes
-					li(ng-repeat="note in notes")
-						div(ng-click="loadNote(note.getId())")
-							span.highlight
-							span.title {{note.getTitle() || 'Untitled'}}
-							span.time {{note.getTime()}}
-							span.delete: a(ng-click="deleteNote(note.getId())") delete
+					li(ng-repeat="note in notes", ng-click="loadNote(note.getId())",  ng-class="note.class")
+						span.highlight
+						span.title {{note.getTitle() || 'Untitled'}}
+						span.time {{note.getTime()}}
+						span.delete: a(ng-click="deleteNote(note.getId())") delete
 				
 				div.controls
 					p Total notes: {{getTotalNotes()}}

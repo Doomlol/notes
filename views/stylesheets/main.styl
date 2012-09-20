@@ -1,45 +1,49 @@
+// Variables
+
 // functions
 
+// mixins
+
 box-shadow()
-    -webkit-box-shadow arguments
-    -moz-box-shadow arguments
-    box-shadow arguments
+	-webkit-box-shadow arguments
+	-moz-box-shadow arguments
+	box-shadow arguments
 
 box-align()
-    -webkit-box-align arguments
-    -moz-box-align arguments
-    box-align arguments
+	-webkit-box-align arguments
+	-moz-box-align arguments
+	box-align arguments
 
 box-orient()
-    -webkit-box-orient arguments
-    -moz-box-orient arguments
-    box-orient arguments
+	-webkit-box-orient arguments
+	-moz-box-orient arguments
+	box-orient arguments
 
 box-flex()
-    -webkit-box-flex arguments
-    -moz-box-flex arguments
-    box-flex arguments
+	-webkit-box-flex arguments
+	-moz-box-flex arguments
+	box-flex arguments
 
 transform()
-    -webkit-transform arguments
+	-webkit-transform arguments
 
 transform-style()
-    -webkit-transform-style arguments
+	-webkit-transform-style arguments
 
 transition
-    -webkit-transition arguments
+	-webkit-transition arguments
 
 transition-property
-    -webkit-transition-property arguments
+	-webkit-transition-property arguments
 
 transition-duration
-    -webkit-transition-duration arguments
+	-webkit-transition-duration arguments
 
 transition-timing-function
-    -webkit-transition-timing-function arguments
+	-webkit-transition-timing-function arguments
 
 perspective()
-    -webkit-perspective arguments
+	-webkit-perspective arguments
 
 
 
@@ -55,6 +59,8 @@ body
 	font-size 14px
 	font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
 	color #555
+	background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#A1B6C6))
+	//background #c4d7e9
 	overflow hidden
 
 a.btn
@@ -81,9 +87,12 @@ div.pad
 	display -moz-box
 	display -webkit-box
 	position absolute
-	width 100%
-	height 100%
+	top 15px
+	left 15px
+	right 15px
+	bottom 15px
 	overflow hidden
+	box-shadow 0 1px 3px rgba(0,0,0,0.25)
 
 	div.main_error
 		display none
@@ -115,56 +124,55 @@ div.pad
 			right 0
 			bottom 0
 			list-style none
+			background #fff
 			overflow-y auto
 			overflow-x hidden
 
 			li
 				position relative
+				padding 10px 15px
 				background #f9f9f9
 				border-bottom 1px solid #eee
 				cursor pointer
 
-				div
-					padding 10px 15px
+				span
+					display block
 
-					span
-						display block
+					&.highlight
+						position absolute
+						top 0
+						left 0
+						bottom 0
+						width 2px
 
-						&.highlight
-							position absolute
-							top 0
-							left 0
-							bottom 0
-							width 2px
+					&.title
+						margin-right 40px
+						font-size 12px
+						font-weight bold
+						text-overflow ellipsis
+						white-space nowrap
+						overflow hidden
 
-						&.title
-							margin-right 40px
-							font-size 12px
-							font-weight bold
-							text-overflow ellipsis
-							white-space nowrap
-							overflow hidden
+					&.time
+						font-size 11px
+						color #aaa
 
-						&.time
-							font-size 11px
+					&.delete
+						position absolute
+						top 0
+						right 0
+						bottom 0
+						padding 0 10px
+						line-height 50px
+						display none
+
+						a
+							font-size 10px
+							text-decoration none
 							color #aaa
 
-						&.delete
-							position absolute
-							top 0
-							right 0
-							bottom 0
-							padding 0 10px
-							line-height 50px
-							display none
-
-							a
-								font-size 10px
-								text-decoration none
-								color #aaa
-
-								&:hover
-									text-decoration underline
+							&:hover
+								text-decoration underline
 
 				&:hover
 					background #fcfcfc
@@ -192,8 +200,8 @@ div.pad
 			//height 50px
 			font-family "Courier New"
 			font-size 12px
-			color #fff
-			background rgba(0,0,0,0.75)
+			color #000
+			background rgba(255,255,255,0.75)
 
 			p
 				margin 0 0 5px
@@ -230,7 +238,8 @@ div.pad
 			color #555
 			border none
 			outline none
-			overflow-y scroll
+			overflow-y auto
+			resize none
 
 	div.list > div.opts,
 	div.editor > div.opts
@@ -293,7 +302,7 @@ div.pad
 			background #ccc
 			border-radius 3px
 
-			&.saved
+			&.saved-true
 				background #5edc20
 
 ::-webkit-scrollbar
@@ -303,7 +312,8 @@ div.pad
 	background #eee
 
 ::-webkit-scrollbar-thumb
-	background #09A8EF
+	//background #09A8EF
+	background #ccc
 
 
 @media (max-width: 800px)

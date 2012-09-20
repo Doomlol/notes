@@ -300,11 +300,17 @@ angular.module('IndexedDB', [])
 // Controllers
 // If we wanted, all the things in controllers, components, and services
 // could be chained inside the NotesApp module declaration
+// Keep in mind that $scope.$apply is necessary in most callbacks
 angular.module('controllers', ['ngResource', 'IndexedDB'])
-	.controller('PadCtrl', function PadCtrl($scope, indexeddb) {
+	.controller('PadCtrl', function PadCtrl($scope, $location, indexeddb) {
 
 		window.xx = $scope;
 		var queue = [];
+
+		$scope.setLocation = function(type, location) {
+			console.log($location, $location[type], $location[type](location));
+			$location[type](location);
+		}
 
 
 
@@ -330,11 +336,25 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 				queue.shift()();
 		}
 		$scope.loadNote = function(id) {
-			// use route provider instead somehow?
-			location.href = '#/note/' + id;
+			$location.path('/note/' + id);
+		}
+		$scope.loadFirstNote = function() {
+			if ($scope.notes.length)
+				$scope.loadNote($scope.notes[0].getId());
+		}
+		$scope.setCurrentNote = function(note) {
+			if ($scope.current_note)
+				$scope.current_note.class = '';
+			$scope.current_note = note;
+			$scope.current_note.class = 'selected';
 		}
 		$scope.addNote = function() {
-			var note = $scope.db.add();
+			var note = $scope.db.add({
+				success: function(note) {
+					$scope.loadNote(note.getId());
+					$scope.$apply();
+				}
+			});
 			$scope.notes.push(note);
 		}
 		$scope.getNote = function(id) {
@@ -346,6 +366,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 			return note;
 		}
 		$scope.deleteNote = function(id) {
+			window.event.stopPropagation(); // only here because delete overlaps clickable note li
 			$scope.db.delete({
 				id: id,
 				success: function(note_id) {
@@ -358,6 +379,10 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 						$scope.notes = $scope.notes.slice(0,index).concat($scope.notes.slice(index+1));
 						$scope.$apply();
 					}
+					if (id == $scope.current_note.getId()) {
+						$scope.loadFirstNote();
+					}
+					$scope.$apply();
 				}
 			});
 		}
@@ -365,17 +390,57 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 			return $scope.notes.length;
 		}
 	})
-	.controller('NoteCtrl', function NoteCtrl($scope, $routeParams) {
+	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {
 
-		var note_id = parseInt($routeParams.note_id);
+		$scope.saved = true;
+		$scope.save_timeout = null;
 
-		$scope.enqueue(function() {
+		// This controller will likely be instantiated before notes have returned from the db.
+		// So instead of trying to fetch the note immediately (it won't be there), enqueue
+		// the call to do so, then set the note when it's available.
+		// Enqueue it at the bottom so all other functions are available when it runs.
+		function initialize() {
+			var note_id = parseInt($routeParams.note_id);
 			$scope.note = $scope.getNote(note_id);
-		});
-
-		$scope.save = function() {
-			$scope.db.edit({item: $scope.note.getValue()})
+			if (!$scope.note) {
+				$scope.loadFirstNote();
+				return;
+			}
+			$scope.setCurrentNote($scope.note);
+			$scope.watchChanges();
 		}
+
+		// Watch the body and save when changes are made
+		$scope.watchChanges = function() {
+			$scope.$watch('note.getBody()', function(new_value, old_value) {
+				if (new_value == old_value)
+					return;
+				$scope.saved = false;
+				$scope.timeoutSave();
+			});
+		}
+
+		// Allow for two seconds to pass before saving
+		$scope.timeoutSave = function() {
+			clearTimeout($scope.save_timeout);
+			$scope.save_timeout = setTimeout($scope.save, 2000);
+		}
+
+		// Save the current note
+		$scope.save = function() {
+			if ($scope.note) {
+				$scope.db.edit({
+					item: $scope.note.getValue(),
+					success: function() {
+						console.log('saved');
+						$scope.saved = true;
+						$scope.$apply();
+					}
+				})
+			}
+		}
+
+		$scope.enqueue(initialize);
 	});
 
 
