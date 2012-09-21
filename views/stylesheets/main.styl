@@ -275,7 +275,7 @@ div.pad
 			display block
 			margin-left 8px
 			width 16px
-			height 30px
+			height 100%
 			background url(/images/gear-black.png) center center no-repeat
 			-webkit-background-size auto 16px
 			opacity 0.4
@@ -408,8 +408,13 @@ body.expanded-true
 				height 26px
 				line-height 26px
 
-		div.list > div.opts input[type="text"]
-			margin 0 0 0 8px
+		div.list > div.opts
+			input[type="text"]
+				margin 0 0 0 8px
+
+			a.gear
+				width 24px
+				-webkit-background-size auto 24px
 
 		div.editor > div.opts
 			div.back

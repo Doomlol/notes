@@ -34,7 +34,7 @@ div.pad div.list > div.opts,div.pad div.editor > div.opts{display:-webkit-box;pa
 div.pad div.list > div.opts input,div.pad div.editor > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
 div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{padding:5px}
 div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-moz-box-flex:1;-webkit-box-flex:1;outline:none}
-div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:30px;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;opacity:.4;}
+div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:100%;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;opacity:.4;}
 div.pad div.list > div.opts a.gear:hover{opacity:.6}
 div.pad div.editor > div.opts{position:relative;}
 div.pad div.editor > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);display:none;}
@@ -59,6 +59,7 @@ div.pad div.editor div.text,div.pad div.editor textarea{top:55px}
 div.pad div.list > div.opts,div.pad div.editor > div.opts{padding:8px;height:38px;}
 div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{font-size:19px;padding:5px 7px;height:26px;line-height:26px}
 div.pad div.list > div.opts input[type="text"]{margin:0 0 0 8px}
+div.pad div.list > div.opts a.gear{width:24px;-webkit-background-size:auto 24px}
 div.pad div.editor > div.opts div.back{display:block}
 div.pad div.editor > div.opts input[type="text"]{padding-right:28px}
 div.pad div.editor > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
