@@ -59,7 +59,8 @@ body
 	font-size 14px
 	font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
 	color #555
-	background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#A1B6C6))
+	//background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#A1B6C6))
+	background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#818F99))
 	//background #c4d7e9
 	overflow hidden
 
@@ -91,6 +92,8 @@ div.pad
 	bottom 15px
 	overflow hidden
 	box-shadow 0 1px 3px rgba(0,0,0,0.25)
+	-webkit-transition-property top, left, right, bottom
+	-webkit-transition-duration 0.5s
 
 	div.main_error
 		display none
@@ -267,6 +270,20 @@ div.pad
 			-moz-box-flex 1
 			-webkit-box-flex 1
 			outline none
+
+		a.gear
+			display block
+			margin-left 8px
+			width 16px
+			height 30px
+			background url(/images/gear-black.png) center center no-repeat
+			-webkit-background-size auto 16px
+			opacity 0.4
+
+			&:hover
+				opacity 0.6
+			
+
     
 	div.editor > div.opts
 		position relative
@@ -327,6 +344,14 @@ div.pad
 
 			&.saved-true
 				background #5edc20
+
+body.expanded-true
+	div.pad
+		top 0
+		left 0
+		right 0
+		bottom 0
+
 
 ::-webkit-scrollbar
 	width 6px

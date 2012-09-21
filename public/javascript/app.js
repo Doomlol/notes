@@ -309,6 +309,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 
 		$scope.db = indexeddb('notes-db', 28, 'notes', Note, upgrade_database);
 		$scope.note_view = false;
+		$scope.expanded = false;
 
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
@@ -386,6 +387,9 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		}
 		$scope.menu = function() {
 			$scope.note_view = false;
+		}
+		$scope.toggleExpand = function() {
+			$scope.expanded = !$scope.expanded;
 		}
 	})
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {

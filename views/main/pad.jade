@@ -9,7 +9,7 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
-	body(ng-controller="MainCtrl", class="view-note-{{note_view}}")
+	body(ng-controller="MainCtrl", class="view-note-{{note_view}} expanded-{{expanded}}")
 
 		div.pad
 			div.main_error
@@ -17,6 +17,7 @@ html(lang="en", ng-app="NotesApp")
 				div.opts
 					a#new.btn(ng-click="addNote()") New
 					input(type="text", id="search", placeholder="Search")
+					a.gear
 				ul#notes
 					li(ng-repeat="note in notes", ng-click="loadNote(note.getId())",  ng-class="note.class")
 						span.highlight
@@ -26,6 +27,7 @@ html(lang="en", ng-app="NotesApp")
 				
 				div.controls
 					p Total notes: {{getTotalNotes()}}
+					p(ng-click="toggleExpand()") Expanded: {{expanded}}
 
 			div.editor(ng-view)
 
