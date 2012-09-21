@@ -84,8 +84,6 @@ a.btn
 		background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0ab4f5), to(#049ee7))
 
 div.pad
-	display -moz-box
-	display -webkit-box
 	position absolute
 	top 15px
 	left 15px
@@ -110,9 +108,11 @@ div.pad
 		box-shadow 0 1px 3px rgba(0,0,0,0.25)
 
 	div.list
-		position relative
-		width 280px        
-		height 100%
+		position absolute
+		top 0
+		left 0
+		bottom 0  
+		width 280px
 		border-right 1px solid #eee
 
 		ul#notes
@@ -219,10 +219,11 @@ div.pad
 
 
 	div.editor
-		position relative
-		height 100%
-		-moz-box-flex 1
-		-webkit-box-flex 1
+		position absolute
+		top 0
+		left 281px
+		right 0
+		bottom 0
 
 		div.text,
 		textarea
@@ -234,7 +235,7 @@ div.pad
 			right 0
 			bottom 0
 			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-			font-size 14px
+			font-size 13px
 			color #555
 			border none
 			outline none
@@ -243,7 +244,6 @@ div.pad
 
 	div.list > div.opts,
 	div.editor > div.opts
-		display -moz-box
 		display -webkit-box
 		padding 8px
 		height 30px
@@ -256,19 +256,42 @@ div.pad
 			&[type="text"]
 				padding 5px
 
-	div.list > div.opts input[type="text"]
-		display block
-		margin 0 0 0 8px
-		height 18px
-		line-height 18px
-		border 1px solid rgb(230,230,230)
-		border-top 1px solid rgb(205,205,205)
-		-moz-box-flex 1
-		-webkit-box-flex 1
-		outline none
+	div.list > div.opts
+		input[type="text"]
+			display block
+			margin 0 0 0 8px
+			height 18px
+			line-height 18px
+			border 1px solid rgb(230,230,230)
+			border-top 1px solid rgb(205,205,205)
+			-moz-box-flex 1
+			-webkit-box-flex 1
+			outline none
     
 	div.editor > div.opts
 		position relative
+
+		div.back
+			margin-right 8px
+			width 20px
+			height 20px
+			//background rgba(0,0,0,0.25)
+			-webkit-transform rotate(-45deg) translate(-2px, 11px)
+			display none
+
+			&:before
+				display block
+				content ''
+				width 20px
+				height 6px
+				background #888
+
+			&:after
+				display block
+				content ''
+				width 6px
+				height 14px
+				background #888
 
 		input[type="text"]
 			display block
@@ -300,7 +323,7 @@ div.pad
 			width 6px
 			height 6px
 			background #ccc
-			border-radius 3px
+			border-radius 50%
 
 			&.saved-true
 				background #5edc20
@@ -325,15 +348,29 @@ div.pad
 
 	div.pad
 		div.list
-			width 100%
+			width auto
+			right 0
+			-webkit-transition -webkit-transform 0.5s
 
 			ul#notes
+				top 55px
+
 				li
 					span
 						&.title
 							font-size 16px
 						&.time
 							font-size 14px
+
+		div.editor
+			left 100%
+			right auto
+			width 100%
+			-webkit-transition -webkit-transform 0.5s
+
+			div.text,
+			textarea
+				top 55px
 
 		div.list > div.opts,
 		div.editor > div.opts
@@ -343,18 +380,31 @@ div.pad
 			input[type="text"]
 				font-size 19px
 				padding 5px 7px
+				height 26px
+				line-height 26px
 
 		div.list > div.opts input[type="text"]
 			margin 0 0 0 8px
-			height 26px
-			line-height 26px
 
-		div.editor > div.opts input[type="text"]
-			margin 0
-			height 26px
-			line-height 26px
+		div.editor > div.opts
+			div.back
+				display block
 
+			input[type="text"]
+				padding-right 28px
 
+			div.save_status
+				top 23px
+				right 20px
+				width 8px
+				height 8px
+
+	body.view-note,
+	body.view-note-true
+		div.pad
+			div.list,
+			div.editor
+				-webkit-transform translateX(-100%)
 
 
 

@@ -302,19 +302,13 @@ angular.module('IndexedDB', [])
 // could be chained inside the NotesApp module declaration
 // Keep in mind that $scope.$apply is necessary in most callbacks
 angular.module('controllers', ['ngResource', 'IndexedDB'])
-	.controller('PadCtrl', function PadCtrl($scope, $location, indexeddb) {
+	.controller('MainCtrl', function MainCtrl($scope, $location, indexeddb) {
 
-		window.xx = $scope;
+		window.mainscope = $scope;
 		var queue = [];
 
-		$scope.setLocation = function(type, location) {
-			console.log($location, $location[type], $location[type](location));
-			$location[type](location);
-		}
-
-
-
 		$scope.db = indexeddb('notes-db', 28, 'notes', Note, upgrade_database);
+		$scope.note_view = false;
 
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
@@ -337,6 +331,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		}
 		$scope.loadNote = function(id) {
 			$location.path('/note/' + id);
+			$scope.note_view = true;
 		}
 		$scope.loadFirstNote = function() {
 			if ($scope.notes.length)
@@ -389,6 +384,9 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		$scope.getTotalNotes = function() {
 			return $scope.notes.length;
 		}
+		$scope.menu = function() {
+			$scope.note_view = false;
+		}
 	})
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {
 
@@ -410,14 +408,17 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 			$scope.watchChanges();
 		}
 
+		function noteChange(new_value, old_value) {
+			if (new_value == old_value)
+				return;
+			$scope.saved = false;
+			$scope.timeoutSave();
+		}
+
 		// Watch the body and save when changes are made
 		$scope.watchChanges = function() {
-			$scope.$watch('note.getBody()', function(new_value, old_value) {
-				if (new_value == old_value)
-					return;
-				$scope.saved = false;
-				$scope.timeoutSave();
-			});
+			$scope.$watch('note.getTitle()', noteChange);
+			$scope.$watch('note.getBody()', noteChange);
 		}
 
 		// Allow for two seconds to pass before saving

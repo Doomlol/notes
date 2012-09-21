@@ -1,5 +1,5 @@
 div.opts
+	div.back(ng-click="menu()")
 	input(type="text", placeholder="Untitled", ng-model="note.value.title")
 	div#save_status.save_status(title="Saved", ng-click="save()", class="saved-{{saved}}")
 textarea(ng-model="note.value.body")
-	| {{note.value.body}}

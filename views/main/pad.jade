@@ -9,9 +9,9 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
-	body
+	body(ng-controller="MainCtrl", class="view-note-{{note_view}}")
 
-		div.pad(ng-controller="PadCtrl")
+		div.pad
 			div.main_error
 			div.list
 				div.opts
