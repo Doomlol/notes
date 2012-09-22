@@ -263,25 +263,28 @@ angular.module('IndexedDB', [])
 				funcs[f] = function(retval, func, opts) {
 					opts = opts || {};
 
+					// This needs to be separated into a new reference so successive returns do
+					// not all point to the same objects
+					var retval_copy = angular.copy(retval);
 					var params = angular.copy(opts);
 
-					params.success = function(retval, result) {
-						retval ? angular.copy(result, retval) : (retval = result);
+					params.success = function(retval_copy, result) {
+						retval_copy ? angular.copy(result, retval_copy) : (retval_copy = result);
 						$rootScope.$apply();
 						if (opts.success)
-							opts.success(retval);
-					}.bind(db, retval);
+							opts.success(retval_copy);
+					}.bind(db, retval_copy);
 
-					params.failure = function(retval, result) {
-						retval ? angular.copy(result, retval) : (retval = result);
-						angular.copy(result, retval);
+					params.failure = function(retval_copy, result) {
+						retval_copy ? angular.copy(result, retval_copy) : (retval_copy = result);
+						angular.copy(result, retval_copy);
 						if (opts.failure)
-							opts.failure(retval);
-					}.bind(db, retval);
+							opts.failure(retval_copy);
+					}.bind(db, retval_copy);
 
 					db.enqueue(db[func].bind(db, params));
 
-					return retval;
+					return retval_copy;
 
 				}.bind(this, retval, f);  // retval is messed if not bound
 			}
@@ -330,13 +333,15 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 			while(queue.length)
 				queue.shift()();
 		}
+		// A function instead of href="/note/note_id". It should remain just this one line.
 		$scope.loadNote = function(id) {
 			$location.path('/note/' + id);
-			$scope.note_view = true;
 		}
 		$scope.loadFirstNote = function() {
 			if ($scope.notes.length)
 				$scope.loadNote($scope.notes[0].getId());
+			else
+				$location.path('');
 		}
 		$scope.setCurrentNote = function(note) {
 			if ($scope.current_note)
@@ -346,8 +351,8 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		}
 		$scope.addNote = function() {
 			var note = $scope.db.add({
-				success: function(note) {
-					$scope.loadNote(note.getId());
+				success: function(n) {
+					$scope.loadNote(n.getId());
 					$scope.$apply();
 				}
 			});
@@ -375,7 +380,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 						$scope.notes = $scope.notes.slice(0,index).concat($scope.notes.slice(index+1));
 						$scope.$apply();
 					}
-					if (id == $scope.current_note.getId()) {
+					if ($scope.current_note && (id == $scope.current_note.getId())) {
 						$scope.loadFirstNote();
 					}
 					$scope.$apply();
@@ -385,8 +390,11 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		$scope.getTotalNotes = function() {
 			return $scope.notes.length;
 		}
+		$scope.setNoteView = function(val) {
+			$scope.note_view = val;
+		}
 		$scope.menu = function() {
-			$scope.note_view = false;
+			$scope.setNoteView(false);
 		}
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
@@ -396,6 +404,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 
 		$scope.saved = true;
 		$scope.save_timeout = null;
+		$scope.setNoteView(true);
 
 		// This controller will likely be instantiated before notes have returned from the db.
 		// So instead of trying to fetch the note immediately (it won't be there), enqueue
@@ -472,8 +481,8 @@ angular.module('NotesApp', ['controllers', 'components'])
 				controller: 'NoteCtrl'
 			})
 			.otherwise({
-				redirectTo: '/',
-				templateUrl: '/partials/no-note'
+				redirectTo: '',
+				templateUrl: '/partials/hello'
 			});
 	});
 

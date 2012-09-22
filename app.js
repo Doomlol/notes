@@ -52,6 +52,6 @@ router.setupRoutes(app);
 
 //app.listen(3000);
 // Change by CH 1/27/2012
-app.listen(process.env.PORT);
-//app.listen(49882);
+//app.listen(process.env.PORT);
+app.listen(49882);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

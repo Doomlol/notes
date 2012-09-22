@@ -3,7 +3,7 @@ transition-property{-webkit-transition-property:arguments}
 transition-duration{-webkit-transition-duration:arguments}
 transition-timing-function{-webkit-transition-timing-function:arguments}
 html,body{margin:0;padding:0;height:100%}
-body{position:relative;font-size:14px;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;color:#555;background:-webkit-gradient(linear,left top,left bottom,from(#d5dee5),to(#818f99));overflow:hidden}
+body{position:relative;font-size:13px;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;color:#555;background:-webkit-gradient(linear,left top,left bottom,from(#d5dee5),to(#818f99));overflow:hidden}
 a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#09a8ef),to(#0494dd));border-radius:3px;border:1px solid #079fe6;}
 a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7))}
 div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hidden;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);-webkit-transition-property:top,left,right,bottom;-webkit-transition-duration:.5s;}
@@ -30,6 +30,8 @@ div.pad div.list div.controls p a{text-decoration:none;color:#fff;}
 div.pad div.list div.controls p a:hover{text-decoration:underline}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor div.text,div.pad div.editor textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none}
+div.pad div.editor div.no-note{position:absolute;padding:20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
+div.pad div.editor div.no-note h4{margin:0;padding:0 0 5px;font-size:16px;border-bottom:1px solid #eee}
 div.pad div.list > div.opts,div.pad div.editor > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
 div.pad div.list > div.opts input,div.pad div.editor > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
 div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{padding:5px}
