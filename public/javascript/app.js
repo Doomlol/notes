@@ -480,6 +480,9 @@ angular.module('NotesApp', ['controllers', 'components'])
 				templateUrl: '/partials/note',
 				controller: 'NoteCtrl'
 			})
+			.when('/new', {
+				// Do stuff
+			})
 			.otherwise({
 				redirectTo: '',
 				templateUrl: '/partials/hello'
