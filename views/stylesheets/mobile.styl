@@ -1,119 +1,60 @@
-// Functions
+// Variables
+
+// functions
+
+// mixins
 
 box-shadow()
-    -webkit-box-shadow arguments
-    -moz-box-shadow arguments
-    box-shadow arguments
+	-webkit-box-shadow arguments
+	-moz-box-shadow arguments
+	box-shadow arguments
 
 box-align()
-    -webkit-box-align arguments
-    -moz-box-align arguments
-    box-align arguments
+	-webkit-box-align arguments
+	-moz-box-align arguments
+	box-align arguments
 
 box-orient()
-    -webkit-box-orient arguments
-    -moz-box-orient arguments
-    box-orient arguments
+	-webkit-box-orient arguments
+	-moz-box-orient arguments
+	box-orient arguments
 
 box-flex()
-    -webkit-box-flex arguments
-    -moz-box-flex arguments
-    box-flex arguments
+	-webkit-box-flex arguments
+	-moz-box-flex arguments
+	box-flex arguments
+
+transform()
+	-webkit-transform arguments
+
+transform-style()
+	-webkit-transform-style arguments
+
+transition
+	-webkit-transition arguments
+
+transition-property
+	-webkit-transition-property arguments
+
+transition-duration
+	-webkit-transition-duration arguments
+
+transition-timing-function
+	-webkit-transition-timing-function arguments
+
+perspective()
+	-webkit-perspective arguments
+
 
 // Styles
 
 html, body
-    margin 0
-    padding 0
-    width 100%
-    height 100%
+	margin 0
+	padding 0
+	height 100%
 
 body
-    position relative
-    font 13px Helvetica, Arial, sans-serif
-    background #fff
-
-ul.menu
-    position fixed
-    top 0
-    left 0
-    right 0
-    display -webkit-box
-    display -moz-box
-    display box
-    box-align stretch
-    box-orient horizontal
-    margin 0
-    padding 0
-    list-style none
-    background #f6f6f6
-    background -webkit-gradient(linear, left top, left bottom, from(white), to(#F6F6F6))
-    border-bottom 1px solid #ddd
-    opacity 0.8
-    z-index 1
-    
-    li
-        margin 0
-        box-flex 1
-        text-align center
-
-        a
-            display block
-            font-size 15px
-            line-height 40px
-            text-decoration none
-            color #555
-            -webkit-tap-highlight-color #eee
-            -webkit-focus-ring-color red
-            -webkit-appearance none
-            outline none
-            &:hover, &:active
-                background #eee
-
-body.focused ul.menu
-    top -41px
-
-ul#menu-bottom
-    position fixed
-    top auto
-    right 0
-    left 0
-    bottom 0
-    border-bottom none
-    border-top 1px solid #ddd
-
-body.focused ul#menu-bottom
-    top auto
-    bottom -41px
-
-div#content
-    position absolute
-    //margin 41px 0
-    //padding 10px
-    top 41px 
-    left 0
-    right 0
-    bottom 41px
-    font-size 16px
-    line-height 25px
-    color #555
-    overflow-y scroll
-
-    p
-        margin 0
-        line-height 22px
-
-    textarea
-        position absolute
-        margin 0
-        padding 8px
-        top 0
-        left 0
-        right 0
-        bottom 0
-        border 0
-        font-family helvetica, arial, sans-serif
-        font-size 18px
-        line-height 24px
-        color #555
-
+	font-size 13px
+	font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+	color #555
+	background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#818F99))

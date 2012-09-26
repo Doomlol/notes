@@ -8,6 +8,9 @@ function isMobile(req) {
 
 function render(req, res, path, options) {
     options = options || {};
+
+    // Turn off mobile for now and try "responsive" design
+    /*
     if (isMobile(req)) {
         if (options.layout === true || typeof options.layout == 'undefined') {
             options.layout = 'layouts/mobile';
@@ -20,9 +23,19 @@ function render(req, res, path, options) {
         }
         path = 'main/' + path;
     }
+    */
+    if (options.layout === true || typeof options.layout == 'undefined') {
+        options.layout = 'layouts/main';
+    }
+    path = 'main/' + path;
+
     //options.vars = options;   // convenience
     res.render(path, options);
 }
+
+exports.landing = function(req, res) {
+    render(req, res, 'landing');
+};
 
 exports.pad = function(req, res) {
     render(req, res, 'pad', {layout: false});

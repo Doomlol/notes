@@ -1,0 +1,457 @@
+// Variables
+
+// functions
+
+// mixins
+
+box-shadow()
+	-webkit-box-shadow arguments
+	-moz-box-shadow arguments
+	box-shadow arguments
+
+box-align()
+	-webkit-box-align arguments
+	-moz-box-align arguments
+	box-align arguments
+
+box-orient()
+	-webkit-box-orient arguments
+	-moz-box-orient arguments
+	box-orient arguments
+
+box-flex()
+	-webkit-box-flex arguments
+	-moz-box-flex arguments
+	box-flex arguments
+
+transform()
+	-webkit-transform arguments
+
+transform-style()
+	-webkit-transform-style arguments
+
+transition
+	-webkit-transition arguments
+
+transition-property
+	-webkit-transition-property arguments
+
+transition-duration
+	-webkit-transition-duration arguments
+
+transition-timing-function
+	-webkit-transition-timing-function arguments
+
+perspective()
+	-webkit-perspective arguments
+
+
+
+// styles
+
+html, body
+	margin 0
+	padding 0
+	height 100%
+
+body
+	position relative
+	font-size 13px
+	font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+	color #555
+	//background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#A1B6C6))
+	background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#818F99))
+	//background #c4d7e9
+	overflow hidden
+
+a.btn
+	display inline-block
+	margin 0
+	padding 0 10px
+	font-family verdana, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+	font-size 10px
+	font-weight bold
+	line-height 28px
+	text-decoration none
+	text-transform uppercase
+	text-shadow 0 1px 1px rgba(0,0,0,0.25)
+	color #fff
+	background #D74635
+	background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#09a8ef), to(#0494dd))
+	border-radius 3px
+	border 1px solid #079fe6
+
+	&:hover
+		background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0ab4f5), to(#049ee7))
+
+div.pad
+	position absolute
+	top 15px
+	left 15px
+	right 15px
+	bottom 15px
+	overflow hidden
+	box-shadow 0 1px 3px rgba(0,0,0,0.25)
+	-webkit-transition-property top, left, right, bottom
+	-webkit-transition-duration 0.5s
+
+	div.main_error
+		display none
+		position absolute
+		padding 10px
+		left 10px
+		right 10px
+		bottom 10px
+		font-size 13px
+		text-align center
+		text-shadow 0 1px 1px rgba(0,0,0,0.25)
+		color #fff
+		background #a00009
+		border-radius 3px
+		box-shadow 0 1px 3px rgba(0,0,0,0.25)
+
+	div.list
+		position absolute
+		top 0
+		left 0
+		bottom 0  
+		width 280px
+		border-right 1px solid #eee
+
+		ul#notes
+			position absolute
+			margin 0
+			padding 0
+			top 47px
+			left 0
+			right 0
+			bottom 0
+			list-style none
+			background #fff
+			overflow-y auto
+			overflow-x hidden
+
+			li
+				position relative
+				padding 10px 15px
+				background #f9f9f9
+				border-bottom 1px solid #eee
+				cursor pointer
+
+				span
+					display block
+
+					&.highlight
+						position absolute
+						top 0
+						left 0
+						bottom 0
+						width 2px
+
+					&.title
+						margin-right 40px
+						font-size 12px
+						font-weight bold
+						text-overflow ellipsis
+						white-space nowrap
+						overflow hidden
+
+					&.time
+						font-size 11px
+						color #aaa
+
+					&.delete
+						position absolute
+						top 0
+						right 0
+						bottom 0
+						padding 0 10px
+						line-height 50px
+						display none
+
+						a
+							font-size 10px
+							text-decoration none
+							color #aaa
+
+							&:hover
+								text-decoration underline
+
+				&:hover
+					background #fcfcfc
+
+					span
+						&.delete
+							display block
+
+				&.selected
+
+					span
+						&.highlight
+							background #0494DD
+						&.title
+							color #0494DD
+						&.time
+							color #7EB6D4
+
+		div.controls
+			position absolute
+			padding 8px 10px
+			left 0
+			right 0
+			bottom 0
+			//height 50px
+			font-family "Courier New"
+			font-size 12px
+			color #000
+			background rgba(255,255,255,0.75)
+
+			p
+				margin 0 0 5px
+				padding 0
+
+				&:last-child
+					margin-bottom 0
+
+				a
+					text-decoration none
+					color #fff
+
+					&:hover
+						text-decoration underline
+
+
+	div.editor
+		position absolute
+		top 0
+		left 281px
+		right 0
+		bottom 0
+
+		div.text,
+		textarea
+			position absolute
+			margin 0
+			padding 12px
+			top 47px
+			left 0
+			right 0
+			bottom 0
+			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+			font-size 13px
+			color #555
+			border none
+			outline none
+			overflow-y auto
+			resize none
+
+		div.no-note
+			position absolute
+			padding 20px
+			top 0
+			left 0
+			right 0
+			bottom 0
+			background #fff
+			overflow-y auto
+
+			h4
+				margin 0
+				padding 0 0 5px
+				font-size 16px
+				border-bottom 1px solid #eee
+
+	div.list > div.opts,
+	div.editor > div.opts
+		display -webkit-box
+		padding 8px
+		height 30px
+		background #f6f6f6
+		border-bottom 1px solid #eee
+
+		input
+			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+
+			&[type="text"]
+				padding 5px
+
+	div.list > div.opts
+		input[type="text"]
+			display block
+			margin 0 0 0 8px
+			height 18px
+			line-height 18px
+			border 1px solid rgb(230,230,230)
+			border-top 1px solid rgb(205,205,205)
+			-moz-box-flex 1
+			-webkit-box-flex 1
+			outline none
+
+		a.gear
+			display block
+			margin-left 8px
+			width 16px
+			height 100%
+			background url(/images/gear-black.png) center center no-repeat
+			-webkit-background-size auto 16px
+			opacity 0.4
+
+			&:hover
+				opacity 0.6
+			
+
+    
+	div.editor > div.opts
+		position relative
+
+		div.back
+			margin-right 8px
+			width 20px
+			height 20px
+			//background rgba(0,0,0,0.25)
+			-webkit-transform rotate(-45deg) translate(-2px, 11px)
+			display none
+
+			&:before
+				display block
+				content ''
+				width 20px
+				height 6px
+				background #888
+
+			&:after
+				display block
+				content ''
+				width 6px
+				height 14px
+				background #888
+
+		input[type="text"]
+			display block
+			margin 0
+			padding-right 20px
+			height 18px
+			line-height 18px
+			border 1px solid transparent
+			background none
+			-moz-box-flex 1
+			-webkit-box-flex 1
+			outline none
+
+			&:hover
+				border 1px solid rgba(230,230,230, 0.5)
+				border-top 1px solid rgba(205,205,205, 0.5)
+				background rgba(255,255,255,0.5)
+
+			&:hover,
+			&:focus
+				border 1px solid rgb(230,230,230)
+				border-top 1px solid rgb(205,205,205)
+				background #fff
+
+		div.save_status
+			position absolute
+			top 20px
+			right 15px
+			width 6px
+			height 6px
+			background #ccc
+			border-radius 50%
+
+			&.saved-true
+				background #5edc20
+
+body.expanded-true
+	div.pad
+		top 0
+		left 0
+		right 0
+		bottom 0
+
+
+::-webkit-scrollbar
+	width 6px
+
+::-webkit-scrollbar-track
+	background #eee
+
+::-webkit-scrollbar-thumb
+	//background #09A8EF
+	background #ccc
+
+
+@media (max-width: 800px)
+
+	a.btn
+		padding 0 12px
+		font-size 14px
+		line-height 36px
+
+	div.pad
+		div.list
+			width auto
+			right 0
+			-webkit-transition -webkit-transform 0.5s
+
+			ul#notes
+				top 55px
+
+				li
+					span
+						&.title
+							font-size 16px
+						&.time
+							font-size 14px
+
+		div.editor
+			left 100%
+			right auto
+			width 100%
+			-webkit-transition -webkit-transform 0.5s
+
+			div.text,
+			textarea
+				top 55px
+
+		div.list > div.opts,
+		div.editor > div.opts
+			padding 8px
+			height 38px
+
+			input[type="text"]
+				font-size 19px
+				padding 5px 7px
+				height 26px
+				line-height 26px
+
+		div.list > div.opts
+			input[type="text"]
+				margin 0 0 0 8px
+
+			a.gear
+				width 24px
+				-webkit-background-size auto 24px
+
+		div.editor > div.opts
+			div.back
+				display block
+
+			input[type="text"]
+				padding-right 28px
+
+			div.save_status
+				top 23px
+				right 20px
+				width 8px
+				height 8px
+
+	body.view-note,
+	body.view-note-true
+		div.pad
+			div.list,
+			div.editor
+				-webkit-transform translateX(-100%)
+
+
+
+

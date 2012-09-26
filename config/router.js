@@ -3,6 +3,11 @@
 var routes = require('../routes');
 
 var paths_to_routes = {
+    '/': routes.landing
+};
+
+/*
+var paths_to_routes = {
     '/': routes.pad,
     '/alt': routes.alt,
     '/about': routes.about,
@@ -19,7 +24,7 @@ var paths_to_routes = {
     '/500': routes.error_500,
     '/*': routes.error_404
     */
-};
+//};
 
 exports.setupRoutes = function(app) {
     // Setup regular routes
