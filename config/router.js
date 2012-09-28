@@ -2,29 +2,31 @@
 
 var routes = require('../routes');
 
-var paths_to_routes = {
-    '/': routes.landing
-};
-
-/*
-var paths_to_routes = {
-    '/': routes.pad,
-    '/alt': routes.alt,
-    '/about': routes.about,
-    '/partials/:path': routes.partials,
-    
-    // Sandbox
-    '/sandbox': routes.sandbox,
-    '/sandbox/:path': routes.sandbox
-    
-    /*,
-    '/sandbox/*': routes.error_404,
-    
-    // Error routes - keep last
-    '/500': routes.error_500,
-    '/*': routes.error_404
-    */
-//};
+if (true) {
+    var paths_to_routes = {
+        '/': routes.landing
+    };
+}
+else {
+    var paths_to_routes = {
+        '/': routes.pad,
+        '/alt': routes.alt,
+        '/about': routes.about,
+        '/partials/:path': routes.partials,
+        
+        // Sandbox
+        '/sandbox': routes.sandbox,
+        '/sandbox/:path': routes.sandbox
+        
+        /*,
+        '/sandbox/*': routes.error_404,
+        
+        // Error routes - keep last
+        '/500': routes.error_500,
+        '/*': routes.error_404
+        */
+    };
+}
 
 exports.setupRoutes = function(app) {
     // Setup regular routes
