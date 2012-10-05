@@ -399,6 +399,17 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
 		}
+		$scope.log = function(x) {
+			x = x || 'no string';
+			console.log('Test log', x);
+		}
+	})
+	.controller('NewCtrl', function NewCtrl($scope, $location, $routeParams) {
+		console.log('uno');
+		$scope.log(1);
+		$scope.addNote();
+		$scope.log(2);
+		console.log('dos');
 	})
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {
 
@@ -482,9 +493,20 @@ angular.module('NotesApp', ['controllers', 'components'])
 			})
 			.when('/new', {
 				// Do stuff
+				template: '<div class="page">Loading...</div>',
+				controller: 'NewCtrl'
+			})
+			.when('/options', {
+				templateUrl: '/partials/options'
+			})
+			.when('/bacon', {
+				redirectTo: '/options'
+			})
+			.when('', {
+				templateUrl: '/partials/hello'
 			})
 			.otherwise({
-				redirectTo: '',
+				redirectTo: '/',
 				templateUrl: '/partials/hello'
 			});
 	});

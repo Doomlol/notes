@@ -2,7 +2,7 @@
 
 var routes = require('../routes');
 
-if (true) {
+if (false) {
     var paths_to_routes = {
         '/': routes.landing
     };
