@@ -17,7 +17,7 @@ html(lang="en", ng-app="NotesApp")
 				div.opts
 					a#new.btn(ng-click="addNote()") New
 					input(type="text", id="search", placeholder="Search")
-					a.gear('')
+					a.gear(href="#/options")
 				ul#notes
 					li(ng-repeat="note in notes", ng-click="loadNote(note.getId())",  ng-class="note.class", rel="note_{{note.getId()}}")
 						span.highlight

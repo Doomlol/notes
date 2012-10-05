@@ -29,24 +29,26 @@ div.pad div.list div.controls p:last-child{margin-bottom:0}
 div.pad div.list div.controls p a{text-decoration:none;color:#fff;}
 div.pad div.list div.controls p a:hover{text-decoration:underline}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
-div.pad div.editor div.text,div.pad div.editor textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none}
+div.pad div.editor note{position:absolute;top:0;left:0;right:0;bottom:0;}
+div.pad div.editor note div.text,div.pad div.editor note textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none}
 div.pad div.editor div.page{position:absolute;padding:20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
 div.pad div.editor div.page h4{margin:0;padding:0 0 5px;font-size:16px;border-bottom:1px solid #eee}
-div.pad div.list > div.opts,div.pad div.editor > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
-div.pad div.list > div.opts input,div.pad div.editor > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
-div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{padding:5px}
+div.pad div.editor div.page del{color:#ccc}
+div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
+div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
+div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
 div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-moz-box-flex:1;-webkit-box-flex:1;outline:none}
 div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:100%;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;opacity:.4;}
 div.pad div.list > div.opts a.gear:hover{opacity:.6}
-div.pad div.editor > div.opts{position:relative;}
-div.pad div.editor > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);display:none;}
-div.pad div.editor > div.opts div.back:before{display:block;content:'';width:20px;height:6px;background:#888}
-div.pad div.editor > div.opts div.back:after{display:block;content:'';width:6px;height:14px;background:#888}
-div.pad div.editor > div.opts input[type="text"]{display:block;margin:0;padding-right:20px;height:18px;line-height:18px;border:1px solid transparent;background:none;-moz-box-flex:1;-webkit-box-flex:1;outline:none;}
-div.pad div.editor > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,230,0.5);border-top:1px solid rgba(205,205,205,0.5);background:rgba(255,255,255,0.5)}
-div.pad div.editor > div.opts input[type="text"]:hover,div.pad div.editor > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
-div.pad div.editor > div.opts div.save_status{position:absolute;top:20px;right:15px;width:6px;height:6px;background:#ccc;border-radius:50%;}
-div.pad div.editor > div.opts div.save_status.saved-true{background:#5edc20}
+div.pad note > div.opts{position:relative;}
+div.pad note > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);display:none;}
+div.pad note > div.opts div.back:before{display:block;content:'';width:20px;height:6px;background:#888}
+div.pad note > div.opts div.back:after{display:block;content:'';width:6px;height:14px;background:#888}
+div.pad note > div.opts input[type="text"]{display:block;margin:0;padding-right:20px;height:18px;line-height:18px;border:1px solid transparent;background:none;-moz-box-flex:1;-webkit-box-flex:1;outline:none;}
+div.pad note > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,230,0.5);border-top:1px solid rgba(205,205,205,0.5);background:rgba(255,255,255,0.5)}
+div.pad note > div.opts input[type="text"]:hover,div.pad note > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
+div.pad note > div.opts div.save_status{position:absolute;top:20px;right:15px;width:6px;height:6px;background:#ccc;border-radius:50%;}
+div.pad note > div.opts div.save_status.saved-true{background:#5edc20}
 body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:#eee}
@@ -57,13 +59,13 @@ div.pad div.list ul#notes{top:55px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
 div.pad div.editor{left:100%;right:auto;width:100%;-webkit-transition:-webkit-transform .5s;}
-div.pad div.editor div.text,div.pad div.editor textarea{top:55px}
-div.pad div.list > div.opts,div.pad div.editor > div.opts{padding:8px;height:38px;}
-div.pad div.list > div.opts input[type="text"],div.pad div.editor > div.opts input[type="text"]{font-size:19px;padding:5px 7px;height:26px;line-height:26px}
+div.pad div.editor note div.text,div.pad div.editor note textarea{top:55px}
+div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:38px;}
+div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{font-size:19px;padding:5px 7px;height:26px;line-height:26px}
 div.pad div.list > div.opts input[type="text"]{margin:0 0 0 8px}
 div.pad div.list > div.opts a.gear{width:24px;-webkit-background-size:auto 24px}
-div.pad div.editor > div.opts div.back{display:block}
-div.pad div.editor > div.opts input[type="text"]{padding-right:28px}
-div.pad div.editor > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
+div.pad note > div.opts div.back{display:block}
+div.pad note > div.opts input[type="text"]{padding-right:28px}
+div.pad note > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
 body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%)}
 }

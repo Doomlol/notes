@@ -22,7 +22,7 @@ function Note(value) {
 		return this.value.title || '';
 	};
 	this.getBody = function() {
-		return this.value.body || 'No text';
+		return this.value.body;
 	};
 	this.getTime = function() {
 		return Utils.formatDate(this.value.updated_at);
@@ -404,13 +404,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 			console.log('Test log', x);
 		}
 	})
-	.controller('NewCtrl', function NewCtrl($scope, $location, $routeParams) {
-		console.log('uno');
-		$scope.log(1);
-		$scope.addNote();
-		$scope.log(2);
-		console.log('dos');
-	})
+
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {
 
 		$scope.saved = true;
@@ -422,10 +416,11 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		// the call to do so, then set the note when it's available.
 		// Enqueue it at the bottom so all other functions are available when it runs.
 		function initialize() {
-			var note_id = parseInt($routeParams.note_id);
+			// parseInt will allow trailing letters after digits
+			var note_id = (new Number($routeParams.note_id)).valueOf();
 			$scope.note = $scope.getNote(note_id);
 			if (!$scope.note) {
-				$scope.loadFirstNote();
+				$location.path('/notfound/' + $routeParams.note_id);
 				return;
 			}
 			$scope.setCurrentNote($scope.note);
@@ -466,6 +461,14 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		}
 
 		$scope.enqueue(initialize);
+	})
+
+	.controller('NotFoundCtrl', function NotFoundCtrl($scope, $routeParams) {
+		$scope.note_id = $routeParams.note_id;
+	})
+
+	.controller('OptionsCtrl', function OptionsCtrl($scope) {
+		// Nothing here yet
 	});
 
 
@@ -478,7 +481,16 @@ angular.module('components', [])
 			restrict: 'E',
 			templateUrl: '/partials/note'
 		}
-	});
+	})
+	.directive('emptyFocus', function() {
+		return {
+			restrict: 'A',
+			controller: function($scope, $element) {
+				if (!$element[0].value)
+					$element[0].focus();
+			}
+		}
+	})
 
 // services
 // filters
@@ -488,19 +500,16 @@ angular.module('NotesApp', ['controllers', 'components'])
 	.config(function($routeProvider) {
 		$routeProvider
 			.when('/note/:note_id', {
-				templateUrl: '/partials/note',
+				template: '<note></note>',
 				controller: 'NoteCtrl'
 			})
-			.when('/new', {
-				// Do stuff
-				template: '<div class="page">Loading...</div>',
-				controller: 'NewCtrl'
+			.when('/notfound/:note_id', {
+				templateUrl: '/partials/notfound',
+				controller: 'NotFoundCtrl'
 			})
 			.when('/options', {
-				templateUrl: '/partials/options'
-			})
-			.when('/bacon', {
-				redirectTo: '/options'
+				templateUrl: '/partials/options',
+				controller: 'OptionsCtrl'
 			})
 			.when('', {
 				templateUrl: '/partials/hello'

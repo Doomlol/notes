@@ -228,22 +228,29 @@ div.pad
 		right 0
 		bottom 0
 
-		div.text,
-		textarea
+		note
 			position absolute
-			margin 0
-			padding 12px
-			top 47px
+			top 0
 			left 0
 			right 0
 			bottom 0
-			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-			font-size 13px
-			color #555
-			border none
-			outline none
-			overflow-y auto
-			resize none
+
+			div.text,
+			textarea
+				position absolute
+				margin 0
+				padding 12px
+				top 47px
+				left 0
+				right 0
+				bottom 0
+				font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+				font-size 13px
+				color #555
+				border none
+				outline none
+				overflow-y auto
+				resize none
 
 		div.page
 			position absolute
@@ -261,8 +268,11 @@ div.pad
 				font-size 16px
 				border-bottom 1px solid #eee
 
+			del
+				color #ccc
+
 	div.list > div.opts,
-	div.editor > div.opts
+	note > div.opts
 		display -webkit-box
 		padding 8px
 		height 30px
@@ -301,7 +311,7 @@ div.pad
 			
 
     
-	div.editor > div.opts
+	note > div.opts
 		position relative
 
 		div.back
@@ -409,12 +419,13 @@ body.expanded-true
 			width 100%
 			-webkit-transition -webkit-transform 0.5s
 
-			div.text,
-			textarea
-				top 55px
+			note
+				div.text,
+				textarea
+					top 55px
 
 		div.list > div.opts,
-		div.editor > div.opts
+		note > div.opts
 			padding 8px
 			height 38px
 
@@ -432,7 +443,7 @@ body.expanded-true
 				width 24px
 				-webkit-background-size auto 24px
 
-		div.editor > div.opts
+		note > div.opts
 			div.back
 				display block
 
