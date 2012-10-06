@@ -4,7 +4,19 @@ div.page
 	p ToDo
 	ul
 		li <del>"No note" scenario - Currently redirects to first note</del>
+		li <del>Focus text on new note</del>
 		li Open first note on load if note exists
 		li Or - Open new note if no note exists
-		li Focus text on new note
 		li Text size
+
+	p On startup, load...
+	ul(class="radioset")
+		li: label
+			input(type="radio", name="startup", value="0")
+			| Welcome page
+		li: label
+			input(type="radio", name="startup", value="1")
+			| First note
+		li: label
+			input(type="radio", name="startup", value="2")
+			| New note

@@ -34,6 +34,10 @@ div.pad div.editor note div.text,div.pad div.editor note textarea{position:absol
 div.pad div.editor div.page{position:absolute;padding:20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
 div.pad div.editor div.page h4{margin:0;padding:0 0 5px;font-size:16px;border-bottom:1px solid #eee}
 div.pad div.editor div.page del{color:#ccc}
+div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;padding:0;list-style:none;}
+div.pad div.editor div.page ul.radioset li label{display:block;padding:3px 10px 3px 3px;cursor:pointer;}
+div.pad div.editor div.page ul.radioset li label:hover{background:#d5dee5;border-radius:5px}
+div.pad div.editor div.page ul.radioset li input[type="radio"]{margin-right:8px}
 div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
