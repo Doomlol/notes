@@ -482,14 +482,42 @@ angular.module('components', [])
 			templateUrl: '/partials/note'
 		}
 	})
-	.directive('emptyFocus', function() {
+	.directive('autoFocus', function() {
+
+		return function(scope, element, attrs) {
+			scope.el = $(element[0]);
+			var unwatch_textchange = scope.$watch('el.val()', function(old_value, new_value) {
+				if (!new_value || (old_value == new_value)) {
+					var text_length = $(scope.el[0]).val().length;
+					var pos = (attrs.autoFocus == 'start') ? 0 : text_length;
+					scope.el.focus();
+					scope.el[0].setSelectionRange(pos, pos);
+					if (text_length)
+						unwatch_textchange();
+				}
+			})
+		}
+
+		/*
 		return {
 			restrict: 'A',
 			controller: function($scope, $element) {
-				if (!$element[0].value)
-					$element[0].focus();
+				$scope.el = $($element[0]);
+
+				var unwatch_textchange = $scope.$watch('el.val()', function(old_value, new_value) {
+					console.log('old value:', old_value, 'new value:', new_value);
+					$scope.el.focus();
+					if (old_value || new_value)
+						unwatch_textchange();
+				});
+
+
+				//console.log('...', el.val(), $(el).val());
+				//if (!$element[0].value)
+				//	$element[0].focus();
+				//$element[0].value ? $element[0].blur() : $element[0].focus();
 			}
-		}
+		}*/
 	})
 
 // services
