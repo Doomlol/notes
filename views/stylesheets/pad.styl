@@ -290,6 +290,73 @@ div.pad
 					input[type="radio"]
 						margin-right 8px
 
+			ul.options
+				margin 10px 0
+				padding 0
+				list-style none
+				
+				li
+					label
+						position relative
+						display inline-block
+						margin 0 10px 0 0
+						padding 0 6px
+						width 250px
+						line-height 32px
+						cursor pointer
+						background #f6f6f6
+						border-bottom 1px solid #fff
+						-webkit-transition background 0.25s ease-out
+
+						&:hover
+							background #eee
+
+						input[type="checkbox"],
+						input[type="radio"]
+							vertical-align middle
+							margin-top -2px
+							margin-right 5px
+
+					&:first-child
+						label
+							border-top-left-radius 3px
+							border-top-right-radius 3px
+
+					&:last-child
+						label
+							border-bottom none
+							border-bottom-left-radius 3px
+							border-bottom-right-radius 3px
+
+					span
+						&.path
+							position absolute
+							display none
+							top 0
+							left 16px
+							width 8px
+							height 15px
+							border-left 1px dotted #999
+							border-bottom 1px dotted #999
+						&.saved
+							font-style italic
+							color #82b94b
+
+							&.hide
+								opacity 0.0
+								-webkit-transition opacity 0.5s ease-out
+							&.show
+								opacity 1.0
+
+					&.subsetting
+						label
+							padding-left 30px
+							width 226px
+							font-size 11px
+
+						span.path
+							display block
+
 	div.list > div.opts,
 	note > div.opts
 		display -webkit-box

@@ -10,13 +10,23 @@ div.page
 		li Text size
 
 	p On startup, load...
-	ul(class="radioset")
-		li: label
-			input(type="radio", name="startup", value="0")
-			| Welcome page
-		li: label
-			input(type="radio", name="startup", value="1")
-			| First note
-		li: label
-			input(type="radio", name="startup", value="2")
-			| New note
+
+	ul(class="options")
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="1")
+				| Welcome page
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="2")
+				| First note
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="3")
+				| New note
+			span(class="saved hide") Saved

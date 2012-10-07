@@ -38,6 +38,18 @@ div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;p
 div.pad div.editor div.page ul.radioset li label{display:block;padding:3px 10px 3px 3px;cursor:pointer;}
 div.pad div.editor div.page ul.radioset li label:hover{background:#d5dee5;border-radius:5px}
 div.pad div.editor div.page ul.radioset li input[type="radio"]{margin-right:8px}
+div.pad div.editor div.page ul.options{margin:10px 0;padding:0;list-style:none;}
+div.pad div.editor div.page ul.options li label{position:relative;display:inline-block;margin:0 10px 0 0;padding:0 6px;width:250px;line-height:32px;cursor:pointer;background:#f6f6f6;border-bottom:1px solid #fff;-webkit-transition:background .25s ease-out;}
+div.pad div.editor div.page ul.options li label:hover{background:#eee}
+div.pad div.editor div.page ul.options li label input[type="checkbox"],div.pad div.editor div.page ul.options li label input[type="radio"]{vertical-align:middle;margin-top:-2px;margin-right:5px}
+div.pad div.editor div.page ul.options li:first-child label{border-top-left-radius:3px;border-top-right-radius:3px}
+div.pad div.editor div.page ul.options li:last-child label{border-bottom:none;border-bottom-left-radius:3px;border-bottom-right-radius:3px}
+div.pad div.editor div.page ul.options li span.path{position:absolute;display:none;top:0;left:16px;width:8px;height:15px;border-left:1px dotted #999;border-bottom:1px dotted #999}
+div.pad div.editor div.page ul.options li span.saved{font-style:italic;color:#82b94b;}
+div.pad div.editor div.page ul.options li span.saved.hide{opacity:0;-webkit-transition:opacity .5s ease-out}
+div.pad div.editor div.page ul.options li span.saved.show{opacity:1}
+div.pad div.editor div.page ul.options li.subsetting label{padding-left:30px;width:226px;font-size:11px}
+div.pad div.editor div.page ul.options li.subsetting span.path{display:block}
 div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}

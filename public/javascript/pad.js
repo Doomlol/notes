@@ -483,7 +483,6 @@ angular.module('components', [])
 		}
 	})
 	.directive('autoFocus', function() {
-
 		return function(scope, element, attrs) {
 			scope.el = $(element[0]);
 			var unwatch_textchange = scope.$watch('el.val()', function(old_value, new_value) {
@@ -497,27 +496,6 @@ angular.module('components', [])
 				}
 			})
 		}
-
-		/*
-		return {
-			restrict: 'A',
-			controller: function($scope, $element) {
-				$scope.el = $($element[0]);
-
-				var unwatch_textchange = $scope.$watch('el.val()', function(old_value, new_value) {
-					console.log('old value:', old_value, 'new value:', new_value);
-					$scope.el.focus();
-					if (old_value || new_value)
-						unwatch_textchange();
-				});
-
-
-				//console.log('...', el.val(), $(el).val());
-				//if (!$element[0].value)
-				//	$element[0].focus();
-				//$element[0].value ? $element[0].blur() : $element[0].focus();
-			}
-		}*/
 	})
 
 // services
