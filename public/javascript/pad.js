@@ -467,7 +467,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		$scope.note_id = $routeParams.note_id;
 	})
 
-	.controller('OptionsCtrl', function OptionsCtrl($scope) {
+	.controller('SettingsCtrl', function OptionsCtrl($scope) {
 		// Nothing here yet
 	});
 
@@ -513,9 +513,9 @@ angular.module('NotesApp', ['controllers', 'components'])
 				templateUrl: '/partials/notfound',
 				controller: 'NotFoundCtrl'
 			})
-			.when('/options', {
-				templateUrl: '/partials/options',
-				controller: 'OptionsCtrl'
+			.when('/settings', {
+				templateUrl: '/partials/settings',
+				controller: 'SettingsCtrl'
 			})
 			.when('', {
 				templateUrl: '/partials/hello'

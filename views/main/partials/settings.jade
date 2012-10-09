@@ -1,0 +1,84 @@
+div.page
+	h2 Settings
+	p Nothing here yet
+	h3 ToDo
+	ul
+		li <del>"No note" scenario - Currently redirects to first note</del>
+		li <del>Focus text on new note</del>
+		li Open first note on load if note exists
+		li Or - Open new note if no note exists
+		li Text size
+
+
+	h3 Meta settings
+
+	ul(class="options")
+		li
+			label
+				span(class="path")
+				input(type="radio", name="settingstype", value="1")
+				| Use local settings
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="settingstype", value="2")
+				| Use synced settings
+			span(class="saved hide") Saved
+
+	h3 On startup, load...
+
+	// Do this with ng-repeat somehow
+	ul(class="options")
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="1")
+				| Welcome page
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="2")
+				| First note
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="3")
+				| New note
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="4")
+				| Last viewed note
+			span(class="saved hide") Saved
+
+	h3 Font
+
+	ul(class="options")
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="1")
+				| Open Sans
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="1")
+				| Helvetica / Arial
+			span(class="saved hide") Saved
+		li
+			label
+				span(class="path")
+				input(type="radio", name="startup", value="1")
+				| Ubuntu
+			span(class="saved hide") Saved
+		
+
+
+
+
+

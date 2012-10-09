@@ -32,16 +32,17 @@ div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor note{position:absolute;top:0;left:0;right:0;bottom:0;}
 div.pad div.editor note div.text,div.pad div.editor note textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none}
 div.pad div.editor div.page{position:absolute;padding:20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
-div.pad div.editor div.page h4{margin:0;padding:0 0 5px;font-size:16px;border-bottom:1px solid #eee}
+div.pad div.editor div.page h2{margin:0;padding:0 0 5px;font-size:16px;border-bottom:1px solid #eee}
+div.pad div.editor div.page h3{margin-top:40px;font-size:14px}
 div.pad div.editor div.page del{color:#ccc}
 div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;padding:0;list-style:none;}
 div.pad div.editor div.page ul.radioset li label{display:block;padding:3px 10px 3px 3px;cursor:pointer;}
 div.pad div.editor div.page ul.radioset li label:hover{background:#d5dee5;border-radius:5px}
 div.pad div.editor div.page ul.radioset li input[type="radio"]{margin-right:8px}
 div.pad div.editor div.page ul.options{margin:10px 0;padding:0;list-style:none;}
-div.pad div.editor div.page ul.options li label{position:relative;display:inline-block;margin:0 10px 0 0;padding:0 6px;width:250px;line-height:32px;cursor:pointer;background:#f6f6f6;border-bottom:1px solid #fff;-webkit-transition:background .25s ease-out;}
-div.pad div.editor div.page ul.options li label:hover{background:#eee}
-div.pad div.editor div.page ul.options li label input[type="checkbox"],div.pad div.editor div.page ul.options li label input[type="radio"]{vertical-align:middle;margin-top:-2px;margin-right:5px}
+div.pad div.editor div.page ul.options li label{position:relative;display:inline-block;margin:0 10px 0 0;padding:0 6px;width:250px;line-height:32px;cursor:pointer;border-bottom:1px solid #eee;-webkit-transition:background .25s ease-out;}
+div.pad div.editor div.page ul.options li label:hover{background:#f6f6f6}
+div.pad div.editor div.page ul.options li label input[type="checkbox"],div.pad div.editor div.page ul.options li label input[type="radio"]{vertical-align:middle;margin-top:-2px;margin-right:8px}
 div.pad div.editor div.page ul.options li:first-child label{border-top-left-radius:3px;border-top-right-radius:3px}
 div.pad div.editor div.page ul.options li:last-child label{border-bottom:none;border-bottom-left-radius:3px;border-bottom-right-radius:3px}
 div.pad div.editor div.page ul.options li span.path{position:absolute;display:none;top:0;left:16px;width:8px;height:15px;border-left:1px dotted #999;border-bottom:1px dotted #999}
