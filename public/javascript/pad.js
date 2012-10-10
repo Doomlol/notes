@@ -67,7 +67,7 @@ var Utils = {
 
 // Database module - IndexedDB
 angular.module('IndexedDB', [])
-	.factory('indexeddb', function($rootScope, $q) {
+	.factory('indexeddb', function($rootScope) {
 
 		function IndexedDB(name, version, store, item_class, upgrade_function) {
 			this.db = null;
@@ -311,7 +311,7 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		var queue = [];
 
 		$scope.db = indexeddb('notes-db', 28, 'notes', Note, upgrade_database);
-		$scope.note_view = false;
+		$scope.page_view = false;
 		$scope.expanded = false;
 
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
@@ -390,11 +390,11 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		$scope.getTotalNotes = function() {
 			return $scope.notes.length;
 		}
-		$scope.setNoteView = function(val) {
-			$scope.note_view = val;
+		$scope.setPageView = function(val) {
+			$scope.page_view = val;
 		}
 		$scope.menu = function() {
-			$scope.setNoteView(false);
+			$scope.setPageView(false);
 		}
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
@@ -405,11 +405,17 @@ angular.module('controllers', ['ngResource', 'IndexedDB'])
 		}
 	})
 
+	.controller('PageCtrl', function PageCtrl($scope, $routeParams) {
+
+		$scope.setPageView(true);
+
+	})
+
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {
 
 		$scope.saved = true;
 		$scope.save_timeout = null;
-		$scope.setNoteView(true);
+		$scope.setPageView(true);
 
 		// This controller will likely be instantiated before notes have returned from the db.
 		// So instead of trying to fetch the note immediately (it won't be there), enqueue
@@ -513,16 +519,23 @@ angular.module('NotesApp', ['controllers', 'components'])
 				templateUrl: '/partials/notfound',
 				controller: 'NotFoundCtrl'
 			})
+
+			// Lookup routes and see if there's a way to make NotFoundCtrl, SettingsCtrl, NoteCtrl, etc,
+			// inherit from PageCtrl, and then stick generic stuff like small-page sliding and back button (menu())
+			// control in there
+
 			.when('/settings', {
 				templateUrl: '/partials/settings',
 				controller: 'SettingsCtrl'
 			})
 			.when('', {
-				templateUrl: '/partials/hello'
+				templateUrl: '/partials/hello',
+				controller: 'PageCtrl'
 			})
 			.otherwise({
 				redirectTo: '/',
-				templateUrl: '/partials/hello'
+				templateUrl: '/partials/hello',
+				controller: 'PageCtrl'
 			});
 	});
 
