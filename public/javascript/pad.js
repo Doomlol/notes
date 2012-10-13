@@ -498,21 +498,13 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule'])
 		var settings = ['type', 'startup', 'fontfamily'];
 
 		function settingsChange(setting, new_value, old_value) {
-			console.log('change', setting, new_value, old_value);
 			localStorageService.set(setting, new_value);
 		}
 
 		angular.forEach(settings, function(s) {
 			$scope[s] = localStorageService.get(s);
 			$scope.$watch(s, settingsChange.bind(this, s));
-		})
-
-		window.xx = function() {
-			angular.forEach(settings, function(s) {
-				console.log(s, $scope[s]);
-			});
-		}
-
+		});
 	})
 
 	.controller('PageCtrl', function PageCtrl($scope, $routeParams) {
