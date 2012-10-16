@@ -96,4 +96,4 @@ div.pad note > div.opts div.back{display:block}
 div.pad note > div.opts input[type="text"]{padding-right:28px}
 div.pad note > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
 body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%)}
-}
+}div.upload_test{padding:30px;text-align:center;border:1px solid #ddd;border-radius:5px}

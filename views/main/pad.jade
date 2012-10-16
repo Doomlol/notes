@@ -10,7 +10,6 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
 	body(ng-controller="MainCtrl", class="view-note-{{page_view}} expanded-{{expanded}} font-{{settings.fontfamily}}")
-
 		div.pad
 			div.main_error
 			div.list
@@ -34,11 +33,9 @@ html(lang="en", ng-app="NotesApp")
 	footer
 		script(src="/javascript/jquery.min.js")
 		script(src="/javascript/angular/angular-1.0.1.min.js")
+		script(src="https://api.filepicker.io/v0/filepicker.js")
 		//script(src="/javascript/angular/angular-resource-1.0.1.min.js")
 		//script(src="https://static.firebase.com/v0/firebase.js")
-		//script(src="/javascript/jquery.tmpl.min.js")
-		//script(src="/javascript/underscore-min.js")
-		//script(src="/javascript/backbone-min.js")
 		//script(src="/javascript/parse-1.0.10.min.js")
 		script(src="/javascript/pad.js")
 		include ../components/analytics.html

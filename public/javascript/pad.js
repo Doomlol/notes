@@ -8,6 +8,8 @@
 })();
 
 
+filepicker.setKey('AdxGfHDDjQ2OTkf5i11y1z');
+
 
 // This is a note!
 function Note(value) {
@@ -543,6 +545,11 @@ angular.module('components', [])
 						unwatch_textchange();
 				}
 			})
+		}
+	})
+	.directive('droppable', function() {
+		return function(scope, element, attrs) {
+			console.log('This is a droppable');
 		}
 	});
 
