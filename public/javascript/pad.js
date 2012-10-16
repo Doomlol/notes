@@ -63,38 +63,42 @@ var Utils = {
 };
 
 // Service - only one instance
+// This should use a prefix
 angular.module('LocalStorageModule', [])
 	.service('localStorageService', function() {
-		return {
-			set: function(key, value) {
-				if (typeof value == 'ojbect')
-					value = JSON.stringify(value);
-				localStorage.setItem(key, value);
-			},
-			get: function(key) {
-				var value = localStorage.getItem(key);
-				try {
-					return JSON.parse(value);
-				}
-				catch(e) {
-					return value;
-				}
-			},
-			remove: function(key) {
-				return localStorage.removeItem(key);
-			},
-			clearAll: function() {
-				for (var i in localStorage)
-					this.remove(i);
-			}
+		this.prefix = 'notesfm-';
+		this.getPrefixedKey = function(key, opts) {
+			return (this.prefix || '') + (opts && opts.prefix || '') + key;
 		}
+		this.set = function(key, value, opts) {
+			if (typeof value == 'ojbect')
+				value = JSON.stringify(value);
+			key = this.getPrefixedKey(key, opts);
+			localStorage.setItem(key, value);
+		};
+		this.get = function(key, opts) {
+			key = this.getPrefixedKey(key, opts);
+			var value = localStorage.getItem(key);
+			try {
+				return JSON.parse(value);
+			}
+			catch(e) {
+				return value;
+			}
+		};
+		this.remove = function(key) {
+			return localStorage.removeItem(key);
+		};
+		this.clearAll = function() {
+			for (var i in localStorage)
+				this.remove(i);
+		};
 	});
 
 // Database module - IndexedDB
 // Factory - multiple instances
 angular.module('IndexedDBModule', [])
 	.factory('indexeddb', function($rootScope) {
-
 		function IndexedDB(name, version, store, item_class, upgrade_function) {
 			this.db = null;
 			this.settings = {
@@ -267,12 +271,8 @@ angular.module('IndexedDBModule', [])
 			};
 			this.initialize();
 		}
-
-
 		function IndexedDBFactory(name, version, store, item_class, upgrade_function) {
-
 			var db = new IndexedDB(name, version, store, item_class, upgrade_function);
-
 			// These values are returned by default
 			var funcs = {
 				get: {},
@@ -281,56 +281,76 @@ angular.module('IndexedDBModule', [])
 				edit: {},
 				delete: null
 			};
-
 			for (var f in funcs) {
-
 				var retval = angular.copy(funcs[f]);
-				
 				funcs[f] = function(retval, func, opts) {
 					opts = opts || {};
-
 					// This needs to be separated into a new reference so successive returns do
 					// not all point to the same objects
 					var retval_copy = angular.copy(retval);
 					var params = angular.copy(opts);
-
 					params.success = function(retval_copy, result) {
 						retval_copy ? angular.copy(result, retval_copy) : (retval_copy = result);
 						$rootScope.$apply();
 						if (opts.success)
 							opts.success(retval_copy);
 					}.bind(db, retval_copy);
-
 					params.failure = function(retval_copy, result) {
 						retval_copy ? angular.copy(result, retval_copy) : (retval_copy = result);
 						angular.copy(result, retval_copy);
 						if (opts.failure)
 							opts.failure(retval_copy);
 					}.bind(db, retval_copy);
-
 					db.enqueue(db[func].bind(db, params));
-
 					return retval_copy;
-
 				}.bind(this, retval, f);  // retval is messed if not bound
 			}
-
 			return funcs;
 		}
-
 		return IndexedDBFactory;
 	});
 
+// Maybe once this is working you can remove LocalStorageModule / localStorageService from
+// the controllers
+angular.module('NotesHelperModule', ['LocalStorageModule'])
+	.service('storage', function() {
+		// This should be a helper for abstracting the switching between local
+		// storage and firebase
+	})
+	.service('settings', function($rootScope, localStorageService) {
 
+		var storage_prefix = 'setting-';
+		var settings = ['type', 'startup', 'fontfamily'];
+
+		$rootScope.settings = {};
+
+		function settingsChange(setting, new_value, old_value) {
+			if (new_value == old_value)
+				return;
+			localStorageService.set(setting, new_value, {prefix: storage_prefix});
+		}
+		function val(setting) {
+			return this.settings[setting];
+		}
+		angular.forEach(settings, function(s) {
+			$rootScope.settings[s] = localStorageService.get(s, {prefix: storage_prefix});
+			$rootScope.$watch(val.bind($rootScope,s), settingsChange.bind(this,s));
+		});
+	});
 
 // Controllers
 // If we wanted, all the things in controllers, components, and services
 // could be chained inside the NotesApp module declaration
 // Keep in mind that $scope.$apply is necessary in most callbacks
-angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule'])
-	.controller('MainCtrl', function MainCtrl($scope, $location, localStorageService, indexeddb) {
+angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHelperModule'])
+	.controller('MainCtrl', function MainCtrl($scope, $location, localStorageService, indexeddb, settings) {
 
-		window.mainscope = $scope;
+		window.xxx = $scope;
+
+		$scope.getSettings = function() {
+			console.log('settings:', $scope.settings);
+		}
+
 		var queue = [];
 
 		$scope.db = indexeddb('notes-db', 28, 'notes', Note, upgrade_database);
@@ -492,19 +512,7 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule'])
 	})
 
 	.controller('SettingsCtrl', function OptionsCtrl($scope, localStorageService) {
-
 		$scope.setPageView(true);
-
-		var settings = ['type', 'startup', 'fontfamily'];
-
-		function settingsChange(setting, new_value, old_value) {
-			localStorageService.set(setting, new_value);
-		}
-
-		angular.forEach(settings, function(s) {
-			$scope[s] = localStorageService.get(s);
-			$scope.$watch(s, settingsChange.bind(this, s));
-		});
 	})
 
 	.controller('PageCtrl', function PageCtrl($scope, $routeParams) {
@@ -581,8 +589,21 @@ angular.module('NotesApp', ['controllers', 'components'])
 
 
 
+/*
 
+// Old settings controller content
 
+var settings = ['type', 'startup', 'fontfamily'];
+
+function settingsChange(setting, new_value, old_value) {
+	localStorageService.set(setting, new_value);
+}
+
+angular.forEach(settings, function(s) {
+	$scope[s] = localStorageService.get(s);
+	$scope.$watch(s, settingsChange.bind(this, s));
+});
+*/
 
 
 

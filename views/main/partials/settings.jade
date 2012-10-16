@@ -17,15 +17,13 @@ div.page
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="type", name="type", value="1")
+				input(type="radio", ng-model="settings.type", name="type", value="1")
 				| Use local settings
-			span(class="saved hide") Saved
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="type", name="type", value="2")
+				input(type="radio", ng-model="settings.type", name="type", value="2")
 				| Use synced settings
-			span(class="saved hide") Saved
 
 	h3 On startup, load...
 
@@ -34,51 +32,57 @@ div.page
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="startup", name="startup", value="1")
+				input(type="radio", ng-model="settings.startup", name="startup", value="1")
 				| Welcome page
-			span(class="saved hide") Saved
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="startup", name="startup", value="2")
+				input(type="radio", ng-model="settings.startup", name="startup", value="2")
 				| First note
-			span(class="saved hide") Saved
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="startup", name="startup", value="3")
+				input(type="radio", ng-model="settings.startup", name="startup", value="3")
 				| New note
-			span(class="saved hide") Saved
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="startup", name="startup", value="4")
+				input(type="radio", ng-model="settings.startup", name="startup", value="4")
 				| Last viewed note
-			span(class="saved hide") Saved
 
 	h3 Font
 
-	ul(class="options")
+	ul(class="options fontfamily")
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="fontfamily", name="fontfamily", value="1")
+				input(type="radio", ng-model="settings.fontfamily", name="fontfamily", value="1")
 				| Open Sans
-			span(class="saved hide") Saved
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="fontfamily", name="fontfamily", value="2")
+				input(type="radio", ng-model="settings.fontfamily", name="fontfamily", value="2")
 				| Helvetica / Arial
-			span(class="saved hide") Saved
 		li
 			label
 				span(class="path")
-				input(type="radio", ng-model="fontfamily", name="fontfamily", value="3")
-				| Ubuntu
-			span(class="saved hide") Saved
-		
-
+				input(type="radio", ng-model="settings.fontfamily", name="fontfamily", value="3")
+				| Verdana
+		li
+			label
+				span(class="path")
+				input(type="radio", ng-model="settings.fontfamily", name="fontfamily", value="4")
+				| Ubuntu Mono
+		li
+			label
+				span(class="path")
+				input(type="radio", ng-model="settings.fontfamily", name="fontfamily", value="5")
+				| Handlee
+		li
+			label
+				span(class="path")
+				input(type="radio", ng-model="settings.fontfamily", name="fontfamily", value="6")
+				| Racing Sans One
 
 
 

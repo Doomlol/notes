@@ -1,5 +1,12 @@
 // Variables
 
+font-1 = "Open Sans", sans-serif
+font-2 = "Helvetica Neue", "Helvetica", "Arial", sans-serif
+font-3 = "Verdana", sans-serif
+font-4 = "Ubuntu Mono", sans-serif
+font-5 = "Handlee", sans-serif
+font-6 = "Racing Sans One", sans-serif
+
 // functions
 
 // mixins
@@ -59,10 +66,22 @@ body
 	font-size 13px
 	font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
 	color #555
-	//background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#A1B6C6))
 	background -webkit-gradient(linear, left top, left bottom, from(#D5DEE5), to(#818F99))
-	//background #c4d7e9
 	overflow hidden
+
+.font-
+	&1
+		font-family font-1
+	&2
+		font-family font-2
+	&3
+		font-family font-3
+	&4
+		font-family font-4
+	&5
+		font-family font-5
+	&6
+		font-family font-6
 
 a.btn
 	display inline-block
@@ -244,7 +263,8 @@ div.pad
 				left 0
 				right 0
 				bottom 0
-				font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+				//font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+				font-family inherit
 				font-size 13px
 				color #555
 				border none
@@ -254,7 +274,7 @@ div.pad
 
 		div.page
 			position absolute
-			padding 20px
+			padding 0 20px
 			top 0
 			left 0
 			right 0
@@ -262,10 +282,19 @@ div.pad
 			background #fff
 			overflow-y auto
 
+			a
+				color #4f99ce
+				text-decoration none
+				border-bottom 1px solid #D5DEE5
+
+				&:hover
+					border-bottom 1px solid #82909A
+
 			h2
 				margin 0
-				padding 0 0 5px
+				padding 10px 0 6px
 				font-size 16px
+				line-height 30px
 				border-bottom 1px solid #eee
 
 			h3
@@ -297,15 +326,16 @@ div.pad
 			ul.options
 				margin 10px 0
 				padding 0
+				max-width 250px
 				list-style none
 				
 				li
 					label
 						position relative
-						display inline-block
+						display block
 						margin 0 10px 0 0
 						padding 0 6px
-						width 250px
+						//width 250px
 						line-height 32px
 						cursor pointer
 						//background #f6f6f6
@@ -344,15 +374,6 @@ div.pad
 							height 15px
 							border-left 1px dotted #999
 							border-bottom 1px dotted #999
-						&.saved
-							font-style italic
-							color #82b94b
-
-							&.hide
-								opacity 0.0
-								-webkit-transition opacity 0.5s ease-out
-							&.show
-								opacity 1.0
 
 					&.subsetting
 						label
@@ -363,6 +384,21 @@ div.pad
 						span.path
 							display block
 
+				&.fontfamily
+					li
+						&:nth-child(1)
+							font-family font-1
+						&:nth-child(2)
+							font-family font-2
+						&:nth-child(3)
+							font-family font-3
+						&:nth-child(4)
+							font-family font-4
+						&:nth-child(5)
+							font-family font-5
+						&:nth-child(6)
+							font-family font-6
+
 	div.list > div.opts,
 	note > div.opts
 		display -webkit-box
@@ -372,7 +408,8 @@ div.pad
 		border-bottom 1px solid #eee
 
 		input
-			font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+			//font-family "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+			font-family inherit
 
 			&[type="text"]
 				padding 5px
