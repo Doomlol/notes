@@ -549,7 +549,22 @@ angular.module('components', [])
 	})
 	.directive('droppable', function() {
 		return function(scope, element, attrs) {
-			console.log('This is a droppable');
+			$(element).on('dragenter', function(e) {
+				//console.log('dragenter', arguments);
+				$(e.target).addClass('hover');
+			});
+			$(element).on('dragover', function(e) {
+				//console.log('dragover', arguments);
+				e.preventDefault();
+			});
+			$(element).on('dragleave', function(e) {
+				//console.log('dragleave', arguments);
+				$(e.target).removeClass('hover');
+			});
+			$(element).on('drop', function(e) {
+				//console.log('drop', arguments);
+				$(e.target).removeClass('hover');
+			});
 		}
 	});
 
