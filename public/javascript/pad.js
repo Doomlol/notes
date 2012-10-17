@@ -535,7 +535,7 @@ angular.module('components', [])
 	})
 	.directive('droppable', function() {
 		return function(scope, element, attrs) {
-			filepicker.makeDropPane(element, {
+			filepicker.makeDropPane($(element), {
 				multiple: true,
 				dragEnter: function() {
 					console.log('dragEnter');
@@ -545,8 +545,13 @@ angular.module('components', [])
 					console.log('dragLeave');
 					$(element).removeClass('droppable-hover');
 				},
-				onStart: function() {
-					console.log('onStart');
+				onStart: function(files) {
+					$(element).removeClass('droppable-hover');
+					console.log('onStart', files);
+
+				},
+				onProgress: function(percentage) {
+					console.log('onProgress', percentage);
 
 				},
 				onSuccess: function(fpfiles) {
@@ -555,10 +560,6 @@ angular.module('components', [])
 				},
 				onError: function(type, message) {
 					console.log('onError', type, message);
-
-				},
-				onProgress: function(percentage) {
-					console.log('onProgress', percentage);
 
 				}
 			});
