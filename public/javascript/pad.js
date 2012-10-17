@@ -121,30 +121,25 @@ angular.module('IndexedDBModule', [])
 			this.initialize_done = function() {
 				this.initialized = true;
 				this.releaseQueue();
-			}
-			this.open_onerror = function(event) {
-				console.log('There was an error with the db (general)', event);
 			};
 			this.open_onblocked = function(event) {
 				console.log('There was an error with the db (blocked)', event);
 			};
+			this.open_onerror = function(event) {
+				console.log('There was an error with the db (general)', event);
+			};
 			this.open_onupgradeneeded = function(event) {
-				this.upgrade(event.target.result);
+				var initialized = this.settings.upgrade_function(event.target.result);
+				if (!initialized) {
+					alert('Error opening database');
+				}
 			};
 			this.open_onsuccess = function(event) {
 				this.db = event.target.result;
 				this.db.onabort = this.db_onabort.bind(this);
 				this.db.onerror = this.db_onerror.bind(this);
 				this.db.onversionchange = this.db_onversionchange.bind(this);
-				if (this.db.setVersion && Number(this.db.version) != this.settings.version) {
-					var version_request = this.db.setVersion(this.settings.version);
-					version_request.onsuccess = function(event) {
-						this.upgrade(event.target.result);
-					}.bind(this);
-				}
-				else {
-					this.initialize_done();
-				}
+				this.initialize_done();
 			};
 			this.db_onabort = function(event) {
 				console.log('db abort', event);
@@ -247,15 +242,6 @@ angular.module('IndexedDBModule', [])
 					opts.success(id);
 				}.bind(this);
 			};
-			this.upgrade = function(transaction) {
-				var initialized = this.settings.upgrade_function(this.db);
-				if (initialized) {
-					transaction.oncomplete = this.initialize_done.bind(this);
-				}
-				else {
-					alert('Error opening database');
-				}
-			}
 			this.enqueue = function(f) {
 				this.queue.push(f);
 				if (this.initialized)
@@ -549,21 +535,32 @@ angular.module('components', [])
 	})
 	.directive('droppable', function() {
 		return function(scope, element, attrs) {
-			$(element).on('dragenter', function(e) {
-				//console.log('dragenter', arguments);
-				$(e.target).addClass('hover');
-			});
-			$(element).on('dragover', function(e) {
-				//console.log('dragover', arguments);
-				e.preventDefault();
-			});
-			$(element).on('dragleave', function(e) {
-				//console.log('dragleave', arguments);
-				$(e.target).removeClass('hover');
-			});
-			$(element).on('drop', function(e) {
-				//console.log('drop', arguments);
-				$(e.target).removeClass('hover');
+			filepicker.makeDropPane(element, {
+				multiple: true,
+				dragEnter: function() {
+					console.log('dragEnter');
+					$(element).addClass('droppable-hover');
+				},
+				dragLeave: function() {
+					console.log('dragLeave');
+					$(element).removeClass('droppable-hover');
+				},
+				onStart: function() {
+					console.log('onStart');
+
+				},
+				onSuccess: function(fpfiles) {
+					console.log('onSuccess', fpfiles);
+
+				},
+				onError: function(type, message) {
+					console.log('onError', type, message);
+
+				},
+				onProgress: function(percentage) {
+					console.log('onProgress', percentage);
+
+				}
 			});
 		}
 	});
