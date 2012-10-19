@@ -284,6 +284,9 @@ angular.module('FirebaseModule', [])
 				console.log('snapshot val:', snapshot.val());
 			});
 
+			// You need to know when all have returned so you can
+			// call $apply
+
 			return ret;
 		};
 		this.add = function(opts) {
