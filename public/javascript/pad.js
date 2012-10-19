@@ -64,39 +64,6 @@ var Utils = {
 	}
 };
 
-// Service - only one instance
-// This should use a prefix
-angular.module('LocalStorageModule', [])
-	.service('localStorageService', function() {
-		this.prefix = 'notesfm-';
-		this.getPrefixedKey = function(key, opts) {
-			return (this.prefix || '') + (opts && opts.prefix || '') + key;
-		}
-		this.set = function(key, value, opts) {
-			if (typeof value == 'ojbect')
-				value = JSON.stringify(value);
-			key = this.getPrefixedKey(key, opts);
-			localStorage.setItem(key, value);
-		};
-		this.get = function(key, opts) {
-			key = this.getPrefixedKey(key, opts);
-			var value = localStorage.getItem(key);
-			try {
-				return JSON.parse(value);
-			}
-			catch(e) {
-				return value;
-			}
-		};
-		this.remove = function(key) {
-			return localStorage.removeItem(key);
-		};
-		this.clearAll = function() {
-			for (var i in localStorage)
-				this.remove(i);
-		};
-	});
-
 // Database module - IndexedDB
 // Factory - multiple instances
 angular.module('IndexedDBModule', [])
@@ -259,6 +226,7 @@ angular.module('IndexedDBModule', [])
 			};
 			this.initialize();
 		}
+		// Keeps track of object references
 		function IndexedDBFactory(name, version, store, item_class, upgrade_function) {
 			var db = new IndexedDB(name, version, store, item_class, upgrade_function);
 			// These values are returned by default
@@ -298,17 +266,104 @@ angular.module('IndexedDBModule', [])
 		return IndexedDBFactory;
 	});
 
+// Service
+angular.module('FirebaseModule', [])
+	.service('firebase', function() {
+
+		this.base = new Firebase('https://gamma.firebase.com/cilphex/users/cilphex/notes');
+		
+		this.get = function(opts) {
+
+		};
+		this.getAll = function(opts) {
+			var ret = [];
+
+			this.base.on('child_added', function(snapshot) {
+				var note = new Note(snapshot.val());
+				ret.push(note);
+				console.log('snapshot val:', snapshot.val());
+			});
+
+			return ret;
+		};
+		this.add = function(opts) {
+
+		};
+		this.delete = function(opts) {
+
+		};
+		this.edit = function(opts) {
+			return {};
+		};
+	});
+
+// Service - only one instance
+// This should use a prefix
+angular.module('LocalStorageModule', [])
+	.service('localStorageService', function() {
+		this.prefix = 'notesfm-';
+		this.getPrefixedKey = function(key, opts) {
+			return (this.prefix || '') + (opts && opts.prefix || '') + key;
+		}
+		this.set = function(key, value, opts) {
+			if (typeof value == 'ojbect')
+				value = JSON.stringify(value);
+			key = this.getPrefixedKey(key, opts);
+			localStorage.setItem(key, value);
+		};
+		this.get = function(key, opts) {
+			key = this.getPrefixedKey(key, opts);
+			var value = localStorage.getItem(key);
+			try {
+				return JSON.parse(value);
+			}
+			catch(e) {
+				return value;
+			}
+		};
+		this.remove = function(key) {
+			return localStorage.removeItem(key);
+		};
+		this.clearAll = function() {
+			for (var i in localStorage)
+				this.remove(i);
+		};
+	});
+
 // Maybe once this is working you can remove LocalStorageModule / localStorageService from
-// the controllers
-angular.module('NotesHelperModule', ['LocalStorageModule'])
-	.service('storage', function() {
+// the controllers.
+// "storage" might be a bad name as this is not a replacement for localStorage, just
+// indexeddb and firebase.  Maybe "database"
+angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'FirebaseModule'])
+	.service('storage', function(indexeddb, firebase) {
 		// This should be a helper for abstracting the switching between local
 		// storage and firebase
+		var mechanism;
+		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit'];
+		for (var i = 0; i < storage_functions.length; i++) {
+			var func = storage_functions[i];
+			this[func] = function(func) {
+				var args = Array.prototype.slice.call(arguments).slice(1);
+				return mechanism[func].apply(mechanism, args);
+			}.bind(this, func);
+		}
+		this.setMechanism = function(m) {
+			switch (m) {
+				case 'firebase':
+					mechanism = firebase;
+					break;
+				default:
+					mechanism = indexeddb('notes-db', 28, 'notes', Note, upgrade_database);
+			};
+		}
+		this.printMechanism = function() {
+			console.log('mechanism:', mechanism);
+		}
 	})
 	.service('settings', function($rootScope, localStorageService) {
 
 		var storage_prefix = 'setting-';
-		var settings = ['type', 'startup', 'fontfamily'];
+		var settings = ['type', 'startup', 'fontfamily', 'theme'];
 
 		$rootScope.settings = {};
 
@@ -330,30 +385,38 @@ angular.module('NotesHelperModule', ['LocalStorageModule'])
 // If we wanted, all the things in controllers, components, and services
 // could be chained inside the NotesApp module declaration
 // Keep in mind that $scope.$apply is necessary in most callbacks
-angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHelperModule'])
-	.controller('MainCtrl', function MainCtrl($scope, $location, localStorageService, indexeddb, settings) {
+angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
+	.controller('MainCtrl', function MainCtrl($scope, $location, indexeddb, storage, settings) {
 
-		window.xxx = $scope;
-
-		$scope.getSettings = function() {
-			console.log('settings:', $scope.settings);
-		}
+		window.xx = $scope;
 
 		var queue = [];
+		storage.setMechanism('indexeddb');
 
-		$scope.db = indexeddb('notes-db', 28, 'notes', Note, upgrade_database);
+		// For testing - remove later
+		$scope.storage = storage;
+
 		$scope.page_view = false;
 		$scope.expanded = false;
 
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
 		// and updated_at, and not get the body for every single note
-		$scope.notes = $scope.db.getAll({
+		$scope.notes = storage.getAll({
 			success: function() {
 				$scope.releaseQueue();
 				$scope.$apply();
 			}
 		});
+
+		$scope.refresh = function() {
+			$scope.notes = storage.getAll({
+				success: function() {
+					$scope.releaseQueue();
+					$scope.$apply();
+				}
+			});
+		}
 
 		$scope.enqueue = function(f) {
 			queue.push(f);
@@ -381,7 +444,7 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHe
 			$scope.current_note.class = 'selected';
 		}
 		$scope.addNote = function() {
-			var note = $scope.db.add({
+			var note = storage.add({
 				success: function(n) {
 					$scope.loadNote(n.getId());
 					$scope.$apply();
@@ -399,7 +462,7 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHe
 		}
 		$scope.deleteNote = function(id) {
 			window.event.stopPropagation(); // only here because delete overlaps clickable note li
-			$scope.db.delete({
+			storage.delete({
 				id: id,
 				success: function(note_id) {
 					var index;
@@ -430,13 +493,9 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHe
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
 		}
-		$scope.log = function(x) {
-			x = x || 'no string';
-			console.log('Test log', x);
-		}
 	})
 
-	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams) {
+	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams, storage) {
 
 		$scope.setPageView(true);
 		$scope.saved = true;
@@ -480,7 +539,7 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHe
 		// Save the current note
 		$scope.save = function() {
 			if ($scope.note) {
-				$scope.db.edit({
+				storage.edit({
 					item: $scope.note.getValue(),
 					success: function() {
 						console.log('saved');
@@ -499,7 +558,7 @@ angular.module('controllers', ['LocalStorageModule', 'IndexedDBModule', 'NotesHe
 		$scope.note_id = $routeParams.note_id;
 	})
 
-	.controller('SettingsCtrl', function OptionsCtrl($scope, localStorageService) {
+	.controller('SettingsCtrl', function OptionsCtrl($scope) {
 		$scope.setPageView(true);
 	})
 
