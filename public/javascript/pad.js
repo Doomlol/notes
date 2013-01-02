@@ -405,12 +405,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
 		// and updated_at, and not get the body for every single note
-		$scope.notes = storage.getAll({
-			success: function() {
-				$scope.releaseQueue();
-				$scope.$apply();
-			}
-		});
 
 		$scope.refresh = function() {
 			$scope.notes = storage.getAll({
@@ -421,6 +415,13 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			});
 		}
 
+		$scope.setDB = function(dbtype) {
+			storage.setMechanism(dbtype);
+			$scope.refresh();
+		}
+
+		// I feel that this is wrong because if there are no notes,
+		// the queue won't be released. does that work?
 		$scope.enqueue = function(f) {
 			queue.push(f);
 			if ($scope.notes.length)
@@ -496,6 +497,8 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
 		}
+
+		$scope.refresh();
 	})
 
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams, storage) {
