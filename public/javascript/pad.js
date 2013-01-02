@@ -268,34 +268,60 @@ angular.module('IndexedDBModule', [])
 
 // Service
 angular.module('FirebaseModule', [])
-	.service('firebase', function() {
+	.service('firebase', function($rootScope) {
 
-		this.base = new Firebase('https://gamma.firebase.com/cilphex/users/cilphex/notes');
+		this.base = new Firebase('https://cilphex.firebaseio.com/users/cilphex/notes');
 		
 		this.get = function(opts) {
 
 		};
 		this.getAll = function(opts) {
 			var ret = [];
-
-			this.base.on('child_added', function(snapshot) {
-				var note = new Note(snapshot.val());
-				ret.push(note);
-				console.log('snapshot val:', snapshot.val());
+			this.base.once('value', function(snapshot) {
+				var notes = snapshot.val();
+				for (var n in notes) {
+					notes[n].id = n;
+					var note = new Note(notes[n]);
+					ret.push(note);
+				}
+				if (opts.success)
+					opts.success(ret);
 			});
-
-			// You need to know when all have returned so you can
-			// call $apply
-
 			return ret;
 		};
 		this.add = function(opts) {
-
+			var item = {updated_at: (new Date()).valueOf()}
+			var noteref = this.base.push(item, function(success) {
+					if (success && opts.success) {
+						item.id = noteref.name();
+						var note = new Note(item);
+						opts.success(note);
+					}
+					else if (!success && opts.failure) {
+						opts.failure();
+					}
+				}
+			);
 		};
 		this.delete = function(opts) {
-
+			this.base.child(opts.id).remove(function(success) {
+				if (success && opts.success) {
+					opts.success(opts.id);
+				}
+				else if (!success && opts.failure) {
+					opts.failure();
+				}
+			});
 		};
 		this.edit = function(opts) {
+			var item = opts.item;
+			this.base.child(item.id).update(item, function(success) {
+				// does opts need to be bound to this function for confusion not to occur?
+				if (success && opts.success)
+					opts.success(item);
+				else if (!success && opts.failure)
+					opts.failure();
+			});
 			return {};
 		};
 	});
@@ -394,7 +420,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		window.xx = $scope;
 
 		var queue = [];
-		storage.setMechanism('indexeddb');
+		storage.setMechanism('firebase');
 
 		// For testing - remove later
 		$scope.storage = storage;
@@ -513,7 +539,8 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		// Enqueue it at the bottom so all other functions are available when it runs.
 		function initialize() {
 			// parseInt will allow trailing letters after digits
-			var note_id = (new Number($routeParams.note_id)).valueOf();
+			//var note_id = (new Number($routeParams.note_id)).valueOf();
+			var note_id = $routeParams.note_id;
 			$scope.note = $scope.getNote(note_id);
 			if (!$scope.note) {
 				$location.path('/notfound/' + $routeParams.note_id);
