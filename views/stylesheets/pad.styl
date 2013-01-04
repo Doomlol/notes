@@ -213,31 +213,24 @@ div.pad
 						&.time
 							color #7EB6D4
 
-		div.controls
+		div.status
 			position absolute
-			padding 8px 10px
 			left 0
 			right 0
 			bottom 0
-			//height 50px
-			font-family "Courier New"
-			font-size 12px
-			color #000
-			background rgba(255,255,255,0.75)
+			background #f9f9f9
+			border-top 1px solid #eee
 
-			p
-				margin 0 0 5px
-				padding 0
+			a
+				display block
+				font-size 11px
+				line-height 27px;
+				text-align center
+				color #527791
+				text-decoration none
 
-				&:last-child
-					margin-bottom 0
-
-				a
-					text-decoration none
-					color #fff
-
-					&:hover
-						text-decoration underline
+				&:hover
+					background #fcfcfc
 
 
 	div.editor
@@ -274,7 +267,7 @@ div.pad
 
 		div.page
 			position absolute
-			padding 0 20px
+			padding 0 20px 20px
 			top 0
 			left 0
 			right 0
@@ -506,6 +499,9 @@ body.expanded-true
 		left 0
 		right 0
 		bottom 0
+
+
+
 
 
 ::-webkit-scrollbar

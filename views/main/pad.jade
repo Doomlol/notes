@@ -24,17 +24,21 @@ html(lang="en", ng-app="NotesApp")
 						span.time {{note.getTime()}}
 						span.delete: a(ng-click="deleteNote(note.getId())") delete
 				
-				div.controls
-					p Total notes: {{getTotalNotes()}}
-					p(ng-click="toggleExpand()") Expanded: {{expanded}}
+				div.status
+					a(ng-show="signed_in") {{user.email}} &nbsp;&mdash;&nbsp; Method
+					a(ng-hide="signed_in") Sign in
+
+					//p Total notes: {{getTotalNotes()}}
+					//p(ng-click="toggleExpand()") Expanded: {{expanded}}
 
 			div.editor(ng-view)
 
 	footer
 		script(src="/javascript/jquery.min.js")
 		script(src="/javascript/angular/angular-1.0.1.min.js")
+		script(src="https://cdn.firebase.com/v0/firebase.js")
+		script(src="https://cdn.firebase.com/v0/firebase-auth-client.js")
 		script(src="https://api.filepicker.io/v1/filepicker.js")
-		script(src="https://static.firebase.com/v0/firebase.js")
 		//script(src="/javascript/angular/angular-resource-1.0.1.min.js")
 		//script(src="/javascript/parse-1.0.10.min.js")
 		script(src="/javascript/pad.js")

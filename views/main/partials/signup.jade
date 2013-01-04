@@ -1,0 +1,26 @@
+div.page
+	
+	h2 Sign up
+
+	div(ng-show="signed_in")
+		p You're already signed in
+
+	div(ng-show="signup_error")
+		p There was an error signing up. Please try again.
+
+	div(ng-show="email_error")
+		p Please enter a valid email address.
+
+	div(ng-show="!signed_in && !signed_up")
+		form(ng-submit="signUp()")
+			input(id="email_input", type="text", placeholder="Username")
+			input(id="password_input", type="password", placeholder="Password")
+			input(type="submit")
+
+	div(ng-show="signed_up")
+		p Signed up. Yay!
+
+
+
+
+	p: a(href="#/login") Sign in instead

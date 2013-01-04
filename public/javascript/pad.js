@@ -53,7 +53,7 @@ var Utils = {
 		var am_pm = date.getHours() < 12 ? 'am' : 'pm';
 		return [hours, ':', minutes, ' ', am_pm].join('');
 	},
-	// pad a number with leading zeroes
+	// Pad a number with leading zeroes
 	digits: function(n, number) {
 		var zeroes = '';
 		var number_digits = Math.ceil(Math.log(number+1)/Math.LN10);
@@ -61,6 +61,11 @@ var Utils = {
 			for (var i = 0; i < n - number_digits; i++)
 				zeroes += '0';
 		return zeroes + number;
+	},
+	// From http://www.regular-expressions.info/email.html
+	validate_email: function(email) {
+		var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+		return regex.test(email);
 	}
 };
 
@@ -266,35 +271,50 @@ angular.module('IndexedDBModule', [])
 		return IndexedDBFactory;
 	});
 
+var base_ref = new Firebase('https://cilphex.firebaseio.com/');
+
 // Service
 angular.module('FirebaseModule', [])
 	.service('firebase', function($rootScope) {
 
-		this.base = new Firebase('https://cilphex.firebaseio.com/users/cilphex/notes');
+		//this.base = new Firebase('https://cilphex.firebaseio.com/users/cilphex/notes');
+
+		this.setUser = function(userid) {
+			this.user_ref = base_ref.child('users').child(userid).child('notes');
+		};
 		
 		this.get = function(opts) {
 
 		};
 		this.getAll = function(opts) {
 			var ret = [];
-			this.base.once('value', function(snapshot) {
-				var notes = snapshot.val();
-				for (var n in notes) {
-					notes[n].id = n;
-					var note = new Note(notes[n]);
-					ret.push(note);
-				}
-				if (opts.success)
-					opts.success(ret);
-			});
+			if (this.user_ref) {
+				console.log('user_ref exists; getAll executing');
+				this.user_ref.once('value', function(snapshot) {
+					var notes = snapshot.val();
+					for (var n in notes) {
+						notes[n].id = n;
+						var note = new Note(notes[n]);
+						ret.push(note);
+					}
+					if (opts.success)
+						opts.success(ret);
+				});
+			}
+			else {
+				console.log('user_ref does not exist; getAll skipped');
+			}
 			return ret;
 		};
 		this.add = function(opts) {
+			var ret = {};
 			var item = {updated_at: (new Date()).valueOf()}
-			var noteref = this.base.push(item, function(success) {
+			var noteref = this.user_ref.push(item, function(success) {
 					if (success && opts.success) {
 						item.id = noteref.name();
 						var note = new Note(item);
+						//ret = note;
+						angular.copy(note, ret);
 						opts.success(note);
 					}
 					else if (!success && opts.failure) {
@@ -302,9 +322,10 @@ angular.module('FirebaseModule', [])
 					}
 				}
 			);
+			return ret;
 		};
 		this.delete = function(opts) {
-			this.base.child(opts.id).remove(function(success) {
+			this.user_ref.child(opts.id).remove(function(success) {
 				if (success && opts.success) {
 					opts.success(opts.id);
 				}
@@ -315,7 +336,7 @@ angular.module('FirebaseModule', [])
 		};
 		this.edit = function(opts) {
 			var item = opts.item;
-			this.base.child(item.id).update(item, function(success) {
+			this.user_ref.child(item.id).update(item, function(success) {
 				// does opts need to be bound to this function for confusion not to occur?
 				if (success && opts.success)
 					opts.success(item);
@@ -368,7 +389,7 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		// This should be a helper for abstracting the switching between local
 		// storage and firebase
 		var mechanism;
-		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit'];
+		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser'];
 		for (var i = 0; i < storage_functions.length; i++) {
 			var func = storage_functions[i];
 			this[func] = function(func) {
@@ -422,11 +443,15 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		var queue = [];
 		storage.setMechanism('firebase');
 
+		$scope.notes = [];
+
 		// For testing - remove later
 		$scope.storage = storage;
 
 		$scope.page_view = false;
 		$scope.expanded = false;
+		$scope.signed_in = false;
+		$scope.user = {};
 
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
@@ -524,7 +549,67 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			$scope.expanded = !$scope.expanded;
 		}
 
-		$scope.refresh();
+
+		$scope.authorize = function() {
+			var authtoken = localStorage.getItem('authtoken');
+			if (authtoken) {
+				base_ref.auth(authtoken, function(success) {
+					if (success)
+						$scope.authorized();
+					else
+						$scope.unauthorized();
+				});
+			}
+			else {
+				$scope.unauthorized();
+			}
+		}
+		$scope.authorized = function() {
+			console.log('authorized');
+			$scope.signed_in = true;
+			$scope.user = {
+				authtoken: localStorage.getItem('authtoken'),
+				userid: localStorage.getItem('userid'),
+				email: localStorage.getItem('email')
+			}
+			storage.setUser($scope.user.userid);
+			$scope.refresh();
+		}
+		$scope.unauthorized = function() {
+			console.log('unauthorized');
+			$scope.signed_in = false;
+			$scope.user = {};
+			$scope.refresh();
+		}
+		$scope.signIn = function() {
+			var email = $('#email_input').val();
+			var password = $('#password_input').val();
+			var authClient = new FirebaseAuthClient(base_ref);
+			authClient.login('password', email, password, function(error, token, user) {
+				if (error) {
+					console.log('error signing in');
+				}
+				else {
+					console.log('signed in');
+					localStorage.setItem('authtoken', token);
+					localStorage.setItem('userid', user.id);
+					localStorage.setItem('email', user.email);
+					$scope.authorize();
+				}
+			});
+		}
+		$scope.signOut = function() {
+			console.log('sign out');
+			// clear authtoken, userid, and email from localStorage
+			base_ref.unauth();
+			localStorage.removeItem('authtoken');
+			localStorage.removeItem('userid');
+			localStorage.removeItem('email');
+			$scope.authorize();
+		}
+
+		$scope.authorize();
+		//$scope.refresh();
 	})
 
 	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams, storage) {
@@ -589,6 +674,43 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 	.controller('NotFoundCtrl', function NotFoundCtrl($scope, $routeParams) {
 		$scope.setPageView(true);
 		$scope.note_id = $routeParams.note_id;
+	})
+
+	.controller('LoginCtrl', function LoginCtrl($scope) {
+		$scope.setPageView(true);
+
+	})
+
+	.controller('SignupCtrl', function SignupCtrl($scope) {
+		$scope.setPageView(true);
+
+		$scope.email_error = false;
+		$scope.signup_error = false;
+
+		$scope.signUp = function() {
+			console.log('doing signup');
+			var email = $('#email_input').val();
+			var password = $('#password_input').val();
+			var authClient = new FirebaseAuthClient(base_ref);
+			if (!Utils.validate_email(email)) {
+				$scope.email_error = true;
+				return;
+			}
+			authClient.createUser(email, password, function(error, user) {
+				if (error) {
+					console.log('error signing up');
+					$scope.signup_error = true;
+				}
+				else {
+					console.log('signed up; now signing in');
+					$scope.signIn();
+					$scope.signup_error = false;
+					$scope.email_error = false;
+					$scope.signed_up = true;
+				}
+			});
+		}
+
 	})
 
 	.controller('SettingsCtrl', function OptionsCtrl($scope) {
@@ -669,6 +791,14 @@ angular.module('NotesApp', ['controllers', 'components'])
 			.when('/notfound/:note_id', {
 				templateUrl: '/partials/notfound',
 				controller: 'NotFoundCtrl'
+			})
+			.when('/login', {
+				templateUrl: '/partials/login',
+				controller: 'LoginCtrl'
+			})
+			.when('/signup', {
+				templateUrl: '/partials/signup',
+				controller: 'SignupCtrl'
 			})
 			.when('/settings', {
 				templateUrl: '/partials/settings',

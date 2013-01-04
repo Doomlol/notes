@@ -1,0 +1,21 @@
+div.page
+
+	h2 Sign In
+
+	div(ng-show="signed_in")
+		p Congrats, you're signed in.
+		p User id: {{user.userid}}
+		p Email: {{user.email}}
+		a(ng-click="signOut()") Sign out.
+
+	div(ng-show="!signed_in")
+		form(ng-submit="signIn()")
+			input(id="email_input", type="text", placeholder="Username")
+			input(id="password_input", type="password", placeholder="Password")
+			input(type="submit")
+
+		p: a(href="#/signup") Sign up
+
+
+
+	p: a(ng-click="menu()") Back
