@@ -219,7 +219,6 @@ div.pad
 			right 0
 			bottom 0
 			background #f9f9f9
-			border-top 1px solid #eee
 
 			a
 				display block
@@ -228,9 +227,14 @@ div.pad
 				text-align center
 				color #527791
 				text-decoration none
+				border-top 1px solid #eee
+				-webkit-transition-property background, border-color
+				-webkit-transition-duration 0.25s
+				-webkit-transition-timing-function ease-out
 
 				&:hover
-					background #fcfcfc
+					background #e3eefb
+					border-color #d2e5f9
 
 
 	div.editor
@@ -275,6 +279,37 @@ div.pad
 			background #fff
 			overflow-y auto
 
+			input,
+			textarea,
+			select
+				margin 0
+				padding 0 6px
+				font-size 13px
+				line-height 24px
+				color #555
+				border 1px solid #ddd
+				box-sizing border-box
+				outline none
+
+			input
+				padding 4px 6px
+				line-height 16px
+
+				&[type="submit"]
+					padding 0 8px
+					line-height 26px
+					background #f9f9f9
+					border none
+
+					&:hover
+						background #f3f3f3
+						cursor pointer
+
+			::-webkit-input-placeholder,
+			::-moz-placeholder
+				font-style italic
+				color #aaa
+
 			a
 				color #4f99ce
 				text-decoration none
@@ -293,6 +328,9 @@ div.pad
 			h3
 				margin-top 40px
 				font-size 14px
+
+			form
+				margin 15px 0
 
 			del
 				color #ccc
@@ -391,6 +429,12 @@ div.pad
 							font-family font-5
 						&:nth-child(6)
 							font-family font-6
+
+			// Specific pages
+
+			&.login
+				input
+					margin-right 10px
 
 	div.list > div.opts,
 	note > div.opts
@@ -526,7 +570,7 @@ body.expanded-true
 		div.list
 			width auto
 			right 0
-			-webkit-transition -webkit-transform 0.5s
+			//-webkit-transition -webkit-transform 0.5s
 
 			ul#notes
 				top 55px
@@ -542,7 +586,7 @@ body.expanded-true
 			left 100%
 			right auto
 			width 100%
-			-webkit-transition -webkit-transform 0.5s
+			//-webkit-transition -webkit-transform 0.5s
 
 			note
 				div.text,

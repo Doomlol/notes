@@ -1,21 +1,39 @@
-div.page
+div.page.login
 
-	h2 Sign In
+	h2(ng-hide="signed_in", ng-click="menu()") Sign In
+	h2(ng-show="signed_in", ng-click="menu()") Signed In
+
+	// Already signed in
 
 	div(ng-show="signed_in")
 		p Congrats, you're signed in.
 		p User id: {{user.userid}}
 		p Email: {{user.email}}
-		a(ng-click="signOut()") Sign out.
+		a(ng-click="signOut()") Sign out
+
+	// Sign in
 
 	div(ng-show="!signed_in")
-		form(ng-submit="signIn()")
+
+		h3(ng-show="logging_in") Credentials
+		h3(ng-hide="logging_in") New Account
+
+		div(ng-show="login_error")
+			p There was an error signing up. Please try again.
+
+		div(ng-show="email_error")
+			p Please enter a valid email address.
+
+		div(ng-show="signup_error")
+				p There was an error signing up. Please try again.
+
+		form(ng-submit="go()")
 			input(id="email_input", type="text", placeholder="Username")
 			input(id="password_input", type="password", placeholder="Password")
-			input(type="submit")
 
-		p: a(href="#/signup") Sign up
+			input(ng-show="logging_in", type="submit", value="Sign in")
+			input(ng-hide="logging_in", type="submit", value="Create")
 
-
-
-	p: a(ng-click="menu()") Back
+		p
+			a(ng-show="logging_in", ng-click="toggleLogin()") Sign up instead
+			a(ng-hide="logging_in", ng-click="toggleLogin()") Sign in instead

@@ -10,6 +10,8 @@
 
 filepicker.setKey('AdxGfHDDjQ2OTkf5i11y1z');
 
+var base_ref = new Firebase('https://cilphex.firebaseio.com/');
+
 
 // This is a note!
 function Note(value) {
@@ -271,8 +273,6 @@ angular.module('IndexedDBModule', [])
 		return IndexedDBFactory;
 	});
 
-var base_ref = new Firebase('https://cilphex.firebaseio.com/');
-
 // Service
 angular.module('FirebaseModule', [])
 	.service('firebase', function($rootScope) {
@@ -397,6 +397,14 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 				return mechanism[func].apply(mechanism, args);
 			}.bind(this, func);
 		}
+		this.sync = function() {
+			console.log('storage: sync');
+			this.setMechanism('firebase');
+		}
+		this.local = function() {
+			console.log('storage: local');
+			this.setMechanism('indexeddb');
+		}
 		this.setMechanism = function(m) {
 			switch (m) {
 				case 'firebase':
@@ -441,13 +449,9 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		window.xx = $scope;
 
 		var queue = [];
-		storage.setMechanism('firebase');
+		storage.local();
 
 		$scope.notes = [];
-
-		// For testing - remove later
-		$scope.storage = storage;
-
 		$scope.page_view = false;
 		$scope.expanded = false;
 		$scope.signed_in = false;
@@ -464,11 +468,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					$scope.$apply();
 				}
 			});
-		}
-
-		$scope.setDB = function(dbtype) {
-			storage.setMechanism(dbtype);
-			$scope.refresh();
 		}
 
 		// I feel that this is wrong because if there are no notes,
@@ -572,6 +571,9 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 				userid: localStorage.getItem('userid'),
 				email: localStorage.getItem('email')
 			}
+			// In the future this should be a call to a method that checks the sync/local
+			// setting first, doesn't just set to sync automatically
+			storage.sync();
 			storage.setUser($scope.user.userid);
 			$scope.refresh();
 		}
@@ -579,33 +581,8 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			console.log('unauthorized');
 			$scope.signed_in = false;
 			$scope.user = {};
+			storage.local();
 			$scope.refresh();
-		}
-		$scope.signIn = function() {
-			var email = $('#email_input').val();
-			var password = $('#password_input').val();
-			var authClient = new FirebaseAuthClient(base_ref);
-			authClient.login('password', email, password, function(error, token, user) {
-				if (error) {
-					console.log('error signing in');
-				}
-				else {
-					console.log('signed in');
-					localStorage.setItem('authtoken', token);
-					localStorage.setItem('userid', user.id);
-					localStorage.setItem('email', user.email);
-					$scope.authorize();
-				}
-			});
-		}
-		$scope.signOut = function() {
-			console.log('sign out');
-			// clear authtoken, userid, and email from localStorage
-			base_ref.unauth();
-			localStorage.removeItem('authtoken');
-			localStorage.removeItem('userid');
-			localStorage.removeItem('email');
-			$scope.authorize();
 		}
 
 		$scope.authorize();
@@ -677,16 +654,50 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 	})
 
 	.controller('LoginCtrl', function LoginCtrl($scope) {
+
 		$scope.setPageView(true);
-
-	})
-
-	.controller('SignupCtrl', function SignupCtrl($scope) {
-		$scope.setPageView(true);
-
+		$scope.logging_in = true;
+		$scope.login_error = false;
 		$scope.email_error = false;
 		$scope.signup_error = false;
 
+		$scope.toggleLogin = function() {
+			$scope.logging_in = !$scope.logging_in;
+		}
+
+		$scope.go = function() {
+			$scope.logging_in ? $scope.signIn() : $scope.signUp();
+		}
+		$scope.signIn = function() {
+			var email = $('#email_input').val();
+			var password = $('#password_input').val();
+			var authClient = new FirebaseAuthClient(base_ref);
+			authClient.login('password', email, password, function(error, token, user) {
+				// Once firebase fixes 'error' to handle invalid email addresses,
+				// you'll need to switch on 'error == whatever'
+				if (error) {
+					console.log('error signing in');
+					$scope.login_error = true;
+					$scope.$apply(); // Since we're in a callback
+				}
+				else {
+					console.log('signed in');
+					localStorage.setItem('authtoken', token);
+					localStorage.setItem('userid', user.id);
+					localStorage.setItem('email', user.email);
+					$scope.authorize();
+				}
+			});
+		}
+		$scope.signOut = function() {
+			console.log('sign out');
+			// clear authtoken, userid, and email from localStorage
+			base_ref.unauth();
+			localStorage.removeItem('authtoken');
+			localStorage.removeItem('userid');
+			localStorage.removeItem('email');
+			$scope.authorize();
+		}
 		$scope.signUp = function() {
 			console.log('doing signup');
 			var email = $('#email_input').val();
@@ -697,6 +708,8 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 				return;
 			}
 			authClient.createUser(email, password, function(error, user) {
+				// Once firebase fixes 'error' to handle invalid email addresses,
+				// you'll need to switch on 'error == whatever'
 				if (error) {
 					console.log('error signing up');
 					$scope.signup_error = true;
@@ -798,7 +811,7 @@ angular.module('NotesApp', ['controllers', 'components'])
 			})
 			.when('/signup', {
 				templateUrl: '/partials/signup',
-				controller: 'SignupCtrl'
+				controller: 'LoginCtrl'
 			})
 			.when('/settings', {
 				templateUrl: '/partials/settings',

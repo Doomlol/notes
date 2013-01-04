@@ -25,8 +25,8 @@ html(lang="en", ng-app="NotesApp")
 						span.delete: a(ng-click="deleteNote(note.getId())") delete
 				
 				div.status
-					a(ng-show="signed_in") {{user.email}} &nbsp;&mdash;&nbsp; Method
-					a(ng-hide="signed_in") Sign in
+					a(ng-show="signed_in", href="#/login") {{user.email}} &nbsp;&mdash;&nbsp; Method
+					a(ng-hide="signed_in", href="#/login") Sign in
 
 					//p Total notes: {{getTotalNotes()}}
 					//p(ng-click="toggleExpand()") Expanded: {{expanded}}

@@ -29,17 +29,23 @@ div.pad div.list ul#notes li:hover span.delete{display:block}
 div.pad div.list ul#notes li.selected span.highlight{background:#0494dd}
 div.pad div.list ul#notes li.selected span.title{color:#0494dd}
 div.pad div.list ul#notes li.selected span.time{color:#7eb6d4}
-div.pad div.list div.status{position:absolute;left:0;right:0;bottom:0;background:#f9f9f9;border-top:1px solid #eee;}
-div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;}
-div.pad div.list div.status a:hover{background:#fcfcfc}
+div.pad div.list div.status{position:absolute;left:0;right:0;bottom:0;background:#f9f9f9;}
+div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-out;}
+div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor note{position:absolute;top:0;left:0;right:0;bottom:0;}
 div.pad div.editor note div.text,div.pad div.editor note textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none}
 div.pad div.editor div.page{position:absolute;padding:0 20px 20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
+div.pad div.editor div.page input,div.pad div.editor div.page textarea,div.pad div.editor div.page select{margin:0;padding:0 6px;font-size:13px;line-height:24px;color:#555;border:1px solid #ddd;box-sizing:border-box;outline:none}
+div.pad div.editor div.page input{padding:4px 6px;line-height:16px;}
+div.pad div.editor div.page input[type="submit"]{padding:0 8px;line-height:26px;background:#f9f9f9;border:none;}
+div.pad div.editor div.page input[type="submit"]:hover{background:#f3f3f3;cursor:pointer}
+div.pad div.editor div.page ::-webkit-input-placeholder,div.pad div.editor div.page ::-moz-placeholder{font-style:italic;color:#aaa}
 div.pad div.editor div.page a{color:#4f99ce;text-decoration:none;border-bottom:1px solid #d5dee5;}
 div.pad div.editor div.page a:hover{border-bottom:1px solid #82909a}
 div.pad div.editor div.page h2{margin:0;padding:10px 0 6px;font-size:16px;line-height:30px;border-bottom:1px solid #eee}
 div.pad div.editor div.page h3{margin-top:40px;font-size:14px}
+div.pad div.editor div.page form{margin:15px 0}
 div.pad div.editor div.page del{color:#ccc}
 div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;padding:0;list-style:none;}
 div.pad div.editor div.page ul.radioset li label{display:block;padding:3px 10px 3px 3px;cursor:pointer;}
@@ -60,6 +66,7 @@ div.pad div.editor div.page ul.options.fontfamily li:nth-child(3){font-family:"V
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(4){font-family:"Ubuntu Mono",sans-serif}
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(5){font-family:"Handlee",sans-serif}
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(6){font-family:"Racing Sans One",sans-serif}
+div.pad div.editor div.page.login input{margin-right:10px}
 div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;padding:8px;height:30px;background:#f6f6f6;border-bottom:1px solid #eee;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:inherit;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
@@ -80,11 +87,11 @@ body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
 ::-webkit-scrollbar-track{background:#eee}
 ::-webkit-scrollbar-thumb{background:#ccc}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
-div.pad div.list{width:auto;right:0;-webkit-transition:-webkit-transform .5s;}
+div.pad div.list{width:auto;right:0;}
 div.pad div.list ul#notes{top:55px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
-div.pad div.editor{left:100%;right:auto;width:100%;-webkit-transition:-webkit-transform .5s;}
+div.pad div.editor{left:100%;right:auto;width:100%;}
 div.pad div.editor note div.text,div.pad div.editor note textarea{top:55px}
 div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:38px;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{font-size:19px;padding:5px 7px;height:26px;line-height:26px}
