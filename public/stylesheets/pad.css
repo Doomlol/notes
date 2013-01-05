@@ -47,6 +47,8 @@ div.pad div.editor div.page a:hover{border-bottom:1px solid #82909a}
 div.pad div.editor div.page h2{margin:0;padding:10px 0 6px;font-size:16px;line-height:30px;border-bottom:1px solid #eee}
 div.pad div.editor div.page h3{margin-top:40px;font-size:14px;}
 div.pad div.editor div.page h3:touchstart{background:#f00}
+div.pad div.editor div.page h3:active{background:#0f0}
+div.pad div.editor div.page h3:active{background:#00f}
 div.pad div.editor div.page form{margin:15px 0}
 div.pad div.editor div.page del{color:#ccc}
 div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;padding:0;list-style:none;}
@@ -93,6 +95,7 @@ div.pad div.list{width:auto;right:0;}
 div.pad div.list ul#notes{top:55px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
+div.pad div.list div.status a{font-size:19px;line-height:41px}
 div.pad div.editor{left:100%;right:auto;width:100%;}
 div.pad div.editor note textarea{top:55px;font-size:19px}
 div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:38px;}
