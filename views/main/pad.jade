@@ -17,16 +17,20 @@ html(lang="en", ng-app="NotesApp")
 					a#new.btn(ng-click="addNote()") New
 					input(type="text", id="search", placeholder="Search")
 					a.gear(href="#/settings")
-				ul#notes
+				
+				ul#notes(ng-show="notes.length")
 					li(ng-repeat="note in notes", ng-click="loadNote(note.getId())",  ng-class="note.class", rel="note_{{note.getId()}}")
 						span.highlight
 						span.title {{note.getTitle() || 'Untitled'}}
 						span.time {{note.getTime()}}
 						span.delete: a(ng-click="deleteNote(note.getId())") delete
 				
+				div.no_notes(ng-show="!notes.length")
+					| No notes
+
 				div.status
-					a(ng-show="signed_in", href="#/login") {{user.email}} &nbsp;&mdash;&nbsp; Method
-					a(ng-hide="signed_in", href="#/login") Sign in
+					a(ng-show="signed_in", href="#/login") Synced &mdash; {{user.email}}
+					a(ng-hide="signed_in", href="#/login") Local &mdash; Sign in
 
 					//p Total notes: {{getTotalNotes()}}
 					//p(ng-click="toggleExpand()") Expanded: {{expanded}}

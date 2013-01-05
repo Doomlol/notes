@@ -135,7 +135,18 @@ div.pad
 		left 0
 		bottom 0  
 		width 280px
+		background #fff
 		border-right 1px solid #eee
+
+		div.no_notes
+			position absolute
+			padding 40px 20px
+			top 47px
+			left 0
+			right 0
+			bottom 0
+			text-align center
+			color #bbb
 
 		ul#notes
 			position absolute
@@ -144,9 +155,8 @@ div.pad
 			top 47px
 			left 0
 			right 0
-			bottom 0
+			bottom 28px
 			list-style none
-			background #fff
 			overflow-y auto
 			overflow-x hidden
 
@@ -328,6 +338,15 @@ div.pad
 			h3
 				margin-top 40px
 				font-size 14px
+
+				&:touchstart
+					background #f00
+
+				&:active
+					background #0f0
+
+				&:active
+					background #00f
 
 			form
 				margin 15px 0
@@ -589,9 +608,9 @@ body.expanded-true
 			//-webkit-transition -webkit-transform 0.5s
 
 			note
-				div.text,
 				textarea
 					top 55px
+					font-size 19px
 
 		div.list > div.opts,
 		note > div.opts
