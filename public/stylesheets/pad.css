@@ -45,7 +45,7 @@ div.pad div.editor div.page ::-webkit-input-placeholder,div.pad div.editor div.p
 div.pad div.editor div.page a{color:#4f99ce;text-decoration:none;border-bottom:1px solid #d5dee5;}
 div.pad div.editor div.page a:hover{border-bottom:1px solid #82909a}
 div.pad div.editor div.page h2{margin:0;padding:10px 0 6px;font-size:16px;line-height:30px;border-bottom:1px solid #eee}
-div.pad div.editor div.page h3{margin-top:40px;font-size:14px;}
+div.pad div.editor div.page h3{margin-top:40px;font-size:14px;-webkit-tap-highlight-color:rgba(255,0,0,0.5);}
 div.pad div.editor div.page h3:touchstart{background:#f00}
 div.pad div.editor div.page h3:active{background:#0f0}
 div.pad div.editor div.page h3:active{background:#00f}
