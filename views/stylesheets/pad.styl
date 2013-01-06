@@ -213,7 +213,7 @@ div.pad
 						&.delete
 							display block
 
-				&.selected
+				&.selected-true
 
 					span
 						&.highlight
@@ -261,7 +261,6 @@ div.pad
 			right 0
 			bottom 0
 
-			div.text,
 			textarea
 				position absolute
 				margin 0
@@ -278,6 +277,20 @@ div.pad
 				outline none
 				overflow-y auto
 				resize none
+				-webkit-transition background 0.25s ease-out
+
+				&.droppable-hover
+					background #eff5fc
+
+					&:after
+						position absolute
+						top 40px
+						left 40px
+						width 100px
+						height 100px
+						background rgba(0,0,0,0.75)
+						border-radius 5px
+						content "."
 
 		div.page
 			position absolute
@@ -334,7 +347,7 @@ div.pad
 				font-size 16px
 				line-height 30px
 				border-bottom 1px solid #eee
-				-webkit-tap-highlight-color #0099fc
+				-webkit-tap-highlight-color rgba(255,0,0,0.5)
 
 			h3
 				margin-top 40px

@@ -27,15 +27,17 @@ div.pad div.list ul#notes li span.delete a{font-size:10px;text-decoration:none;c
 div.pad div.list ul#notes li span.delete a:hover{text-decoration:underline}
 div.pad div.list ul#notes li:hover{background:#fcfcfc;}
 div.pad div.list ul#notes li:hover span.delete{display:block}
-div.pad div.list ul#notes li.selected span.highlight{background:#0494dd}
-div.pad div.list ul#notes li.selected span.title{color:#0494dd}
-div.pad div.list ul#notes li.selected span.time{color:#7eb6d4}
+div.pad div.list ul#notes li.selected-true span.highlight{background:#0494dd}
+div.pad div.list ul#notes li.selected-true span.title{color:#0494dd}
+div.pad div.list ul#notes li.selected-true span.time{color:#7eb6d4}
 div.pad div.list div.status{position:absolute;left:0;right:0;bottom:0;background:#f9f9f9;}
 div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor note{position:absolute;top:0;left:0;right:0;bottom:0;}
-div.pad div.editor note div.text,div.pad div.editor note textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none}
+div.pad div.editor note textarea{position:absolute;margin:0;padding:12px;top:47px;left:0;right:0;bottom:0;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none;-webkit-transition:background .25s ease-out;}
+div.pad div.editor note textarea.droppable-hover{background:#eff5fc;}
+div.pad div.editor note textarea.droppable-hover:after{position:absolute;top:40px;left:40px;width:100px;height:100px;background:rgba(0,0,0,0.75);border-radius:5px;content:"."}
 div.pad div.editor div.page{position:absolute;padding:0 20px 20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
 div.pad div.editor div.page input,div.pad div.editor div.page textarea,div.pad div.editor div.page select{margin:0;padding:0 6px;font-size:13px;line-height:24px;color:#555;border:1px solid #ddd;box-sizing:border-box;outline:none}
 div.pad div.editor div.page input{padding:4px 6px;line-height:16px;}
@@ -44,11 +46,8 @@ div.pad div.editor div.page input[type="submit"]:hover{background:#f3f3f3;cursor
 div.pad div.editor div.page ::-webkit-input-placeholder,div.pad div.editor div.page ::-moz-placeholder{font-style:italic;color:#aaa}
 div.pad div.editor div.page a{color:#4f99ce;text-decoration:none;border-bottom:1px solid #d5dee5;}
 div.pad div.editor div.page a:hover{border-bottom:1px solid #82909a}
-div.pad div.editor div.page h2{margin:0;padding:10px 0 6px;font-size:16px;line-height:30px;border-bottom:1px solid #eee}
-div.pad div.editor div.page h3{margin-top:40px;font-size:14px;-webkit-tap-highlight-color:rgba(255,0,0,0.5);}
-div.pad div.editor div.page h3:touchstart{background:#f00}
-div.pad div.editor div.page h3:active{background:#0f0}
-div.pad div.editor div.page h3:active{background:#00f}
+div.pad div.editor div.page h2{margin:0;padding:10px 0 6px;font-size:16px;line-height:30px;border-bottom:1px solid #eee;-webkit-tap-highlight-color:rgba(255,0,0,0.5)}
+div.pad div.editor div.page h3{margin-top:40px;font-size:14px}
 div.pad div.editor div.page form{margin:15px 0}
 div.pad div.editor div.page del{color:#ccc}
 div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;padding:0;list-style:none;}

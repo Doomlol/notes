@@ -19,7 +19,8 @@ html(lang="en", ng-app="NotesApp")
 					a.gear(href="#/settings")
 				
 				ul#notes(ng-show="notes.length")
-					li(ng-repeat="note in notes", ng-click="loadNote(note.getId())",  ng-class="note.class", rel="note_{{note.getId()}}")
+					li(ng-repeat="note in notes", ng-click="loadNote(note.getId())", class="selected-{{note.getId() == current_note.getId()}}", rel="note_{{note.getId()}}")
+						// ng-class="note.class"
 						span.highlight
 						span.title {{note.getTitle() || 'Untitled'}}
 						span.time {{note.getTime()}}

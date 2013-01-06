@@ -146,16 +146,20 @@ angular.module('IndexedDBModule', [])
 				return store;
 			};
 			this.get = function(opts) { //, cb
+				var id = (new Number(opts.id)).valueOf() || -1;
 				var store = this.getStore();
-				var req = store.get(opts.id);
+				var req = store.get(id);
 				req.onerror = function(event) {
 					opts.failure();
 				}.bind(this);
 				req.onsuccess = function(event) {
-					var item;
-					if (req.result)
-						item = this.classify(req.result);
-					opts.success(item);
+					if (req.result) {
+						var item = this.classify(req.result);
+						opts.success(item);
+					}
+					else {
+						opts.failure();
+					}
 				}.bind(this);
 			};
 			this.getAll = function(opts) {  // cb
@@ -282,9 +286,30 @@ angular.module('FirebaseModule', [])
 		this.setUser = function(userid) {
 			this.user_ref = base_ref.child('users').child(userid).child('notes');
 		};
-		
 		this.get = function(opts) {
-
+			var note = new Note({id: opts.id});
+			var note_ref = this.user_ref.child(opts.id);
+			var once = false;
+			note_ref.off('value');
+			note_ref.on('value', function(snapshot) {
+				note.value = snapshot.val();
+				//$rootScope.$apply();
+				if (!once) {
+					if (note.value && opts.success) {
+						console.log('calling get success');
+						opts.success(note);
+					}
+					else if (!note.value && opts.failure) {
+						console.log('calling get failure');
+						opts.failure();
+					}
+					once = true;
+				}
+				else {
+					$rootScope.$apply();
+				}
+			});
+			return note;
 		};
 		this.getAll = function(opts) {
 			var ret = [];
@@ -389,12 +414,16 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		// This should be a helper for abstracting the switching between local
 		// storage and firebase
 		var mechanism;
+		// I don't like 'setuser' being here because it's specific, not generic
 		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser'];
 		for (var i = 0; i < storage_functions.length; i++) {
 			var func = storage_functions[i];
 			this[func] = function(func) {
 				var args = Array.prototype.slice.call(arguments).slice(1);
-				return mechanism[func].apply(mechanism, args);
+				if (mechanism[func])
+					return mechanism[func].apply(mechanism, args);
+				else
+					throw "This storage mechanism doesn't support '" + func + "'"
 			}.bind(this, func);
 		}
 		this.sync = function() {
@@ -492,10 +521,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 				$location.path('');
 		}
 		$scope.setCurrentNote = function(note) {
-			if ($scope.current_note)
-				$scope.current_note.class = '';
 			$scope.current_note = note;
-			$scope.current_note.class = 'selected';
 		}
 		$scope.addNote = function() {
 			var note = storage.add({
@@ -507,12 +533,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			$scope.notes.push(note);
 		}
 		$scope.getNote = function(id) {
-			var note = null;
-			angular.forEach($scope.notes, function(value, key) {
-				if (value.getId() == id)
-					note = value;
-			});
-			return note;
+			return storage.get({id: id});
 		}
 		$scope.deleteNote = function(id) {
 			window.event.stopPropagation(); // only here because delete overlaps clickable note li
@@ -603,13 +624,18 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			// parseInt will allow trailing letters after digits
 			//var note_id = (new Number($routeParams.note_id)).valueOf();
 			var note_id = $routeParams.note_id;
-			$scope.note = $scope.getNote(note_id);
-			if (!$scope.note) {
-				$location.path('/notfound/' + $routeParams.note_id);
-				return;
-			}
-			$scope.setCurrentNote($scope.note);
-			$scope.watchChanges();
+			$scope.note = storage.get({
+				id: note_id,
+				success: function(note) {
+					$scope.setCurrentNote($scope.note);
+					$scope.watchChanges();
+					$scope.$apply();
+				},
+				failure: function() {
+					$location.path('/notfound/' + $routeParams.note_id);
+					$scope.$apply();
+				}
+			});
 		}
 
 		function noteChange(new_value, old_value) {
@@ -650,6 +676,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 
 	.controller('NotFoundCtrl', function NotFoundCtrl($scope, $routeParams) {
 		$scope.setPageView(true);
+		$scope.setCurrentNote(null);
 		$scope.note_id = $routeParams.note_id;
 	})
 

@@ -7,8 +7,7 @@ div.page.login
 
 	div(ng-show="signed_in")
 		p Congrats, you're signed in.
-		p User id: {{user.userid}}
-		p Email: {{user.email}}
+		p {{user.email}} (id: {{user.userid}})
 		a(ng-click="signOut()") Sign out
 
 	// Sign in
@@ -28,7 +27,7 @@ div.page.login
 				p There was an error signing up. Please try again.
 
 		form(ng-submit="go()")
-			input(id="email_input", type="text", placeholder="Username")
+			input(id="email_input", type="text", placeholder="Email")
 			input(id="password_input", type="password", placeholder="Password")
 
 			input(ng-show="logging_in", type="submit", value="Sign in")
