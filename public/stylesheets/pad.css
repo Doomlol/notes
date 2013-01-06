@@ -94,7 +94,7 @@ div.pad div.list{width:auto;right:0;}
 div.pad div.list ul#notes{top:55px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
-div.pad div.list div.status a{font-size:19px;line-height:41px}
+div.pad div.list div.status a{font-size:19px;line-height:54px}
 div.pad div.editor{left:100%;right:auto;width:100%;}
 div.pad div.editor note textarea{top:55px;font-size:19px}
 div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:38px;}
