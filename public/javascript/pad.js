@@ -16,6 +16,13 @@ var base_ref = new Firebase('https://cilphex.firebaseio.com/');
 // This is a note!
 function Note(value) {
 	this.value = value;
+	this.setValue = function(item) {
+		for (var key in item) {
+			var val = item[key];
+			if (typeof val != 'undefined')
+				this.value[key] = val;
+		}
+	};
 	this.getValue = function() {
 		return this.value;
 	};
@@ -286,14 +293,14 @@ angular.module('FirebaseModule', [])
 		this.setUser = function(userid) {
 			this.user_ref = base_ref.child('users').child(userid).child('notes');
 		};
+		// This should be changed to item_ref, and use a 'classify' system like the db storage
 		this.get = function(opts) {
 			var note = new Note({id: opts.id});
 			var note_ref = this.user_ref.child(opts.id);
 			var once = false;
 			note_ref.off('value');
 			note_ref.on('value', function(snapshot) {
-				note.value = snapshot.val();
-				//$rootScope.$apply();
+				note.setValue(snapshot.val());
 				if (!once) {
 					if (note.value && opts.success) {
 						console.log('calling get success');
@@ -361,6 +368,7 @@ angular.module('FirebaseModule', [])
 		};
 		this.edit = function(opts) {
 			var item = opts.item;
+			console.log('saving item:', item);
 			this.user_ref.child(item.id).update(item, function(success) {
 				// does opts need to be bound to this function for confusion not to occur?
 				if (success && opts.success)
@@ -630,6 +638,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					$scope.setCurrentNote($scope.note);
 					$scope.watchChanges();
 					$scope.$apply();
+					console.log('got note:', note);
 				},
 				failure: function() {
 					$location.path('/notfound/' + $routeParams.note_id);

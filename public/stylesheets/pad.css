@@ -90,6 +90,7 @@ body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
 ::-webkit-scrollbar-track{background:#eee}
 ::-webkit-scrollbar-thumb{background:#ccc}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
+div.pad{top:0;left:0;right:0;bottom:0;}
 div.pad div.list{width:auto;right:0;}
 div.pad div.list ul#notes{top:55px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
