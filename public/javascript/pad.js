@@ -18,9 +18,9 @@ function Note(value) {
 	this.value = value;
 	this.setValue = function(item) {
 		for (var key in item) {
-			var val = item[key];
-			if (typeof val != 'undefined')
-				this.value[key] = val;
+			var value = item[key];
+			if (typeof value != 'undefined')
+				this.value[key] = value;
 		}
 	};
 	this.getValue = function() {
@@ -368,7 +368,6 @@ angular.module('FirebaseModule', [])
 		};
 		this.edit = function(opts) {
 			var item = opts.item;
-			console.log('saving item:', item);
 			this.user_ref.child(item.id).update(item, function(success) {
 				// does opts need to be bound to this function for confusion not to occur?
 				if (success && opts.success)
@@ -530,6 +529,13 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		}
 		$scope.setCurrentNote = function(note) {
 			$scope.current_note = note;
+
+			// Now make sure the reference in $scope.notes matches this one
+			for (var i = 0; i < $scope.notes.length; i++) {
+				if ($scope.notes[i].getId() == $scope.current_note.getId()) {
+					$scope.notes[i] = $scope.current_note;
+				}
+			}
 		}
 		$scope.addNote = function() {
 			var note = storage.add({
@@ -638,7 +644,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					$scope.setCurrentNote($scope.note);
 					$scope.watchChanges();
 					$scope.$apply();
-					console.log('got note:', note);
 				},
 				failure: function() {
 					$location.path('/notfound/' + $routeParams.note_id);
