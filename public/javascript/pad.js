@@ -717,7 +717,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 				// Once firebase fixes 'error' to handle invalid email addresses,
 				// you'll need to switch on 'error == whatever'
 				if (error) {
-					console.log('error signing in');
+					console.log('error signing in', error);
 					$scope.login_error = true;
 					$scope.$apply(); // Since we're in a callback
 				}
