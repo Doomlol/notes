@@ -3,8 +3,9 @@
 // For the main site Pad
 
 (function() {
-	window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-	window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.mozIDBTransaction || window.msIDBTransaction;
+	if (!indexedDB || !IDBTransaction) {
+		alert('Your browser does not support local databases');
+	}
 })();
 
 
