@@ -10,6 +10,7 @@ body{position:relative;font-size:13px;font-family:"Open Sans","Helvetica Neue",H
 .font-4{font-family:"Ubuntu Mono",sans-serif}
 .font-5{font-family:"Handlee",sans-serif}
 .font-6{font-family:"Racing Sans One",sans-serif}
+a{outline:none}
 a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#09a8ef),to(#0494dd));background:-moz-linear-gradient(top,#09a8ef,#0494dd);border-radius:3px;border:1px solid #079fe6;}
 a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7));background:-moz-linear-gradient(top,#0ab4f5,#049ee7)}
 div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hidden;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);-webkit-transition-property:top,left,right,bottom;-webkit-transition-duration:.5s;}
