@@ -27,6 +27,15 @@ function Note(value) {
 	this.getValue = function() {
 		return this.value;
 	};
+	// This is used when editing a note, because you can't pass along attachments
+	this.getContent = function() {
+		return {
+			id:         this.value.id,
+			title:      this.value.title,
+			body:       this.value.body,
+			updated_at: this.value.updated_at
+		};
+	};
 	this.getId = function() {
 		return this.value.id;
 	};
@@ -38,6 +47,9 @@ function Note(value) {
 	};
 	this.getTime = function() {
 		return Utils.formatDate(this.value.updated_at);
+	};
+	this.getAttachments = function() {
+		return this.value.attachments;
 	};
 }
 
@@ -56,6 +68,9 @@ function upgrade_database(db) {
 
 
 var Utils = {
+	getCurrentTimestamp: function() {
+		return (new Date()).valueOf();
+	},
 	formatDate: function(timestamp) {
 		var date = new Date (timestamp);
 		var hours = date.getHours() % 12 + (date.getHours()%12==0?1:0);
@@ -191,7 +206,7 @@ angular.module('IndexedDBModule', [])
 			};
 			this.add = function(opts) {
 				var store = this.getStore();
-				var date = (new Date()).valueOf();
+				var date = Utils.getCurrentTimestamp();
 				var req = store.add({updated_at: date});
 				req.onerror = function(event) {
 					opts.failure();
@@ -207,7 +222,7 @@ angular.module('IndexedDBModule', [])
 					opts.failure();
 					return;
 				}
-				item.updated_at = (new Date()).valueOf();
+				item.updated_at = Utils.getCurrentTimestamp();
 				var store = this.getStore();
 				var req = store.put(item);
 				req.onerror = function(event) {
@@ -341,7 +356,7 @@ angular.module('FirebaseModule', [])
 		};
 		this.add = function(opts) {
 			var ret = {};
-			var item = {updated_at: (new Date()).valueOf()}
+			var item = {updated_at: Utils.getCurrentTimestamp()}
 			var noteref = this.user_ref.push(item, function(success) {
 					if (success && opts.success) {
 						item.id = noteref.name();
@@ -378,6 +393,23 @@ angular.module('FirebaseModule', [])
 			});
 			return {};
 		};
+		this.attach = function(opts) {
+			var items = opts.items;
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+				item.id = opts.id;
+				item.updated_at = Utils.getCurrentTimestamp();
+				var attachmentref = this.user_ref.child(item.id).child('attachments').push(item, function(item, success) {
+					if (success && opts.success) {
+						opts.success(item);
+					}
+					else if (!success && opts.failure) {
+						opts.failure(item);
+					}
+				}.bind(this, item));
+			};
+			return true;
+		}
 	});
 
 // Service - only one instance
@@ -423,7 +455,7 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		// storage and firebase
 		var mechanism;
 		// I don't like 'setuser' being here because it's specific, not generic
-		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser'];
+		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser', 'attach'];
 		for (var i = 0; i < storage_functions.length; i++) {
 			var func = storage_functions[i];
 			this[func] = function(func) {
@@ -676,7 +708,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.save = function() {
 			if ($scope.note) {
 				storage.edit({
-					item: $scope.note.getValue(),
+					item: $scope.note.getContent(),
 					success: function() {
 						console.log('saved');
 						$scope.saved = true;
@@ -686,7 +718,46 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			}
 		}
 
+		$scope.attach = function(fpfiles) {
+			try {
+				storage.attach({
+					id: $scope.note.getId(),
+					items: fpfiles,
+					success: function(item) {
+						$scope.note.value.attachments.push(item);
+						console.log('attached:', item);
+					},
+					failure: function(item) {
+						console.log('FAILED attach:', item);
+					}
+				});
+			}
+			catch (e) {
+				alert('Error: ' + e);
+			}
+		}
+
 		$scope.enqueue(initialize);
+	})
+
+	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element) {
+
+
+		$scope.updateStyle = function() {
+			var src_url = 'url(' + $scope.getImageSrc() + ')';
+			$element.css({
+				'background-image': src_url
+			});
+		}
+
+		$scope.getImageSrc = function() {
+			return 'http://storage.notes.fm/' + $scope.attachment.key;
+		}
+
+		$scope.$watch('attachment', function() {
+			$scope.updateStyle();
+		})
+
 	})
 
 	.controller('NotFoundCtrl', function NotFoundCtrl($scope, $routeParams) {
@@ -787,6 +858,12 @@ angular.module('components', [])
 			templateUrl: '/partials/note'
 		}
 	})
+	.directive('attachment', function() {
+		return {
+			restrict: 'E',
+			controller: 'AttachmentCtrl'
+		}
+	})
 	.directive('autoFocus', function() {
 		return function(scope, element, attrs) {
 			scope.el = $(element[0]);
@@ -804,6 +881,7 @@ angular.module('components', [])
 	})
 	.directive('droppable', function() {
 		return function(scope, element, attrs) {
+			// scope is a NoteCtrl instance
 			filepicker.makeDropPane($(element), {
 				multiple: true,
 				dragEnter: function() {
@@ -825,7 +903,7 @@ angular.module('components', [])
 				},
 				onSuccess: function(fpfiles) {
 					console.log('onSuccess', fpfiles);
-
+					scope.attach(fpfiles);
 				},
 				onError: function(type, message) {
 					console.log('onError', type, message);

@@ -1,7 +1,5 @@
-transition{-webkit-transition:arguments}
-transition-property{-webkit-transition-property:arguments}
-transition-duration{-webkit-transition-duration:arguments}
-transition-timing-function{-webkit-transition-timing-function:arguments}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+* html .clearfix{height:1%}
 html,body{margin:0;padding:0;height:100%}
 body{position:relative;font-size:13px;font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;color:#555;background:-webkit-gradient(linear,left top,left bottom,from(#d5dee5),to(#818f99));background:-moz-linear-gradient(top,#d5dee5,#818f99);overflow:hidden}
 .font-1{font-family:"Open Sans",sans-serif}
@@ -10,10 +8,10 @@ body{position:relative;font-size:13px;font-family:"Open Sans","Helvetica Neue",H
 .font-4{font-family:"Ubuntu Mono",sans-serif}
 .font-5{font-family:"Handlee",sans-serif}
 .font-6{font-family:"Racing Sans One",sans-serif}
-a{outline:none}
+a,input{outline:none}
 a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:28px;text-decoration:none;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#d74635;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#09a8ef),to(#0494dd));background:-moz-linear-gradient(top,#09a8ef,#0494dd);border-radius:3px;border:1px solid #079fe6;}
 a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7));background:-moz-linear-gradient(top,#0ab4f5,#049ee7)}
-div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hidden;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);-webkit-transition-property:top,left,right,bottom;-webkit-transition-duration:.5s;}
+div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hidden;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);-webkit-transition-property:top,left,right,bottom;-moz-transition-property:top,left,right,bottom;transition-property:top,left,right,bottom;-webkit-transition-duration:.5s;-moz-transition-duration:.5s;transition-duration:.5s;}
 div.pad div.main_error{display:none;position:absolute;padding:10px;left:10px;right:10px;bottom:10px;font-size:13px;text-align:center;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#a00009;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
 div.pad div.list{position:absolute;top:0;left:0;bottom:0;width:280px;background:#fff;border-right:1px solid #eee;}
 div.pad div.list div.no_notes{position:absolute;padding:40px 20px;top:47px;left:0;right:0;bottom:0;text-align:center;color:#bbb}
@@ -32,14 +30,16 @@ div.pad div.list ul#notes li.selected-true span.highlight{background:#0494dd}
 div.pad div.list ul#notes li.selected-true span.title{color:#0494dd}
 div.pad div.list ul#notes li.selected-true span.time{color:#7eb6d4}
 div.pad div.list div.status{position:absolute;left:0;right:0;bottom:0;background:#f9f9f9;}
-div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-out;}
+div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor note{position:absolute;top:0;left:0;right:0;bottom:0;}
 div.pad div.editor note div.text{position:absolute;top:47px;left:0;right:0;bottom:0;}
-div.pad div.editor note div.text textarea{position:absolute;margin:0;padding:12px;width:100%;height:100%;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background .25s ease-out;-moz-transition:background .25s ease-out;}
+div.pad div.editor note div.text textarea{position:absolute;margin:0;padding:12px;width:100%;height:100%;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background .25s ease-out;-moz-transition:background .25s ease-out;transition:background .25s ease-out;}
 div.pad div.editor note div.text textarea.droppable-hover{background:#eff5fc;}
 div.pad div.editor note div.text textarea.droppable-hover:after{position:absolute;top:40px;left:40px;width:100px;height:100px;background:rgba(0,0,0,0.75);border-radius:5px;content:"."}
+div.pad div.editor note div.attachments{position:absolute;padding:5px 0 5px 5px;left:5px;right:5px;bottom:5px;background-color:rgba(0,0,0,0.5);border-radius:2px;}
+div.pad div.editor note div.attachments attachment{float:left;margin:0 5px 0 0;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
 div.pad div.editor div.page{position:absolute;padding:0 20px 20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
 div.pad div.editor div.page input,div.pad div.editor div.page textarea,div.pad div.editor div.page select{margin:0;padding:0 6px;font-size:13px;line-height:24px;color:#555;border:1px solid #ddd;box-sizing:border-box;outline:none}
 div.pad div.editor div.page input{padding:4px 6px;line-height:16px;}
@@ -57,7 +57,7 @@ div.pad div.editor div.page ul.radioset li label{display:block;padding:3px 10px 
 div.pad div.editor div.page ul.radioset li label:hover{background:#d5dee5;border-radius:5px}
 div.pad div.editor div.page ul.radioset li input[type="radio"]{margin-right:8px}
 div.pad div.editor div.page ul.options{margin:10px 0;padding:0;max-width:250px;list-style:none;}
-div.pad div.editor div.page ul.options li label{position:relative;display:block;margin:0 10px 0 0;padding:0 6px;line-height:32px;cursor:pointer;border-bottom:1px solid #eee;-webkit-transition:background .25s ease-out;}
+div.pad div.editor div.page ul.options li label{position:relative;display:block;margin:0 10px 0 0;padding:0 6px;line-height:32px;cursor:pointer;border-bottom:1px solid #eee;-webkit-transition:background .25s ease-out;-moz-transition:background .25s ease-out;transition:background .25s ease-out;}
 div.pad div.editor div.page ul.options li label:hover{background:#f6f6f6}
 div.pad div.editor div.page ul.options li label input[type="checkbox"],div.pad div.editor div.page ul.options li label input[type="radio"]{vertical-align:middle;margin-top:-2px;margin-right:8px}
 div.pad div.editor div.page ul.options li:first-child label{border-top-left-radius:3px;border-top-right-radius:3px}
@@ -79,7 +79,7 @@ div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;he
 div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:100%;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;-moz-background-size:auto 16px;background-size:auto 16px;opacity:.4;}
 div.pad div.list > div.opts a.gear:hover{opacity:.6}
 div.pad note > div.opts{position:relative;}
-div.pad note > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);-webkit-transform:rotate(-45deg) translate(-2px,11px);display:none;}
+div.pad note > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);-webkit-transform:rotate(-45deg) translate(-2px,11px);-moz-transform:rotate(-45deg) translate(-2px,11px);transform:rotate(-45deg) translate(-2px,11px);display:none;}
 div.pad note > div.opts div.back:before{display:block;content:'';width:20px;height:6px;background:#888}
 div.pad note > div.opts div.back:after{display:block;content:'';width:6px;height:14px;background:#888}
 div.pad note > div.opts input[type="text"]{display:block;margin:0;padding-right:20px;height:18px;line-height:18px;border:1px solid transparent;background:none;-moz-box-flex:1;-webkit-box-flex:1;outline:none;}
@@ -94,20 +94,20 @@ body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
 div.pad{top:0;left:0;right:0;bottom:0;}
 div.pad div.list{width:auto;right:0;}
-div.pad div.list ul#notes{top:55px;}
+div.pad div.list ul#notes{top:55px;bottom:54px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
 div.pad div.list div.status a{font-size:19px;line-height:54px}
 div.pad div.editor{left:100%;right:auto;width:100%;}
 div.pad div.editor note div.text{top:55px;}
 div.pad div.editor note div.text textarea{font-size:19px}
-div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:38px;}
+div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:55px;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{font-size:19px;padding:5px 7px;height:26px;line-height:26px}
 div.pad div.list > div.opts input[type="text"]{margin:0 0 0 8px}
 div.pad div.list > div.opts a.gear{width:24px;-webkit-background-size:auto 24px;-moz-background-size:auto 24px;background-size:auto 24px}
 div.pad note > div.opts div.back{display:block}
 div.pad note > div.opts input[type="text"]{padding-right:28px}
 div.pad note > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
-body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%);-webkit-transform:translateX(-100%)}
-}div.upload_test{padding:30px;text-align:center;border:1px solid #ddd;border-radius:5px;-webkit-transition:border-color 1.5s ease-out;transition:border-color 1.5s ease-out;}
+body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%);-moz-transform:translateX(-100%);transform:translateX(-100%)}
+}div.upload_test{padding:30px;text-align:center;border:1px solid #ddd;border-radius:5px;-webkit-transition:border-color 1.5s ease-out;-moz-transition:border-color 1.5s ease-out;transition:border-color 1.5s ease-out;}
 div.upload_test.droppable-hover{border-color:#0099fc}

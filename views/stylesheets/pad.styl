@@ -33,25 +33,54 @@ box-flex()
 
 transform()
 	-webkit-transform arguments
+	-moz-transform arguments
+	transform arguments
 
 transform-style()
 	-webkit-transform-style arguments
+	-moz-transform-style arguments
+	transform-style arguments
 
-transition
+transition()
 	-webkit-transition arguments
+	-moz-transition arguments
+	transition arguments
 
-transition-property
+transition-property()
 	-webkit-transition-property arguments
+	-moz-transition-property arguments
+	transition-property arguments
 
-transition-duration
+transition-duration()
 	-webkit-transition-duration arguments
+	-moz-transition-duration arguments
+	transition-duration arguments
 
-transition-timing-function
+transition-timing-function()
 	-webkit-transition-timing-function arguments
+	-moz-transition-timing-function arguments
+	transition-timing-function arguments
+
+background-size()
+	-webkit-background-size arguments
+	-moz-background-size arguments
+	background-size arguments
 
 perspective()
 	-webkit-perspective arguments
 
+
+// Necessary
+
+.clearfix:after
+	content "."
+	display block
+	height 0
+	clear both
+	visibility hidden
+
+* html .clearfix
+	height 1%
 
 
 // styles
@@ -84,7 +113,8 @@ body
 	&6
 		font-family font-6
 
-a
+a,
+input
 	outline none
 
 a.btn
@@ -117,8 +147,8 @@ div.pad
 	bottom 15px
 	overflow hidden
 	box-shadow 0 1px 3px rgba(0,0,0,0.25)
-	-webkit-transition-property top, left, right, bottom
-	-webkit-transition-duration 0.5s
+	transition-property top, left, right, bottom
+	transition-duration 0.5s
 
 	div.main_error
 		display none
@@ -244,9 +274,9 @@ div.pad
 				color #527791
 				text-decoration none
 				border-top 1px solid #eee
-				-webkit-transition-property background, border-color
-				-webkit-transition-duration 0.25s
-				-webkit-transition-timing-function ease-out
+				transition-property background, border-color
+				transition-duration 0.25s
+				transition-timing-function ease-out
 
 				&:hover
 					background #e3eefb
@@ -290,8 +320,7 @@ div.pad
 					resize none
 					-moz-box-sizing border-box
 					box-sizing border-box
-					-webkit-transition background 0.25s ease-out
-					-moz-transition background 0.25s ease-out
+					transition background 0.25s ease-out
 
 					&.droppable-hover
 						background #eff5fc
@@ -305,6 +334,27 @@ div.pad
 							background rgba(0,0,0,0.75)
 							border-radius 5px
 							content "."
+
+			div.attachments
+				position absolute
+				padding 5px 0 5px 5px
+				left 5px
+				right 5px
+				bottom 5px
+				background-color rgba(0,0,0,0.5)
+				border-radius 2px
+
+				attachment
+					float left
+					margin 0 5px 0 0
+					width 100px
+					height 100px
+					color #eee
+					background rgba(0,0,0,0.5)
+					background-size cover
+					background-position center center
+					background-repeat no-repeat
+					box-shadow 0 1px 3px rgba(0,0,0,0.25)
 
 		div.page
 			position absolute
@@ -410,7 +460,7 @@ div.pad
 						//background #f6f6f6
 						//border-bottom 1px solid #fff
 						border-bottom 1px solid #eee
-						-webkit-transition background 0.25s ease-out
+						transition background 0.25s ease-out
 
 						&:hover
 							//background #eee
@@ -511,8 +561,6 @@ div.pad
 			width 16px
 			height 100%
 			background url(/images/gear-black.png) center center no-repeat
-			-webkit-background-size auto 16px
-			-moz-background-size auto 16px
 			background-size auto 16px
 			opacity 0.4
 
@@ -624,6 +672,7 @@ body.expanded-true
 
 			ul#notes
 				top 55px
+				bottom 54px
 
 				li
 					span
@@ -653,7 +702,7 @@ body.expanded-true
 		div.list > div.opts,
 		note > div.opts
 			padding 8px
-			height 38px
+			height 55px
 
 			input[type="text"]
 				font-size 19px
@@ -667,8 +716,6 @@ body.expanded-true
 
 			a.gear
 				width 24px
-				-webkit-background-size auto 24px
-				-moz-background-size auto 24px
 				background-size auto 24px
 
 		note > div.opts
@@ -689,7 +736,6 @@ body.expanded-true
 		div.pad
 			div.list,
 			div.editor
-				-webkit-transform translateX(-100%)
 				transform translateX(-100%)
 
 
@@ -700,7 +746,6 @@ div.upload_test
 	text-align center
 	border 1px solid #ddd
 	border-radius 5px
-	-webkit-transition border-color 1.5s ease-out
 	transition border-color 1.5s ease-out
 
 	&.droppable-hover
