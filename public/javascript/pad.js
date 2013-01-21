@@ -24,6 +24,12 @@ function Note(value) {
 				this.value[key] = value;
 		}
 	};
+	this.addAttachment = function(attachment) {
+		if (!this.value.attachments)
+			this.value.attachments = {};
+		this.value.attachments[attachment.firebasekey] = attachment;
+		delete attachment.firebasekey;
+	}
 	this.getValue = function() {
 		return this.value;
 	};
@@ -91,6 +97,17 @@ var Utils = {
 	validate_email: function(email) {
 		var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 		return regex.test(email);
+	},
+	isImage: function(attachment) {
+		return this.isImageMimetype(attachment.mimetype) && this.isImageExtension(attachment.key);
+	},
+	isImageMimetype: function(mimetype) {
+		return /^image\//i.test(mimetype);
+	},
+	isImageExtension: function(filename) {
+		var extensions = ['jpg', 'png', 'gif'];
+		var regex = new RegExp("\." + ['jpg', 'png'].join('|') + '$', 'i');
+		return filename.match(regex);
 	}
 };
 
@@ -401,6 +418,7 @@ angular.module('FirebaseModule', [])
 				item.updated_at = Utils.getCurrentTimestamp();
 				var attachmentref = this.user_ref.child(item.id).child('attachments').push(item, function(item, success) {
 					if (success && opts.success) {
+						item.firebasekey = attachmentref.name();
 						opts.success(item);
 					}
 					else if (!success && opts.failure) {
@@ -657,7 +675,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		//$scope.refresh();
 	})
 
-	.controller('NoteCtrl', function NoteCtrl($scope, $location, $routeParams, storage) {
+	.controller('NoteCtrl', function NoteCtrl($scope, $element, $location, $routeParams, storage) {
 
 		$scope.setPageView(true);
 		$scope.saved = true;
@@ -724,8 +742,8 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					id: $scope.note.getId(),
 					items: fpfiles,
 					success: function(item) {
-						$scope.note.value.attachments.push(item);
-						console.log('attached:', item);
+						$scope.note.addAttachment(item);
+						console.log('attached', item);
 					},
 					failure: function(item) {
 						console.log('FAILED attach:', item);
@@ -742,7 +760,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element) {
 
-
 		$scope.updateStyle = function() {
 			var src_url = 'url(' + $scope.getImageSrc() + ')';
 			$element.css({
@@ -751,12 +768,16 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		}
 
 		$scope.getImageSrc = function() {
-			return 'http://storage.notes.fm/' + $scope.attachment.key;
+			var path = 'file.png';
+			if (Utils.isImage($scope.attachment)) {
+				path = $scope.attachment.thumbs[100];
+			}
+			return 'http://storage.notes.fm/' + path;
 		}
 
 		$scope.$watch('attachment', function() {
 			$scope.updateStyle();
-		})
+		});
 
 	})
 
@@ -851,10 +872,13 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 // The things inside this could be chained to the 'NotesApp' module contents,
 // but this way if we wanted we could separate this out into another file,
 // and potentially reuse it elsewhere.
+// 1/21/2013 - When possible, specify controllers here and not in the routeProver -
+// that way you can inject $element into the controller
 angular.module('components', [])
 	.directive('note', function() {
 		return {
 			restrict: 'E',
+			controller: 'NoteCtrl',
 			templateUrl: '/partials/note'
 		}
 	})
@@ -882,31 +906,77 @@ angular.module('components', [])
 	.directive('droppable', function() {
 		return function(scope, element, attrs) {
 			// scope is a NoteCtrl instance
+
+			var thumb_manager = {
+			
+				rand: Math.round(Math.random()*1000),
+
+				thumb_keys: {},
+				uploaded_fpfiles: null,
+
+				conversion_options: [
+					{format: 'jpg', quality: 65, fit: 'crop', width: 100, height: 100},
+					{format: 'jpg', quality: 65, fit: 'crop', width: 40, height: 40}
+				],
+
+				thumbConverted: function(orig_fpfile, options, new_fpfile) {
+
+					console.log('thumbConverted', this, orig_fpfile, new_fpfile);
+
+					if (!this.thumb_keys[orig_fpfile.key])
+						this.thumb_keys[orig_fpfile.key] = {};
+
+					this.thumb_keys[orig_fpfile.key][options.width] = new_fpfile.key;
+
+					if (Object.keys(this.thumb_keys[orig_fpfile.key]).length == this.conversion_options.length) {
+						orig_fpfile.thumbs = this.thumb_keys[orig_fpfile.key];
+						console.log('calling scope.attach with', [orig_fpfile]);
+						scope.attach([orig_fpfile]);
+					}
+				}
+			};
+
 			filepicker.makeDropPane($(element), {
 				multiple: true,
 				dragEnter: function() {
-					console.log('dragEnter');
+					console.log('dragEnter', thumb_manager.rand);
 					$(element).addClass('droppable-hover');
 				},
 				dragLeave: function() {
-					console.log('dragLeave');
+					console.log('dragLeave', thumb_manager.rand);
 					$(element).removeClass('droppable-hover');
 				},
 				onStart: function(files) {
 					$(element).removeClass('droppable-hover');
-					console.log('onStart', files);
-
+					console.log('onStart', thumb_manager.rand, files);
 				},
 				onProgress: function(percentage) {
-					console.log('onProgress', percentage);
+					console.log('onProgress', thumb_manager.rand, percentage);
 
 				},
 				onSuccess: function(fpfiles) {
-					console.log('onSuccess', fpfiles);
-					scope.attach(fpfiles);
+					console.log('onSuccess', thumb_manager.rand, fpfiles);
+					// Generate thumbs
+
+					thumb_manager.uploaded_fpfiles = fpfiles;
+					thumb_manager.thumbs_remaining = (fpfiles.length * thumb_manager.conversion_options.length);
+
+					// For every image uploaded
+					for (var i = 0; i < fpfiles.length; i++) {
+						// For every thumbnail size
+						for (var j = 0; j < thumb_manager.conversion_options.length; j++) {
+							var orig_fpfile = fpfiles[i];
+							var options = thumb_manager.conversion_options[j];
+							filepicker.convert(
+								orig_fpfile,
+								options,
+								thumb_manager.thumbConverted.bind(thumb_manager, orig_fpfile, options)
+							);
+						}
+					}
 				},
 				onError: function(type, message) {
-					console.log('onError', type, message);
+					console.log('onError', thumb_manager.rand, type, message);
 
 				}
 			});
@@ -918,8 +988,7 @@ angular.module('NotesApp', ['controllers', 'components'])
 	.config(function($routeProvider) {
 		$routeProvider
 			.when('/note/:note_id', {
-				template: '<note></note>',
-				controller: 'NoteCtrl'
+				template: '<note></note>'
 			})
 			.when('/notfound/:note_id', {
 				templateUrl: '/partials/notfound',
