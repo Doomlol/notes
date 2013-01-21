@@ -681,6 +681,10 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.saved = true;
 		$scope.save_timeout = null;
 
+		console.log('the element', $element);
+
+		$($element).attr('ng-class', 'count-{{note.getAttachments().length}}');
+
 		// This controller will likely be instantiated before notes have returned from the db.
 		// So instead of trying to fetch the note immediately (it won't be there), enqueue
 		// the call to do so, then set the note when it's available.
