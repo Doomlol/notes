@@ -167,103 +167,132 @@ div.pad
 
 	div.list
 		position absolute
+		display -webkit-box
+		display -moz-box
+		display box
+		box-orient vertical
 		top 0
 		left 0
 		bottom 0  
 		width 280px
-		background #fff
 		border-right 1px solid #eee
 
 		div.no_notes
-			position absolute
+			box-flex 1
 			padding 40px 20px
-			top 47px
-			left 0
-			right 0
-			bottom 0
 			text-align center
 			color #bbb
+			background #fff
 
 		ul#notes
-			position absolute
+			box-flex 1
 			margin 0
 			padding 0
-			top 47px
-			left 0
-			right 0
-			bottom 27px
 			list-style none
 			overflow-y auto
 			overflow-x hidden
 
 			li
 				position relative
-				padding 10px 15px
-				background #f9f9f9
 				border-bottom 1px solid #eee
-				cursor pointer
 
-				span
-					display block
+				div.highlight
+					position absolute
+					top 0
+					left 0
+					bottom 0
+					width 2px
+					z-index 1
 
-					&.highlight
-						position absolute
-						top 0
-						left 0
-						bottom 0
-						width 2px
+				div.basic
+					position relative
+					padding 10px 15px
+					background #f9f9f9
+					cursor pointer
 
-					&.title
-						margin-right 40px
+					h2
+						margin 0 40px 0 0
 						font-size 12px
 						font-weight bold
 						text-overflow ellipsis
 						white-space nowrap
 						overflow hidden
 
-					&.time
-						font-size 11px
-						color #aaa
+					span
+						display block
 
-					&.delete
-						position absolute
-						top 0
-						right 0
-						bottom 0
-						padding 0 10px
-						line-height 50px
-						display none
-
-						a
-							font-size 10px
-							text-decoration none
+						&.time
+							font-size 11px
 							color #aaa
 
-							&:hover
-								text-decoration underline
-
-				&:hover
-					background #fcfcfc
-
-					span
 						&.delete
-							display block
+							position absolute
+							top 0
+							right 0
+							bottom 0
+							padding 0 10px
+							line-height 50px
+							display none
+
+							a
+								font-size 10px
+								text-decoration none
+								color #aaa
+
+								&:hover
+									text-decoration underline
+
+					&:hover
+						background #fcfcfc
+
+						span
+							&.delete
+								display block
+
+				div.details
+					display none
+					padding 0 15px
+					font-size 11px
+					background #f9f9f9
+
+					h3
+						margin 0
+						font-size 11px
+						font-weight normal
+
+					div.uploads
+						padding-bottom 10px
+
+						div.upload
+							margin 0 0 5px
+							width 100%
+							height 4px
+							background rgba(0,0,0,0.075)
+
+							div.progress
+								width 35%
+								height 100%
+								background #A2AEB7
+
+				&:last-child
+					border-bottom none
 
 				&.selected-true
 
-					span
-						&.highlight
-							background #0494DD
-						&.title
+					div.highlight
+						background #0494DD
+
+					div.details
+						display block
+
+					div.basic
+						h2
 							color #0494DD
-						&.time
-							color #7EB6D4
+						span
+							&.time
+								color #7EB6D4
 
 		div.status
-			position absolute
-			left 0
-			right 0
-			bottom 0
 			background #f9f9f9
 
 			a
@@ -292,17 +321,18 @@ div.pad
 
 		note
 			position absolute
+			display -webkit-box
+			display -moz-box
+			display box
+			box-orient vertical
 			top 0
 			left 0
 			right 0
 			bottom 0
 
 			div.text
-				position absolute
-				top 47px
-				left 0
-				right 0
-				bottom 0
+				position relative
+				box-flex 1
 
 				textarea
 					position absolute
@@ -336,17 +366,16 @@ div.pad
 							content "."
 
 			div.attachments
-				position absolute
-				padding 5px 0 0 5px
-				left 5px
-				right 5px
-				bottom 5px
+				padding 0 5px 0 0
 				background-color rgba(0,0,0,0.5)
 				border-radius 2px
+				background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#000), to(#222))
+				background -moz-linear-gradient(top, #000, #222)
 
 				attachment
+					position relative
 					float left
-					margin 0 5px 5px 0
+					margin 5px 0 5px 5px
 					width 100px
 					height 100px
 					color #eee
@@ -355,6 +384,31 @@ div.pad
 					background-position center center
 					background-repeat no-repeat
 					box-shadow 0 1px 3px rgba(0,0,0,0.25)
+
+					div.hover_opts
+						
+						a
+							display block
+							text-decoration none
+
+						a.delete
+							position absolute
+							top 0
+							right 0
+							width 16px
+							height 16px
+							color #eee
+							background-color rgba(0,0,0,0.25)
+							background-image url(http://media.notes.fm/glyphicons-halflings-white.png)
+							background-position -311px 1px
+							background-repeat no-repeat
+
+							&:hover
+								background-color #09A8EF
+
+					&:hover
+						div.hover_opts
+							display block
 
 		div.page
 			position absolute
@@ -671,9 +725,6 @@ body.expanded-true
 			//-webkit-transition -webkit-transform 0.5s
 
 			ul#notes
-				top 55px
-				bottom 54px
-
 				li
 					span
 						&.title
@@ -694,8 +745,6 @@ body.expanded-true
 
 			note
 				div.text
-					top 55px
-
 					textarea
 						font-size 19px
 
@@ -739,14 +788,3 @@ body.expanded-true
 				transform translateX(-100%)
 
 
-
-
-div.upload_test
-	padding 30px
-	text-align center
-	border 1px solid #ddd
-	border-radius 5px
-	transition border-color 1.5s ease-out
-
-	&.droppable-hover
-		border-color #0099fc

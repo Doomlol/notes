@@ -13,33 +13,45 @@ a.btn{display:inline-block;margin:0;padding:0 10px;font-family:verdana,"Open San
 a.btn:hover{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7));background:-moz-linear-gradient(top,#0ab4f5,#049ee7)}
 div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hidden;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);-webkit-transition-property:top,left,right,bottom;-moz-transition-property:top,left,right,bottom;transition-property:top,left,right,bottom;-webkit-transition-duration:.5s;-moz-transition-duration:.5s;transition-duration:.5s;}
 div.pad div.main_error{display:none;position:absolute;padding:10px;left:10px;right:10px;bottom:10px;font-size:13px;text-align:center;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#a00009;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
-div.pad div.list{position:absolute;top:0;left:0;bottom:0;width:280px;background:#fff;border-right:1px solid #eee;}
-div.pad div.list div.no_notes{position:absolute;padding:40px 20px;top:47px;left:0;right:0;bottom:0;text-align:center;color:#bbb}
-div.pad div.list ul#notes{position:absolute;margin:0;padding:0;top:47px;left:0;right:0;bottom:27px;list-style:none;overflow-y:auto;overflow-x:hidden;}
-div.pad div.list ul#notes li{position:relative;padding:10px 15px;background:#f9f9f9;border-bottom:1px solid #eee;cursor:pointer;}
-div.pad div.list ul#notes li span{display:block;}
-div.pad div.list ul#notes li span.highlight{position:absolute;top:0;left:0;bottom:0;width:2px}
-div.pad div.list ul#notes li span.title{margin-right:40px;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
-div.pad div.list ul#notes li span.time{font-size:11px;color:#aaa}
-div.pad div.list ul#notes li span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
-div.pad div.list ul#notes li span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
-div.pad div.list ul#notes li span.delete a:hover{text-decoration:underline}
-div.pad div.list ul#notes li:hover{background:#fcfcfc;}
-div.pad div.list ul#notes li:hover span.delete{display:block}
-div.pad div.list ul#notes li.selected-true span.highlight{background:#0494dd}
-div.pad div.list ul#notes li.selected-true span.title{color:#0494dd}
-div.pad div.list ul#notes li.selected-true span.time{color:#7eb6d4}
-div.pad div.list div.status{position:absolute;left:0;right:0;bottom:0;background:#f9f9f9;}
+div.pad div.list{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;top:0;left:0;bottom:0;width:280px;border-right:1px solid #eee;}
+div.pad div.list div.no_notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding:40px 20px;text-align:center;color:#bbb;background:#fff}
+div.pad div.list ul#notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
+div.pad div.list ul#notes li{position:relative;border-bottom:1px solid #eee;}
+div.pad div.list ul#notes li div.highlight{position:absolute;top:0;left:0;bottom:0;width:2px;z-index:1}
+div.pad div.list ul#notes li div.basic{position:relative;padding:10px 15px;background:#f9f9f9;cursor:pointer;}
+div.pad div.list ul#notes li div.basic h2{margin:0 40px 0 0;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+div.pad div.list ul#notes li div.basic span{display:block;}
+div.pad div.list ul#notes li div.basic span.time{font-size:11px;color:#aaa}
+div.pad div.list ul#notes li div.basic span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
+div.pad div.list ul#notes li div.basic span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
+div.pad div.list ul#notes li div.basic span.delete a:hover{text-decoration:underline}
+div.pad div.list ul#notes li div.basic:hover{background:#fcfcfc;}
+div.pad div.list ul#notes li div.basic:hover span.delete{display:block}
+div.pad div.list ul#notes li div.details{display:none;padding:0 15px;font-size:11px;background:#f9f9f9;}
+div.pad div.list ul#notes li div.details h3{margin:0;font-size:11px;font-weight:normal}
+div.pad div.list ul#notes li div.details div.uploads{padding-bottom:10px;}
+div.pad div.list ul#notes li div.details div.uploads div.upload{margin:0 0 5px;width:100%;height:4px;background:rgba(0,0,0,0.075);}
+div.pad div.list ul#notes li div.details div.uploads div.upload div.progress{width:35%;height:100%;background:#a2aeb7}
+div.pad div.list ul#notes li:last-child{border-bottom:none}
+div.pad div.list ul#notes li.selected-true div.highlight{background:#0494dd}
+div.pad div.list ul#notes li.selected-true div.details{display:block}
+div.pad div.list ul#notes li.selected-true div.basic h2{color:#0494dd}
+div.pad div.list ul#notes li.selected-true div.basic span.time{color:#7eb6d4}
+div.pad div.list div.status{background:#f9f9f9;}
 div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
-div.pad div.editor note{position:absolute;top:0;left:0;right:0;bottom:0;}
-div.pad div.editor note div.text{position:absolute;top:47px;left:0;right:0;bottom:0;}
+div.pad div.editor note{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;top:0;left:0;right:0;bottom:0;}
+div.pad div.editor note div.text{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;}
 div.pad div.editor note div.text textarea{position:absolute;margin:0;padding:12px;width:100%;height:100%;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background .25s ease-out;-moz-transition:background .25s ease-out;transition:background .25s ease-out;}
 div.pad div.editor note div.text textarea.droppable-hover{background:#eff5fc;}
 div.pad div.editor note div.text textarea.droppable-hover:after{position:absolute;top:40px;left:40px;width:100px;height:100px;background:rgba(0,0,0,0.75);border-radius:5px;content:"."}
-div.pad div.editor note div.attachments{position:absolute;padding:5px 0 0 5px;left:5px;right:5px;bottom:5px;background-color:rgba(0,0,0,0.5);border-radius:2px;}
-div.pad div.editor note div.attachments attachment{float:left;margin:0 5px 5px 0;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
+div.pad div.editor note div.attachments{padding:0 5px 0 0;background-color:rgba(0,0,0,0.5);border-radius:2px;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#000),to(#222));background:-moz-linear-gradient(top,#000,#222);}
+div.pad div.editor note div.attachments attachment{position:relative;float:left;margin:5px 0 5px 5px;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+div.pad div.editor note div.attachments attachment div.hover_opts a{display:block;text-decoration:none}
+div.pad div.editor note div.attachments attachment div.hover_opts a.delete{position:absolute;top:0;right:0;width:16px;height:16px;color:#eee;background-color:rgba(0,0,0,0.25);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:-311px 1px;background-repeat:no-repeat;}
+div.pad div.editor note div.attachments attachment div.hover_opts a.delete:hover{background-color:#09a8ef}
+div.pad div.editor note div.attachments attachment:hover div.hover_opts{display:block}
 div.pad div.editor div.page{position:absolute;padding:0 20px 20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
 div.pad div.editor div.page input,div.pad div.editor div.page textarea,div.pad div.editor div.page select{margin:0;padding:0 6px;font-size:13px;line-height:24px;color:#555;border:1px solid #ddd;box-sizing:border-box;outline:none}
 div.pad div.editor div.page input{padding:4px 6px;line-height:16px;}
@@ -94,12 +106,10 @@ body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
 div.pad{top:0;left:0;right:0;bottom:0;}
 div.pad div.list{width:auto;right:0;}
-div.pad div.list ul#notes{top:55px;bottom:54px;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
 div.pad div.list div.status a{font-size:19px;line-height:54px}
 div.pad div.editor{left:100%;right:auto;width:100%;}
-div.pad div.editor note div.text{top:55px;}
 div.pad div.editor note div.text textarea{font-size:19px}
 div.pad div.list > div.opts,div.pad note > div.opts{padding:8px;height:55px;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{font-size:19px;padding:5px 7px;height:26px;line-height:26px}
@@ -109,5 +119,4 @@ div.pad note > div.opts div.back{display:block}
 div.pad note > div.opts input[type="text"]{padding-right:28px}
 div.pad note > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
 body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%);-moz-transform:translateX(-100%);transform:translateX(-100%)}
-}div.upload_test{padding:30px;text-align:center;border:1px solid #ddd;border-radius:5px;-webkit-transition:border-color 1.5s ease-out;-moz-transition:border-color 1.5s ease-out;transition:border-color 1.5s ease-out;}
-div.upload_test.droppable-hover{border-color:#0099fc}
+}

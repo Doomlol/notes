@@ -57,6 +57,16 @@ function Note(value) {
 	this.getAttachments = function() {
 		return this.value.attachments;
 	};
+	this.getAttachmentKey = function(attachment) {
+		if (!this.value.attachments)
+			return null;
+		for (var a in this.value.attachments) {
+			if (this.value.attachments[a].id == attachment.id) {
+				return a;
+			}
+		}
+		return null;
+	};
 }
 
 
@@ -427,7 +437,18 @@ angular.module('FirebaseModule', [])
 				}.bind(this, item));
 			};
 			return true;
-		}
+		};
+		this.unattach = function(opts) {
+			this.user_ref.child(opts.id).child('attachments').child(opts.attachment_key).remove(function(success) {
+				if (success && opts.success) {
+					opts.success(opts);
+				}
+				else if (!success && opts.failure) {
+					opts.failure();
+				}
+			});
+			return true;
+		};
 	});
 
 // Service - only one instance
@@ -473,7 +494,7 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		// storage and firebase
 		var mechanism;
 		// I don't like 'setuser' being here because it's specific, not generic
-		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser', 'attach'];
+		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser', 'attach', 'unattach'];
 		for (var i = 0; i < storage_functions.length; i++) {
 			var func = storage_functions[i];
 			this[func] = function(func) {
@@ -683,8 +704,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 
 		console.log('the element', $element);
 
-		$($element).attr('ng-class', 'count-{{note.getAttachments().length}}');
-
 		// This controller will likely be instantiated before notes have returned from the db.
 		// So instead of trying to fetch the note immediately (it won't be there), enqueue
 		// the call to do so, then set the note when it's available.
@@ -762,7 +781,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.enqueue(initialize);
 	})
 
-	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element) {
+	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage) {
 
 		$scope.updateStyle = function() {
 			var src_url = 'url(' + $scope.getImageSrc() + ')';
@@ -774,9 +793,31 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.getImageSrc = function() {
 			var path = 'file.png';
 			if (Utils.isImage($scope.attachment)) {
-				path = $scope.attachment.thumbs[100];
+				path = $scope.attachment.thumbs[100].key;
 			}
 			return 'http://storage.notes.fm/' + path;
+		}
+
+		$scope.remove = function() {
+			try {
+				storage.unattach({
+					id: $scope.note.getId(),
+					attachment_key: $scope.note.getAttachmentKey($scope.attachment),
+					success: function() {
+						console.log('removed from firebase', $scope.attachment);
+						if ($scope.attachment.thumbs) {
+							for (var thumb in $scope.attachment.thumbs) {
+								filepicker.remove($scope.attachment.thumbs[thumb]);
+							}
+						}
+						filepicker.remove($scope.attachment);
+						console.log('removed from filepicker');
+					}
+				});
+			}
+			catch (e) {
+				alert('Error: ' + e);
+			}
 		}
 
 		$scope.$watch('attachment', function() {
@@ -802,7 +843,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.toggleLogin = function() {
 			$scope.logging_in = !$scope.logging_in;
 		}
-
 		$scope.go = function() {
 			$scope.logging_in ? $scope.signIn() : $scope.signUp();
 		}
@@ -915,7 +955,7 @@ angular.module('components', [])
 			
 				rand: Math.round(Math.random()*1000),
 
-				thumb_keys: {},
+				thumbs: {},
 				uploaded_fpfiles: null,
 
 				conversion_options: [
@@ -927,13 +967,13 @@ angular.module('components', [])
 
 					console.log('thumbConverted', this, orig_fpfile, new_fpfile);
 
-					if (!this.thumb_keys[orig_fpfile.key])
-						this.thumb_keys[orig_fpfile.key] = {};
+					if (!this.thumbs[orig_fpfile.key])
+						this.thumbs[orig_fpfile.key] = {};
 
-					this.thumb_keys[orig_fpfile.key][options.width] = new_fpfile.key;
+					this.thumbs[orig_fpfile.key][options.width] = new_fpfile;
 
-					if (Object.keys(this.thumb_keys[orig_fpfile.key]).length == this.conversion_options.length) {
-						orig_fpfile.thumbs = this.thumb_keys[orig_fpfile.key];
+					if (Object.keys(this.thumbs[orig_fpfile.key]).length == this.conversion_options.length) {
+						orig_fpfile.thumbs = this.thumbs[orig_fpfile.key];
 						console.log('calling scope.attach with', [orig_fpfile]);
 						scope.attach([orig_fpfile]);
 					}

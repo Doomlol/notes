@@ -8,3 +8,5 @@ div.text
 
 div.attachments.clearfix
 	attachment(ng-repeat="a in note.getAttachments()", ng-init="attachment=a")
+		div.hover_opts
+			a.delete(ng-click="remove()", alt="Delete")
