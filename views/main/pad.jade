@@ -19,7 +19,7 @@ html(lang="en", ng-app="NotesApp")
 					a.gear(href="#/settings")
 				
 				ul#notes(ng-show="notes.length")
-					
+
 					li(ng-repeat="note in notes", class="selected-{{note.getId() == current_note.getId()}}", rel="note_{{note.getId()}}")
 						div.highlight
 						div.basic(ng-click="loadNote(note.getId())")
@@ -48,6 +48,7 @@ html(lang="en", ng-app="NotesApp")
 		script(src="https://cdn.firebase.com/v0/firebase.js")
 		script(src="https://cdn.firebase.com/v0/firebase-auth-client.js")
 		script(src="https://api.filepicker.io/v1/filepicker.js")
+		script(src="https://api.filepicker.io/v1/filepicker_debug.js")
 		//script(src="/javascript/angular/angular-resource-1.0.1.min.js")
 		//script(src="/javascript/parse-1.0.10.min.js")
 		script(src="/javascript/pad.js")

@@ -21,8 +21,9 @@ function Note(value) {
 	this.setValue = function(item) {
 		for (var key in item) {
 			var value = item[key];
-			if (typeof value != 'undefined')
+			if (typeof value != 'undefined') {
 				this.value[key] = value;
+			}
 		}
 	};
 	this.addAttachment = function(attachment) {
@@ -347,7 +348,15 @@ angular.module('FirebaseModule', [])
 			var once = false;
 			note_ref.off('value');
 			note_ref.on('value', function(snapshot) {
+
+				console.log('on callback fired');
+
+				// Whether we're calling storage.get, or it's a remote db update,
+				// update the value of the note
 				note.setValue(snapshot.val());
+
+				// If we called storage.get, call the callback. Don't $apply - let that happen
+				// in the callback. Consider calling $apply if opts.success does not exist
 				if (!once) {
 					if (note.value && opts.success) {
 						console.log('calling get success');
@@ -359,6 +368,8 @@ angular.module('FirebaseModule', [])
 					}
 					once = true;
 				}
+
+				// This is what happens when on('value') gets fired from a remote db update
 				else {
 					$rootScope.$apply();
 				}
@@ -800,11 +811,12 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		}
 
 		$scope.getImageSrc = function() {
-			var path = 'file.png';
 			if (Utils.isImage($scope.attachment)) {
-				path = $scope.attachment.thumbs[100].key;
+				return 'http://storage.notes.fm/' + $scope.attachment.thumbs[100].key;
 			}
-			return 'http://storage.notes.fm/' + path;
+			else {
+				return 'http://media.notes.fm/file.png';
+			}
 		}
 
 		$scope.remove = function() {
@@ -813,7 +825,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					id: $scope.note.getId(),
 					attachment_key: $scope.note.getAttachmentKey($scope.attachment),
 					success: function() {
-						console.log('removed from firebase', $scope.attachment);
+						console.log('removed from firebase');
 						if ($scope.attachment.thumbs) {
 							for (var thumb in $scope.attachment.thumbs) {
 								filepicker.remove($scope.attachment.thumbs[thumb]);
