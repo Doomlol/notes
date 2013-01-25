@@ -16,7 +16,8 @@ var base_ref = new Firebase('https://cilphex.firebaseio.com/');
 
 // This is a note!
 function Note(value) {
-	this.value = value;
+	this.value = value || {};
+	this.uploads = [];
 	this.setValue = function(item) {
 		for (var key in item) {
 			var value = item[key];
@@ -338,7 +339,10 @@ angular.module('FirebaseModule', [])
 		};
 		// This should be changed to item_ref, and use a 'classify' system like the db storage
 		this.get = function(opts) {
-			var note = new Note({id: opts.id});
+
+			// It is questionable whether opts.replace should be required here
+
+			var note = opts.replace || new Note({id: opts.id});
 			var note_ref = this.user_ref.child(opts.id);
 			var once = false;
 			note_ref.off('value');
@@ -618,8 +622,14 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			});
 			$scope.notes.push(note);
 		}
+		// This doesn't get a note from storage, it gets the reference to this
+		// note in $scope.notes
 		$scope.getNote = function(id) {
-			return storage.get({id: id});
+			for (var i = 0; i < $scope.notes.length; i++) {
+				if ($scope.notes[i].getId() == id)
+					return $scope.notes[i];
+			}
+			return null;
 		}
 		$scope.deleteNote = function(id) {
 			window.event.stopPropagation(); // only here because delete overlaps clickable note li
@@ -702,8 +712,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.saved = true;
 		$scope.save_timeout = null;
 
-		console.log('the element', $element);
-
 		// This controller will likely be instantiated before notes have returned from the db.
 		// So instead of trying to fetch the note immediately (it won't be there), enqueue
 		// the call to do so, then set the note when it's available.
@@ -714,6 +722,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			var note_id = $routeParams.note_id;
 			$scope.note = storage.get({
 				id: note_id,
+				replace: $scope.getNote(note_id),
 				success: function(note) {
 					$scope.setCurrentNote($scope.note);
 					$scope.watchChanges();
@@ -766,7 +775,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					items: fpfiles,
 					success: function(item) {
 						$scope.note.addAttachment(item);
-						console.log('attached', item);
+						console.log('attached');//, item);
 					},
 					failure: function(item) {
 						console.log('FAILED attach:', item);
@@ -948,11 +957,16 @@ angular.module('components', [])
 		}
 	})
 	.directive('droppable', function() {
-		return function(scope, element, attrs) {
-			// scope is a NoteCtrl instance
 
-			var thumb_manager = {
-			
+		return function(scope, element, attrs) {
+
+			var picker = {
+
+				// Since there's no way to identify multiple uploads, right now
+				// we can only allow one at a time
+				uploading: false,
+				upload_count: 0,
+
 				rand: Math.round(Math.random()*1000),
 
 				thumbs: {},
@@ -963,9 +977,68 @@ angular.module('components', [])
 					{format: 'jpg', quality: 65, fit: 'crop', width: 40, height: 40}
 				],
 
+				dragEnter: function() {
+					$(element).addClass('droppable-hover');
+					console.log('dragEnter', this.rand);
+
+				},
+				dragLeave: function() {
+					$(element).removeClass('droppable-hover');
+					console.log('dragLeave', this.rand);
+
+				},
+				onStart: function(files) {
+					this.uploading = true;
+					this.upload_count = files.length;
+					$(element).removeClass('droppable-hover');
+					console.log('onStart', this.rand, files);
+
+				},
+				onProgress: function(percentage) {
+					console.log('onProgress', this.rand, percentage);
+
+					if (scope.note) {
+						scope.note.uploads = [
+							{count: this.upload_count, progress: percentage}
+						];
+						scope.$apply();
+					}
+				},
+				onSuccess: function(fpfiles) {
+					this.uploading = false;
+
+					if (scope.note) {
+						scope.note.uploads = [];
+					}
+
+					console.log('onSuccess', this.rand, fpfiles);
+					// Generate thumbs
+
+					this.uploaded_fpfiles = fpfiles;
+					this.thumbs_remaining = (fpfiles.length * this.conversion_options.length);
+
+					// For every image uploaded
+					for (var i = 0; i < fpfiles.length; i++) {
+						// For every thumbnail size
+						for (var j = 0; j < this.conversion_options.length; j++) {
+							var orig_fpfile = fpfiles[i];
+							var options = this.conversion_options[j];
+							filepicker.convert(
+								orig_fpfile,
+								options,
+								this.thumbConverted.bind(this, orig_fpfile, options)
+							);
+						}
+					}
+				},
+				onError: function(type, message) {
+					this.uploading = false;
+					console.log('onError', this.rand, type, message);
+
+				},
 				thumbConverted: function(orig_fpfile, options, new_fpfile) {
 
-					console.log('thumbConverted', this, orig_fpfile, new_fpfile);
+					console.log('thumbConverted');
 
 					if (!this.thumbs[orig_fpfile.key])
 						this.thumbs[orig_fpfile.key] = {};
@@ -980,50 +1053,17 @@ angular.module('components', [])
 				}
 			};
 
-			filepicker.makeDropPane($(element), {
-				multiple: true,
-				dragEnter: function() {
-					console.log('dragEnter', thumb_manager.rand);
-					$(element).addClass('droppable-hover');
-				},
-				dragLeave: function() {
-					console.log('dragLeave', thumb_manager.rand);
-					$(element).removeClass('droppable-hover');
-				},
-				onStart: function(files) {
-					$(element).removeClass('droppable-hover');
-					console.log('onStart', thumb_manager.rand, files);
-				},
-				onProgress: function(percentage) {
-					console.log('onProgress', thumb_manager.rand, percentage);
+			var drop_pane_options = {
+				multiple:   true,
+				dragEnter:  picker.dragEnter.bind(picker),
+				dragLeave:  picker.dragLeave.bind(picker),
+				onStart:    picker.onStart.bind(picker),
+				onProgress: picker.onProgress.bind(picker),
+				onSuccess:  picker.onSuccess.bind(picker),
+				onError:    picker.onError.bind(picker)
+			};
 
-				},
-				onSuccess: function(fpfiles) {
-					console.log('onSuccess', thumb_manager.rand, fpfiles);
-					// Generate thumbs
-
-					thumb_manager.uploaded_fpfiles = fpfiles;
-					thumb_manager.thumbs_remaining = (fpfiles.length * thumb_manager.conversion_options.length);
-
-					// For every image uploaded
-					for (var i = 0; i < fpfiles.length; i++) {
-						// For every thumbnail size
-						for (var j = 0; j < thumb_manager.conversion_options.length; j++) {
-							var orig_fpfile = fpfiles[i];
-							var options = thumb_manager.conversion_options[j];
-							filepicker.convert(
-								orig_fpfile,
-								options,
-								thumb_manager.thumbConverted.bind(thumb_manager, orig_fpfile, options)
-							);
-						}
-					}
-				},
-				onError: function(type, message) {
-					console.log('onError', thumb_manager.rand, type, message);
-
-				}
-			});
+			filepicker.makeDropPane($(element), drop_pane_options);
 		}
 	});
 

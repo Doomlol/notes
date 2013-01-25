@@ -4,9 +4,15 @@ div.opts
 	div#save_status.save_status(title="Saved", ng-click="save()", class="saved-{{saved}}")
 
 div.text
-	textarea(ng-model="note.value.body", auto-focus="end", droppable="true")
+	textarea(ng-model="note.value.body", auto-focus="end", droppable="true", test-directive="true")
 
 div.attachments.clearfix
-	attachment(ng-repeat="a in note.getAttachments()", ng-init="attachment=a")
+
+	attachment(ng-repeat="attachment in note.getAttachments()")
 		div.hover_opts
 			a.delete(ng-click="remove()", alt="Delete")
+	
+	div.upload(ng-repeat="upload in note.uploads")
+		h3 {{upload.count}} files
+		div.bar
+			div.progress(ng-style="{width: upload.progress + '%'}")
