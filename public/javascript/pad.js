@@ -19,19 +19,16 @@ function Note(value) {
 	this.value = value || {};
 	this.uploads = [];
 	this.setValue = function(item) {
+		for (var key in this.value) {
+			delete this.value[key];
+		}
 		for (var key in item) {
 			var value = item[key];
-			if (typeof value != 'undefined') {
+			//if (typeof value != 'undefined') {
 				this.value[key] = value;
-			}
+			//}
 		}
 	};
-	this.addAttachment = function(attachment) {
-		if (!this.value.attachments)
-			this.value.attachments = {};
-		this.value.attachments[attachment.firebasekey] = attachment;
-		delete attachment.firebasekey;
-	}
 	this.getValue = function() {
 		return this.value;
 	};
@@ -63,7 +60,7 @@ function Note(value) {
 		if (!this.value.attachments)
 			return null;
 		for (var a in this.value.attachments) {
-			if (this.value.attachments[a].id == attachment.id) {
+			if (this.value.attachments[a].url == attachment.url) {
 				return a;
 			}
 		}
@@ -369,9 +366,15 @@ angular.module('FirebaseModule', [])
 					once = true;
 				}
 
-				// This is what happens when on('value') gets fired from a remote db update
+				// This is what happens when on('value') gets fired from a remote db update.
+				// Note: theoretically this will call $rootScope.$apply every time any note is
+				// remotely updated, even if it's not the current note.  Maybe try to make this
+				// only fire if 'note' is the current note?
 				else {
-					$rootScope.$apply();
+					// Maybe just only do this if not currently $apply-ing or $digest-ing
+					// look up the stackoverflow stuff for a version of safeApply, it should have it
+					if (!($rootScope.$$phase == '$apply' || $rootScope.$$phase == '$digest'))
+						$rootScope.$apply();
 				}
 			});
 			return note;
@@ -785,7 +788,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					id: $scope.note.getId(),
 					items: fpfiles,
 					success: function(item) {
-						$scope.note.addAttachment(item);
 						console.log('attached');//, item);
 					},
 					failure: function(item) {
@@ -825,14 +827,12 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 					id: $scope.note.getId(),
 					attachment_key: $scope.note.getAttachmentKey($scope.attachment),
 					success: function() {
-						console.log('removed from firebase');
 						if ($scope.attachment.thumbs) {
 							for (var thumb in $scope.attachment.thumbs) {
 								filepicker.remove($scope.attachment.thumbs[thumb]);
 							}
 						}
 						filepicker.remove($scope.attachment);
-						console.log('removed from filepicker');
 					}
 				});
 			}
@@ -1007,8 +1007,7 @@ angular.module('components', [])
 
 				},
 				onProgress: function(percentage) {
-					console.log('onProgress', this.rand, percentage);
-
+					//console.log('onProgress', this.rand, percentage);
 					if (scope.note) {
 						scope.note.uploads = [
 							{count: this.upload_count, progress: percentage}
@@ -1038,7 +1037,7 @@ angular.module('components', [])
 							filepicker.convert(
 								orig_fpfile,
 								options,
-								this.thumbConverted.bind(this, orig_fpfile, options)
+								this.thumbConverted.bind(this, options, orig_fpfile)
 							);
 						}
 					}
@@ -1048,7 +1047,7 @@ angular.module('components', [])
 					console.log('onError', this.rand, type, message);
 
 				},
-				thumbConverted: function(orig_fpfile, options, new_fpfile) {
+				thumbConverted: function(options, orig_fpfile, new_fpfile) {
 
 					console.log('thumbConverted');
 
