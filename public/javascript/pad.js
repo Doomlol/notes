@@ -54,7 +54,7 @@ function Note(value) {
 		return Utils.formatDate(this.value.updated_at);
 	};
 	this.getAttachments = function() {
-		return this.value.attachments;
+		return this.value.attachments || {};
 	};
 	this.getAttachmentKey = function(attachment) {
 		if (!this.value.attachments)
@@ -345,8 +345,7 @@ angular.module('FirebaseModule', [])
 			var once = false;
 			note_ref.off('value');
 			note_ref.on('value', function(snapshot) {
-
-				console.log('on callback fired');
+				//console.log('ref.on callback fired');
 
 				// Whether we're calling storage.get, or it's a remote db update,
 				// update the value of the note
@@ -356,11 +355,11 @@ angular.module('FirebaseModule', [])
 				// in the callback. Consider calling $apply if opts.success does not exist
 				if (!once) {
 					if (note.value && opts.success) {
-						console.log('calling get success');
+						//console.log('firebase.get success');
 						opts.success(note);
 					}
 					else if (!note.value && opts.failure) {
-						console.log('calling get failure');
+						console.log('firebase.get failure');
 						opts.failure();
 					}
 					once = true;
@@ -442,9 +441,8 @@ angular.module('FirebaseModule', [])
 			var items = opts.items;
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
-				item.id = opts.id;
 				item.updated_at = Utils.getCurrentTimestamp();
-				var attachmentref = this.user_ref.child(item.id).child('attachments').push(item, function(item, success) {
+				var attachmentref = this.user_ref.child(opts.id).child('attachments').push(item, function(item, success) {
 					if (success && opts.success) {
 						item.firebasekey = attachmentref.name();
 						opts.success(item);
@@ -683,8 +681,8 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.authorize = function() {
 			var authtoken = localStorage.getItem('authtoken');
 			if (authtoken) {
-				base_ref.auth(authtoken, function(success) {
-					if (success)
+				base_ref.auth(authtoken, function(error, dummy) {
+					if (!error)
 						$scope.authorized();
 					else
 						$scope.unauthorized();
@@ -766,6 +764,13 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.timeoutSave = function() {
 			clearTimeout($scope.save_timeout);
 			$scope.save_timeout = setTimeout($scope.save, 2000);
+		}
+
+		// Used in the template to determine whether to show or hide attachments box
+		$scope.showAttachments = function() {
+			var attachments = $scope.note && Object.keys($scope.note.getAttachments()).length;
+			var uploads = $scope.note && $scope.note.uploads.length;
+			return attachments || uploads;
 		}
 
 		// Save the current note
@@ -1065,13 +1070,14 @@ angular.module('components', [])
 			};
 
 			var drop_pane_options = {
-				multiple:   true,
-				dragEnter:  picker.dragEnter.bind(picker),
-				dragLeave:  picker.dragLeave.bind(picker),
-				onStart:    picker.onStart.bind(picker),
-				onProgress: picker.onProgress.bind(picker),
-				onSuccess:  picker.onSuccess.bind(picker),
-				onError:    picker.onError.bind(picker)
+				multiple:        true,
+				store_location:  'S3',
+				dragEnter:       picker.dragEnter.bind(picker),
+				dragLeave:       picker.dragLeave.bind(picker),
+				onStart:         picker.onStart.bind(picker),
+				onProgress:      picker.onProgress.bind(picker),
+				onSuccess:       picker.onSuccess.bind(picker),
+				onError:         picker.onError.bind(picker)
 			};
 
 			filepicker.makeDropPane($(element), drop_pane_options);
