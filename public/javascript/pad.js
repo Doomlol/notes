@@ -766,10 +766,11 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			$scope.save_timeout = setTimeout($scope.save, 2000);
 		}
 
-		// Used in the template to determine whether to show or hide attachments box
+		// Used in the template to determine whether to show or hide attachments box.
+		// This function is messy - why's it called like 6 times on a note load?
 		$scope.showAttachments = function() {
-			var attachments = $scope.note && Object.keys($scope.note.getAttachments()).length;
-			var uploads = $scope.note && $scope.note.uploads.length;
+			var attachments = $scope.note && $scope.note.getAttachments && Object.keys($scope.note.getAttachments()).length;
+			var uploads = $scope.note && $scope.note.uploads && $scope.note.uploads.length;
 			return attachments || uploads;
 		}
 
