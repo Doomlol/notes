@@ -445,11 +445,11 @@ angular.module('FirebaseModule', [])
 				var item = items[i];
 				item.updated_at = Utils.getCurrentTimestamp();
 				var attachmentref = this.user_ref.child(opts.id).child('attachments').push(item, function(item, error, dummy) {
-					if (success && opts.success) {
+					if (!error && opts.success) {
 						item.firebasekey = attachmentref.name();
 						opts.success(item);
 					}
-					else if (!success && opts.failure) {
+					else if (error && opts.failure) {
 						opts.failure(item);
 					}
 				}.bind(this, item));
