@@ -4,7 +4,7 @@ div.opts
 	div#save_status.save_status(title="Saved", ng-click="save()", class="saved-{{saved}}")
 
 div.text
-	textarea(ng-model="note.value.body", auto-focus="end", droppable="true", test-directive="true")
+	textarea(ng-model="note.value.body", auto-focus="end", droppable="{{supportsAttachments()}}", test-directive="true")
 
 div.attachments.clearfix(ng-show="showAttachments()")
 

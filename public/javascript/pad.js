@@ -12,16 +12,20 @@
 filepicker.setKey('AdxGfHDDjQ2OTkf5i11y1z');
 
 var base_ref = new Firebase('https://cilphex.firebaseio.com/');
+var auth_client;
 
 
 // This is a note!
 function Note(value) {
-	this.value = value || {};
+	this.value = value;
 	this.uploads = [];
 	this.setValue = function(item) {
 		for (var key in this.value) {
 			delete this.value[key];
 		}
+		this.updateValue(item);
+	};
+	this.updateValue = function(item) {
 		for (var key in item) {
 			var value = item[key];
 			//if (typeof value != 'undefined') {
@@ -349,7 +353,7 @@ angular.module('FirebaseModule', [])
 
 				// Whether we're calling storage.get, or it's a remote db update,
 				// update the value of the note
-				note.setValue(snapshot.val());
+				note.updateValue(snapshot.val());
 
 				// If we called storage.get, call the callback. Don't $apply - let that happen
 				// in the callback. Consider calling $apply if opts.success does not exist
@@ -401,19 +405,17 @@ angular.module('FirebaseModule', [])
 		this.add = function(opts) {
 			var ret = {};
 			var item = {updated_at: Utils.getCurrentTimestamp()}
-			var noteref = this.user_ref.push(item, function(success) {
-					if (success && opts.success) {
-						item.id = noteref.name();
-						var note = new Note(item);
-						//ret = note;
-						angular.copy(note, ret);
-						opts.success(note);
-					}
-					else if (!success && opts.failure) {
-						opts.failure();
-					}
+			var note_ref = this.user_ref.push(item, function(error, dummy) {
+				if (!error && opts.success) {
+					item.id = note_ref.name();
+					var note = new Note(item);
+					angular.copy(note, ret);
+					opts.success(note);
 				}
-			);
+				else if (error && opts.failure) {
+					opts.failure();
+				}
+			});
 			return ret;
 		};
 		this.delete = function(opts) {
@@ -427,12 +429,13 @@ angular.module('FirebaseModule', [])
 			});
 		};
 		this.edit = function(opts) {
+			console.log('edit opts', opts);
 			var item = opts.item;
-			this.user_ref.child(item.id).update(item, function(success) {
+			this.user_ref.child(item.id).update(item, function(error, dummy) {
 				// does opts need to be bound to this function for confusion not to occur?
-				if (success && opts.success)
+				if (!error && opts.success)
 					opts.success(item);
-				else if (!success && opts.failure)
+				else if (error && opts.failure)
 					opts.failure();
 			});
 			return {};
@@ -509,6 +512,7 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		// This should be a helper for abstracting the switching between local
 		// storage and firebase
 		var mechanism;
+		var synced = false;
 		// I don't like 'setuser' being here because it's specific, not generic
 		var storage_functions = ['get', 'getAll', 'add', 'delete', 'edit', 'setUser', 'attach', 'unattach'];
 		for (var i = 0; i < storage_functions.length; i++) {
@@ -524,10 +528,12 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		this.sync = function() {
 			console.log('storage: sync');
 			this.setMechanism('firebase');
+			this.synced = true;
 		}
 		this.local = function() {
 			console.log('storage: local');
 			this.setMechanism('indexeddb');
+			this.synced = false;
 		}
 		this.setMechanism = function(m) {
 			switch (m) {
@@ -570,10 +576,8 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 	.controller('MainCtrl', function MainCtrl($scope, $location, indexeddb, storage, settings) {
 
-		window.xx = $scope;
-
-		var queue = [];
 		storage.local();
+		var queue = [];
 
 		$scope.notes = [];
 		$scope.page_view = false;
@@ -581,10 +585,19 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.signed_in = false;
 		$scope.user = {};
 
+		$scope.initialize = function() {
+			auth_client = new FirebaseAuthClient(base_ref, function(error, user) {
+				if (error)
+					$scope.authError(error);
+				else if (user)
+					$scope.authorized(user);
+				else
+					$scope.unauthorized();
+			});
+		}
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
 		// and updated_at, and not get the body for every single note
-
 		$scope.refresh = function() {
 			$scope.notes = storage.getAll({
 				success: function() {
@@ -593,7 +606,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 				}
 			});
 		}
-
 		// I feel that this is wrong because if there are no notes,
 		// the queue won't be released. does that work?
 		$scope.enqueue = function(f) {
@@ -676,35 +688,18 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
 		}
-
-
-		$scope.authorize = function() {
-			var authtoken = localStorage.getItem('authtoken');
-			if (authtoken) {
-				base_ref.auth(authtoken, function(error, dummy) {
-					if (!error)
-						$scope.authorized();
-					else
-						$scope.unauthorized();
-				});
-			}
-			else {
-				$scope.unauthorized();
-			}
-		}
-		$scope.authorized = function() {
+		$scope.authorized = function(user) {
 			console.log('authorized');
 			$scope.signed_in = true;
-			$scope.user = {
-				authtoken: localStorage.getItem('authtoken'),
-				userid: localStorage.getItem('userid'),
-				email: localStorage.getItem('email')
-			}
+			$scope.user = user;
 			// In the future this should be a call to a method that checks the sync/local
 			// setting first, doesn't just set to sync automatically
 			storage.sync();
-			storage.setUser($scope.user.userid);
+			storage.setUser($scope.user.id);
 			$scope.refresh();
+		}
+		$scope.authError = function(error) {
+			console.log('authError');
 		}
 		$scope.unauthorized = function() {
 			console.log('unauthorized');
@@ -714,8 +709,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			$scope.refresh();
 		}
 
-		$scope.authorize();
-		//$scope.refresh();
+		$scope.initialize();
 	})
 
 	.controller('NoteCtrl', function NoteCtrl($scope, $element, $location, $routeParams, storage) {
@@ -764,6 +758,10 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.timeoutSave = function() {
 			clearTimeout($scope.save_timeout);
 			$scope.save_timeout = setTimeout($scope.save, 2000);
+		}
+
+		$scope.supportsAttachments = function() {
+			return storage.synced;
 		}
 
 		// Used in the template to determine whether to show or hide attachments box.
@@ -860,6 +858,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 	})
 
 	.controller('LoginCtrl', function LoginCtrl($scope) {
+		console.log('login control');
 
 		$scope.setPageView(true);
 		$scope.logging_in = true;
@@ -874,34 +873,15 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			$scope.logging_in ? $scope.signIn() : $scope.signUp();
 		}
 		$scope.signIn = function() {
-			var email = $('#email_input').val();
-			var password = $('#password_input').val();
-			var authClient = new FirebaseAuthClient(base_ref);
-			authClient.login('password', email, password, function(error, token, user) {
-				// Once firebase fixes 'error' to handle invalid email addresses,
-				// you'll need to switch on 'error == whatever'
-				if (error) {
-					console.log('error signing in', error);
-					$scope.login_error = true;
-					$scope.$apply(); // Since we're in a callback
-				}
-				else {
-					console.log('signed in');
-					localStorage.setItem('authtoken', token);
-					localStorage.setItem('userid', user.id);
-					localStorage.setItem('email', user.email);
-					$scope.authorize();
-				}
+			console.log('signing in...');
+			auth_client.login('password', {
+				email: $('#email_input').val(),
+				password: $('#password_input').val()
 			});
 		}
 		$scope.signOut = function() {
 			console.log('sign out');
-			// clear authtoken, userid, and email from localStorage
-			base_ref.unauth();
-			localStorage.removeItem('authtoken');
-			localStorage.removeItem('userid');
-			localStorage.removeItem('email');
-			$scope.authorize();
+			auth_client.logout();
 		}
 		$scope.signUp = function() {
 			console.log('doing signup');
@@ -978,23 +958,22 @@ angular.module('components', [])
 
 		return function(scope, element, attrs) {
 
+			if (attrs.droppable !== 'true')
+				return;
+
 			var picker = {
 
 				// Since there's no way to identify multiple uploads, right now
 				// we can only allow one at a time
 				uploading: false,
 				upload_count: 0,
-
 				rand: Math.round(Math.random()*1000),
-
 				thumbs: {},
 				uploaded_fpfiles: null,
-
 				conversion_options: [
 					{format: 'jpg', quality: 65, fit: 'crop', width: 100, height: 100},
 					{format: 'jpg', quality: 65, fit: 'crop', width: 40, height: 40}
 				],
-
 				dragEnter: function() {
 					$(element).addClass('droppable-hover');
 					console.log('dragEnter', this.rand);
@@ -1023,14 +1002,10 @@ angular.module('components', [])
 				},
 				onSuccess: function(fpfiles) {
 					this.uploading = false;
-
 					if (scope.note) {
 						scope.note.uploads = [];
 					}
-
 					console.log('onSuccess', this.rand, fpfiles);
-					// Generate thumbs
-
 					this.uploaded_fpfiles = fpfiles;
 					this.thumbs_remaining = (fpfiles.length * this.conversion_options.length);
 
@@ -1051,17 +1026,12 @@ angular.module('components', [])
 				onError: function(type, message) {
 					this.uploading = false;
 					console.log('onError', this.rand, type, message);
-
 				},
 				thumbConverted: function(options, orig_fpfile, new_fpfile) {
-
 					console.log('thumbConverted');
-
 					if (!this.thumbs[orig_fpfile.key])
 						this.thumbs[orig_fpfile.key] = {};
-
 					this.thumbs[orig_fpfile.key][options.width] = new_fpfile;
-
 					if (Object.keys(this.thumbs[orig_fpfile.key]).length == this.conversion_options.length) {
 						orig_fpfile.thumbs = this.thumbs[orig_fpfile.key];
 						console.log('calling scope.attach with', [orig_fpfile]);
@@ -1069,7 +1039,6 @@ angular.module('components', [])
 					}
 				}
 			};
-
 			var drop_pane_options = {
 				multiple:        true,
 				store_location:  'S3',
@@ -1080,7 +1049,6 @@ angular.module('components', [])
 				onSuccess:       picker.onSuccess.bind(picker),
 				onError:         picker.onError.bind(picker)
 			};
-
 			filepicker.makeDropPane($(element), drop_pane_options);
 		}
 	});
