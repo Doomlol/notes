@@ -15,7 +15,7 @@ div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hid
 div.pad div.main_error{display:none;position:absolute;padding:10px;left:10px;right:10px;bottom:10px;font-size:13px;text-align:center;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#a00009;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
 div.pad div.list{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;top:0;left:0;bottom:0;width:280px;background:#fff;border-right:1px solid #eee;}
 div.pad div.list div.no_notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding:40px 20px;text-align:center;color:#bbb;background:#fff}
-div.pad div.list ul#notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0 0 -1px;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
+div.pad div.list ul#notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
 div.pad div.list ul#notes li{position:relative;border-bottom:1px solid #eee;}
 div.pad div.list ul#notes li div.highlight{position:absolute;top:0;left:0;bottom:0;width:2px;z-index:1}
 div.pad div.list ul#notes li h2{margin:0 40px 0 0;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
