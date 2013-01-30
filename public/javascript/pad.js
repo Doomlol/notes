@@ -385,7 +385,6 @@ angular.module('FirebaseModule', [])
 		this.getAll = function(opts) {
 			var ret = [];
 			if (this.user_ref) {
-				console.log('user_ref exists; getAll executing');
 				this.user_ref.once('value', function(snapshot) {
 					var notes = snapshot.val();
 					for (var n in notes) {
@@ -419,11 +418,11 @@ angular.module('FirebaseModule', [])
 			return ret;
 		};
 		this.delete = function(opts) {
-			this.user_ref.child(opts.id).remove(function(success) {
-				if (success && opts.success) {
+			this.user_ref.child(opts.id).remove(function(error, dummy) {
+				if (!error && opts.success) {
 					opts.success(opts.id);
 				}
-				else if (!success && opts.failure) {
+				else if (error && opts.failure) {
 					opts.failure();
 				}
 			});
@@ -445,7 +444,7 @@ angular.module('FirebaseModule', [])
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
 				item.updated_at = Utils.getCurrentTimestamp();
-				var attachmentref = this.user_ref.child(opts.id).child('attachments').push(item, function(item, success) {
+				var attachmentref = this.user_ref.child(opts.id).child('attachments').push(item, function(item, error, dummy) {
 					if (success && opts.success) {
 						item.firebasekey = attachmentref.name();
 						opts.success(item);
@@ -458,11 +457,11 @@ angular.module('FirebaseModule', [])
 			return true;
 		};
 		this.unattach = function(opts) {
-			this.user_ref.child(opts.id).child('attachments').child(opts.attachment_key).remove(function(success) {
-				if (success && opts.success) {
+			this.user_ref.child(opts.id).child('attachments').child(opts.attachment_key).remove(function(error, dummy) {
+				if (!error && opts.success) {
 					opts.success(opts);
 				}
-				else if (!success && opts.failure) {
+				else if (error && opts.failure) {
 					opts.failure();
 				}
 			});
@@ -576,7 +575,7 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 	.controller('MainCtrl', function MainCtrl($scope, $location, indexeddb, storage, settings) {
 
-		storage.local();
+		//storage.local();
 		var queue = [];
 
 		$scope.notes = [];
@@ -858,8 +857,6 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 	})
 
 	.controller('LoginCtrl', function LoginCtrl($scope) {
-		console.log('login control');
-
 		$scope.setPageView(true);
 		$scope.logging_in = true;
 		$scope.login_error = false;
@@ -958,7 +955,7 @@ angular.module('components', [])
 
 		return function(scope, element, attrs) {
 
-			if (attrs.droppable !== 'true')
+			if (attrs.droppable !== 'true' || !scope.supportsAttachments())
 				return;
 
 			var picker = {
