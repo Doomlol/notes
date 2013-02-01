@@ -40,7 +40,7 @@ function Note(value) {
 	this.getContent = function() {
 		return {
 			id:         this.value.id,
-			title:      this.value.title,
+			title:      this.getTitle(),
 			body:       this.value.body,
 			updated_at: this.value.updated_at
 		};
