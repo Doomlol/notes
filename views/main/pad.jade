@@ -9,7 +9,7 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="stylesheet", type="text/css", href="/stylesheets/pad.css")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
-	body(ng-controller="MainCtrl", class="view-note-{{page_view}} expanded-{{expanded}} font-{{settings.fontfamily}} theme-{{settings.theme}}")
+	body(ng-controller="MainCtrl", class="view-note-{{page_view}} expanded-{{expanded}} font-{{settings.fontfamily}} theme-{{settings.theme}} audio-true")
 		div.pad
 			div.main_error
 			div.list
@@ -41,6 +41,21 @@ html(lang="en", ng-app="NotesApp")
 					a(ng-hide="signed_in", href="#/login") Local &mdash; Sign in
 
 			div.editor(ng-view)
+
+		div.audio-player(ng-controller="AudioPlayerCtrl")
+			div.info
+				| oldschool_blues.mp3
+			//a.control.back
+			//a.control.forward
+			a.control.play(ng-click="play()")
+			a.control.pause(ng-click="pause()")
+			div.track
+				div.fill
+				div.handle
+			div.time
+				| {{current_time}} / {{duration}}
+
+			audio(src="http://storage.notes.fm/QthFifsS7WID7MxNmZWp_14%20A%20Down%20and%20Dusky%20Blonde.mp3")
 
 	footer
 		script(src="/javascript/jquery.min.js")

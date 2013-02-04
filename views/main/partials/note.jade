@@ -8,9 +8,15 @@ div.text
 
 div.attachments.clearfix(ng-show="showAttachments()")
 
-	attachment(ng-repeat="attachment in note.getAttachments()")
+	attachment(ng-repeat="attachment in note.getAttachments()", ng-click="log()")
 		div.hover_opts
 			a.delete(ng-click="remove()", alt="Delete")
+			
+			div.opts.audio
+				| Audio
+			
+			div.opts.video
+				| Video
 	
 	div.upload(ng-repeat="upload in note.uploads")
 		h3 {{upload.count}} files

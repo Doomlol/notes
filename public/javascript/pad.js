@@ -97,10 +97,42 @@ var Utils = {
 		var am_pm = date.getHours() < 12 ? 'am' : 'pm';
 		return [hours, ':', minutes, ' ', am_pm].join('');
 	},
+	formatDuration: function(s) {
+		s = Math.ceil(s);
+		var seconds = s % 60;
+		var minutes = Math.floor(s/60);
+		var hours = Math.floor(s/3600);
+		var time = minutes + ':' + this.digits(2, seconds);
+		if (hours)
+			time = hours + ':' + time;
+		return time;
+	},
+	formatDurationProgress: function(s, progress) {
+		//Math.log(val) / Math.LN10;
+		progress = Math.round(progress);
+		var s = Math.ceil(s);
+		var seconds = progress % 60;
+
+		var total_minutes = Math.floor(s/60);
+		var minutes_pad = Math.ceil(Math.log(total_minutes+1)/Math.LN10);
+		var minutes = Math.floor(progress/60);
+
+		var total_hours = Math.floor(s/3600);
+		var hours_pad = Math.ceil(Math.log(total_hours+1)/Math.LN10);
+		var hours = Math.floor(progress/3600);
+
+		var time = this.digits(minutes_pad, minutes) + ':' + this.digits(2, seconds);
+		if (hours)
+			time = this.digits(hours_pad, hours) + ':' + time;
+		return time;
+	},
 	// Pad a number with leading zeroes
 	digits: function(n, number) {
 		var zeroes = '';
 		var number_digits = Math.ceil(Math.log(number+1)/Math.LN10);
+		if (number == 0)
+			n-=1;
+		//var number_digits = (number == 0 ? n : Math.ceil(Math.log(number+1)/Math.LN10));
 		if (number_digits < n)
 			for (var i = 0; i < n - number_digits; i++)
 				zeroes += '0';
@@ -111,16 +143,36 @@ var Utils = {
 		var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 		return regex.test(email);
 	},
-	isImage: function(attachment) {
-		return this.isImageMimetype(attachment.mimetype) && this.isImageExtension(attachment.key);
+	isFileType: function(type, attachment) {
+		switch(type) {
+			case 'image':
+				var extensions = ['jpg', 'jpeg', 'png'];
+				return /^image\//i.test(attachment.mimetype) || attachment.key.match(this.getFileRegex(extensions));
+				break;
+			case 'audio':
+				var extensions = ['mp3'];
+				return /^audio\//i.test(attachment.mimetype) || attachment.key.match(this.getFileRegex(extensions));
+				break;
+			case 'video':
+				var extensions = ['mp4'];
+				return /^video\//i.test(attachment.mimetype) || attachment.key.match(this.getFileRegex(extensions));
+				break;
+			default:
+				return true;
+		}
 	},
-	isImageMimetype: function(mimetype) {
-		return /^image\//i.test(mimetype);
+	getFileType: function(attachment) {
+		if (this.isFileType('image', attachment))
+			return 'image';
+		else if (this.isFileType('audio', attachment))
+			return 'audio';
+		else if (this.isFileType('video', attachment))
+			return 'video';
+		else
+			return 'other';
 	},
-	isImageExtension: function(filename) {
-		var extensions = ['jpg', 'png', 'gif'];
-		var regex = new RegExp("\." + ['jpg', 'png'].join('|') + '$', 'i');
-		return filename.match(regex);
+	getFileRegex: function(extensions) {
+		return new RegExp("\." + extensions.join('|') + '$', 'i');
 	}
 };
 
@@ -698,6 +750,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			$scope.refresh();
 		}
 		$scope.authError = function(error) {
+			alert('auth error. sign in again.');
 			console.log('authError');
 		}
 		$scope.unauthorized = function() {
@@ -808,22 +861,28 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage) {
 
-		$scope.updateStyle = function() {
-			var src_url = 'url(' + $scope.getImageSrc() + ')';
-			$element.css({
-				'background-image': src_url
-			});
+		// Get rid of this at some indeterminate point in the future
+		$scope.log = function() {
+			console.log('attachment:', $scope.attachment);
 		}
 
+		$scope.updateStyle = function() {
+			if (Utils.isFileType('image', $scope.attachment)) {
+				var src_url = 'url(' + $scope.getImageSrc() + ')';
+				$element.css({'background-image': src_url});
+			}
+			else {
+				$element.addClass(Utils.getFileType($scope.attachment));
+			}
+		}
 		$scope.getImageSrc = function() {
-			if (Utils.isImage($scope.attachment)) {
+			if (Utils.isFileType('image', $scope.attachment)) {
 				return 'http://storage.notes.fm/' + $scope.attachment.thumbs[100].key;
 			}
 			else {
 				return 'http://media.notes.fm/file.png';
 			}
 		}
-
 		$scope.remove = function() {
 			try {
 				storage.unattach({
@@ -843,11 +902,9 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 				alert('Error: ' + e);
 			}
 		}
-
 		$scope.$watch('attachment', function() {
 			$scope.updateStyle();
 		});
-
 	})
 
 	.controller('NotFoundCtrl', function NotFoundCtrl($scope, $routeParams) {
@@ -914,7 +971,40 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 
 	.controller('PageCtrl', function PageCtrl($scope, $routeParams) {
 		$scope.setPageView(true);
-	});
+	})
+
+	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element) {
+
+		var player = $($element).find('audio')[0];
+
+		$scope.duration = '0:00';
+		$scope.current_time = '0:00';
+		$scope.progress = 0;
+
+		$(player).on('loadedmetadata', function() {
+			$scope.duration = Utils.formatDuration(player.duration);
+			$scope.$apply();
+		});
+
+		$(player).on('timeupdate', function() {
+			var trackwidth = $($element).find('div.track').width();
+			var fillwidth = Math.round(player.currentTime / player.duration * trackwidth);
+			$($element).find('div.track div.fill').css({width: fillwidth + 'px'});
+			$($element).find('div.track div.handle').css({left: fillwidth + 'px'});
+			$scope.current_time = Utils.formatDurationProgress(player.duration, player.currentTime);
+			$scope.$apply();
+		});
+
+		$scope.play = function() {
+			player.play();
+			$element.addClass('playing');
+		}
+		$scope.pause = function() {
+			player.pause();
+			$element.removeClass('playing');
+		}
+
+	})
 
 
 // The things inside this could be chained to the 'NotesApp' module contents,
@@ -973,20 +1063,15 @@ angular.module('components', [])
 				],
 				dragEnter: function() {
 					$(element).addClass('droppable-hover');
-					console.log('dragEnter', this.rand);
-
 				},
 				dragLeave: function() {
 					$(element).removeClass('droppable-hover');
-					console.log('dragLeave', this.rand);
-
 				},
 				onStart: function(files) {
 					this.uploading = true;
 					this.upload_count = files.length;
 					$(element).removeClass('droppable-hover');
 					console.log('onStart', this.rand, files);
-
 				},
 				onProgress: function(percentage) {
 					//console.log('onProgress', this.rand, percentage);
@@ -1008,15 +1093,22 @@ angular.module('components', [])
 
 					// For every image uploaded
 					for (var i = 0; i < fpfiles.length; i++) {
-						// For every thumbnail size
-						for (var j = 0; j < this.conversion_options.length; j++) {
-							var orig_fpfile = fpfiles[i];
-							var options = this.conversion_options[j];
-							filepicker.convert(
-								orig_fpfile,
-								options,
-								this.thumbConverted.bind(this, options, orig_fpfile)
-							);
+						var orig_fpfile = fpfiles[i];
+
+						// If it's an image, generate thumbs for each size
+						if (Utils.isFileType('image', orig_fpfile)) {
+							for (var j = 0; j < this.conversion_options.length; j++) {
+								var options = this.conversion_options[j];
+								filepicker.convert(
+									orig_fpfile,
+									options,
+									this.thumbConverted.bind(this, options, orig_fpfile)
+								);
+							}
+						}
+						// Otherwise, just attach it to the note
+						else {
+							scope.attach([orig_fpfile]);
 						}
 					}
 				},
