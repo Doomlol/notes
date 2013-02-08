@@ -683,6 +683,7 @@ div.pad
 	note > div.opts
 		position relative
 
+		// This isn't appearing in the note right now
 		div.back
 			margin-right 8px
 			width 20px
@@ -872,7 +873,7 @@ body
 		top 0
 		left 0
 		right 0
-		bottom 0
+		bottom 0 !important
 
 		div.list
 			width auto
@@ -934,6 +935,9 @@ body
 				right 20px
 				width 8px
 				height 8px
+
+	div.audio-player
+		display none
 
 	body.view-note,
 	body.view-note-true

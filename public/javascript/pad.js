@@ -731,10 +731,16 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			return $scope.notes.length;
 		}
 		$scope.setPageView = function(val) {
-			$scope.page_view = val;
+			if ($location.path() == '/')
+				$scope.page_view = false;
+			else
+				$scope.page_view = val;
 		}
+		// Is this function necessary anymore now that you can use the browser back button? Yes,
+		// Probably - what if your first page load is not "/" ?
 		$scope.menu = function() {
-			$scope.setPageView(false);
+			$location.path('/');
+			//$scope.setPageView(false);
 		}
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
@@ -1165,14 +1171,13 @@ angular.module('NotesApp', ['controllers', 'components'])
 				templateUrl: '/partials/settings',
 				controller: 'SettingsCtrl'
 			})
-			.when('', {
+			.when('/', {
 				templateUrl: '/partials/hello',
 				controller: 'PageCtrl'
 			})
 			.otherwise({
-				redirectTo: '/',
-				templateUrl: '/partials/hello',
-				controller: 'PageCtrl'
+				//redirectTo: '/'
+				template: "Content does not exist"
 			});
 	});
 

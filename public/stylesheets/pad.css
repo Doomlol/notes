@@ -128,7 +128,7 @@ body.expanded-true.audio-true div.pad{bottom:30px}
 ::-webkit-scrollbar-track{background:#eee}
 ::-webkit-scrollbar-thumb{background:#ccc}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
-div.pad{top:0;left:0;right:0;bottom:0;}
+div.pad{top:0;left:0;right:0;bottom:0 !important;}
 div.pad div.list{width:auto;right:0;}
 div.pad div.list ul#notes li span.title{font-size:16px}
 div.pad div.list ul#notes li span.time{font-size:14px}
@@ -142,5 +142,6 @@ div.pad div.list > div.opts a.gear{width:24px;-webkit-background-size:auto 24px;
 div.pad note > div.opts div.back{display:block}
 div.pad note > div.opts input[type="text"]{padding-right:28px}
 div.pad note > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
+div.audio-player{display:none}
 body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%);-moz-transform:translateX(-100%);transform:translateX(-100%)}
 }
