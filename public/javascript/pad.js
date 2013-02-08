@@ -935,6 +935,7 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.signIn = function() {
 			console.log('signing in...');
 			auth_client.login('password', {
+				rememberMe: true,
 				email: $('#email_input').val(),
 				password: $('#password_input').val()
 			});
