@@ -12,8 +12,8 @@ div.attachments.clearfix(ng-show="showAttachments()")
 		div.hover_opts
 			a.delete(ng-click="remove()", alt="Delete")
 			
-			div.opts.audio
-				| Audio
+			div.opts.audio(ng-click="play()")
+				| Audio - {{data.current_time}} / {{data.total_time}}
 			
 			div.opts.video
 				| Video

@@ -52,7 +52,7 @@ div.pad div.editor note div.attachments attachment.audio,div.pad div.editor note
 div.pad div.editor note div.attachments attachment div.hover_opts a{display:block;text-decoration:none}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete{position:absolute;top:0;right:0;width:16px;height:16px;color:#eee;background-color:rgba(0,0,0,0.25);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:-311px 1px;background-repeat:no-repeat;}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete:hover{background-color:#09a8ef}
-div.pad div.editor note div.attachments attachment div.hover_opts div.opts{position:absolute;display:none;left:0;right:0;bottom:0;min-height:20px;background:rgba(0,0,0,0.25)}
+div.pad div.editor note div.attachments attachment div.hover_opts div.opts{position:absolute;display:none;left:0;right:0;bottom:0;min-height:20px;font-size:11px;line-height:20px;text-align:center;background:rgba(0,0,0,0.25)}
 div.pad div.editor note div.attachments attachment:hover div.hover_opts{display:block}
 div.pad div.editor note div.attachments attachment.audio div.opts.audio{display:block}
 div.pad div.editor note div.attachments attachment.video div.opts.video{display:block}
@@ -115,10 +115,12 @@ div.audio-player a.control.play{background-position:-259px -68px}
 div.audio-player a.control.pause{display:none;background-position:-282px -68px}
 div.audio-player a.control.forward{background-position:-355px -68px}
 div.audio-player a.control:hover{opacity:1}
-div.audio-player.playing a.control.play{display:none}
-div.audio-player.playing a.control.pause{display:block}
-div.audio-player div.track{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:13px 0 13px 15px;height:4px;background:rgba(255,255,255,0.2);}
-div.audio-player div.track div.fill{width:0;height:100%;background:#aaa}
+div.audio-player.playing a.control.play,div.audio-player.playing-true a.control.play{display:none}
+div.audio-player.playing a.control.pause,div.audio-player.playing-true a.control.pause{display:block}
+div.audio-player div.track{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:13px 0 13px 15px;height:4px;background:rgba(255,255,255,0.15);}
+div.audio-player div.track div.loaded,div.audio-player div.track div.progress{position:absolute;top:0;left:0;bottom:0;width:0}
+div.audio-player div.track div.loaded{background:rgba(255,255,255,0.2)}
+div.audio-player div.track div.progress{background:rgba(255,255,255,0.3)}
 div.audio-player div.track div.handle{position:absolute;top:-4px;left:0;margin:0 -6px;width:12px;height:12px;background:#ccc;border-radius:50%;-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.75);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.75);box-shadow:0 1px 5px rgba(0,0,0,0.75)}
 div.audio-player div.time{width:85px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
 body.audio-true div.pad{bottom:45px}

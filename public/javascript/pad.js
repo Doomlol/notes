@@ -624,7 +624,7 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 // If we wanted, all the things in controllers, components, and services
 // could be chained inside the NotesApp module declaration
 // Keep in mind that $scope.$apply is necessary in most callbacks
-angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
+angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 	.controller('MainCtrl', function MainCtrl($scope, $location, indexeddb, storage, settings) {
 
 		//storage.local();
@@ -865,12 +865,19 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.enqueue(initialize);
 	})
 
-	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage) {
+	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, AudioManager) {
 
-		// Get rid of this at some indeterminate point in the future
-		$scope.log = function() {
-			console.log('attachment:', $scope.attachment);
-		}
+
+
+
+
+		// Changes to this aren't showing up in the attachment dom
+		$scope.data = AudioManager.data;
+
+
+
+
+
 
 		$scope.updateStyle = function() {
 			if (Utils.isFileType('image', $scope.attachment)) {
@@ -906,6 +913,14 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 			}
 			catch (e) {
 				alert('Error: ' + e);
+			}
+		}
+		$scope.play = function() {
+			if (Utils.isFileType('audio', $scope.attachment)) {
+				AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key);
+			}
+			else {
+				console.log('Not a playable attachment:', $scope.attachment);
 			}
 		}
 		$scope.$watch('attachment', function() {
@@ -980,38 +995,77 @@ angular.module('controllers', ['IndexedDBModule', 'NotesHelperModule'])
 		$scope.setPageView(true);
 	})
 
-	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element) {
-
-		var player = $($element).find('audio')[0];
-
-		$scope.duration = '0:00';
-		$scope.current_time = '0:00';
-		$scope.progress = 0;
-
-		$(player).on('loadedmetadata', function() {
-			$scope.duration = Utils.formatDuration(player.duration);
-			$scope.$apply();
-		});
-
-		$(player).on('timeupdate', function() {
-			var trackwidth = $($element).find('div.track').width();
-			var fillwidth = Math.round(player.currentTime / player.duration * trackwidth);
-			$($element).find('div.track div.fill').css({width: fillwidth + 'px'});
-			$($element).find('div.track div.handle').css({left: fillwidth + 'px'});
-			$scope.current_time = Utils.formatDurationProgress(player.duration, player.currentTime);
-			$scope.$apply();
-		});
-
+	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element, AudioManager) {
+		
+		$scope.data = AudioManager.data;
+		
 		$scope.play = function() {
-			player.play();
-			$element.addClass('playing');
+			AudioManager.play();
 		}
+		
 		$scope.pause = function() {
-			player.pause();
-			$element.removeClass('playing');
+			AudioManager.pause();
+		}
+	})
+
+angular.module('AudioManagerModule', [])
+	.service('AudioManager', function($rootScope) {
+		
+		var audio = document.createElement('audio');
+		
+		this.data = {
+			playing: false,
+			total_time: '0:00',
+			current_time: '0:00',
+			loaded: 0,
+			progress: 0
+		};
+
+		$(audio).on('loadedmetadata', function() {
+
+			this.data.total_time = Utils.formatDuration(audio.duration);
+
+			$(audio).on('progress', function() {
+				this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
+				
+
+				// If you end up broadcasting, you can probably get rid of these $rootScope.$apply()s
+				$rootScope.$apply();
+
+
+			}.bind(this));
+			$(audio).on('timeupdate', function() {
+				this.data.progress = audio.currentTime / audio.duration * 100;
+				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
+				
+
+				$rootScope.$apply();
+
+				
+			}.bind(this));
+
+		}.bind(this));
+
+		this.set = function(src) {
+			audio.src = src;
+		}
+		this.play = function(src) {
+			if (src)
+				this.set(src);
+			try {
+				audio.play();
+			}
+			catch(e) {
+				console.log('Cannot play audio:', e);
+			}
+			this.data.playing = !audio.paused;
+		}
+		this.pause = function() {
+			audio.pause();
+			this.data.playing = !audio.paused;
 		}
 
-	})
+	});
 
 
 // The things inside this could be chained to the 'NotesApp' module contents,
@@ -1215,4 +1269,49 @@ angular.forEach(settings, function(s) {
 */
 
 
+// Old audio controller
+/*
+	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element, AudioManager) {
 
+		console.log('Audio manager:', AudioManager);
+
+		var player = $($element).find('audio')[0];
+
+		$scope.duration = '0:00';
+		$scope.current_time = '0:00';
+		$scope.progress = 0;
+
+		function metaDataLoaded() {
+
+			$(player).on('progress', function() {
+				var loadedwidth = Math.round((player.buffered.end(player.buffered.length - 1) - player.buffered.start(0)) / player.duration * 100);
+				$($element).find('div.track div.loaded').css({width: loadedwidth + '%'});
+				$scope.$apply();
+			});
+
+			$(player).on('timeupdate', function() {
+				var fillwidth = player.currentTime / player.duration * 100;
+				$($element).find('div.track div.progress').css({width: fillwidth + '%'});
+				$($element).find('div.track div.handle').css({left: fillwidth + '%'});
+				$scope.current_time = Utils.formatDurationProgress(player.duration, player.currentTime);
+				$scope.$apply();
+			});
+		}
+
+		$(player).on('loadedmetadata', function() {
+			metaDataLoaded();
+			$scope.duration = Utils.formatDuration(player.duration);
+			$scope.$apply();
+		});
+
+		$scope.play = function() {
+			player.play();
+			$element.addClass('playing');
+		}
+		$scope.pause = function() {
+			player.pause();
+			$element.removeClass('playing');
+		}
+
+	})
+*/

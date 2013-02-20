@@ -42,7 +42,7 @@ html(lang="en", ng-app="NotesApp")
 
 			div.editor(ng-view)
 
-		div.audio-player(ng-controller="AudioPlayerCtrl")
+		div.audio-player(ng-controller="AudioPlayerCtrl", class="playing-{{data.playing}}")
 			div.info
 				| oldschool_blues.mp3
 			//a.control.back
@@ -50,10 +50,11 @@ html(lang="en", ng-app="NotesApp")
 			a.control.play(ng-click="play()")
 			a.control.pause(ng-click="pause()")
 			div.track
-				div.fill
-				div.handle
+				div.loaded(ng-style="{width: data.loaded+'%'}")
+				div.progress(ng-style="{width: data.progress+'%'}")
+				div.handle(ng-style="{left: data.progress+'%'}")
 			div.time
-				| {{current_time}} / {{duration}}
+				| {{data.current_time}} / {{data.total_time}}
 
 			audio(src="http://storage.notes.fm/QthFifsS7WID7MxNmZWp_14%20A%20Down%20and%20Dusky%20Blonde.mp3")
 
