@@ -874,6 +874,12 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		// Changes to this aren't showing up in the attachment dom
 		$scope.data = AudioManager.data;
 
+		$scope.$on('audio-progress', function() {
+			$scope.$apply();
+		});
+		$scope.$on('audio-timeupdate', function() {
+			$scope.$apply();
+		});
 
 
 
@@ -998,6 +1004,13 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element, AudioManager) {
 		
 		$scope.data = AudioManager.data;
+
+		$scope.$on('audio-progress', function() {
+			$scope.$apply();
+		});
+		$scope.$on('audio-timeupdate', function() {
+			$scope.$apply();
+		});
 		
 		$scope.play = function() {
 			AudioManager.play();
@@ -1015,6 +1028,7 @@ angular.module('AudioManagerModule', [])
 		
 		this.data = {
 			playing: false,
+			src: null,
 			total_time: '0:00',
 			current_time: '0:00',
 			loaded: 0,
@@ -1030,7 +1044,9 @@ angular.module('AudioManagerModule', [])
 				
 
 				// If you end up broadcasting, you can probably get rid of these $rootScope.$apply()s
-				$rootScope.$apply();
+				//$rootScope.$apply();
+
+				$rootScope.$broadcast('audio-progress');
 
 
 			}.bind(this));
@@ -1039,25 +1055,22 @@ angular.module('AudioManagerModule', [])
 				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
 				
 
-				$rootScope.$apply();
+				//$rootScope.$apply();
 
-				
+				$rootScope.$broadcast('audio-timeupdate');
+
 			}.bind(this));
 
 		}.bind(this));
 
 		this.set = function(src) {
+			this.data.src = src;
 			audio.src = src;
 		}
 		this.play = function(src) {
 			if (src)
 				this.set(src);
-			try {
-				audio.play();
-			}
-			catch(e) {
-				console.log('Cannot play audio:', e);
-			}
+			audio.play();
 			this.data.playing = !audio.paused;
 		}
 		this.pause = function() {
