@@ -119,8 +119,8 @@ div.audio-player.playing a.control.play,div.audio-player.playing-true a.control.
 div.audio-player.playing a.control.pause,div.audio-player.playing-true a.control.pause{display:block}
 div.audio-player div.track{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:13px 0 13px 15px;height:4px;background:rgba(255,255,255,0.15);}
 div.audio-player div.track div.loaded,div.audio-player div.track div.progress{position:absolute;top:0;left:0;bottom:0;width:0}
-div.audio-player div.track div.loaded{background:rgba(255,255,255,0.2)}
-div.audio-player div.track div.progress{background:rgba(255,255,255,0.3)}
+div.audio-player div.track div.loaded{background:#71767a;border-right:1px solid #a2aeb7}
+div.audio-player div.track div.progress{background:#a2aeb7}
 div.audio-player div.track div.handle{position:absolute;top:-4px;left:0;margin:0 -6px;width:12px;height:12px;background:#ccc;border-radius:50%;-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.75);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.75);box-shadow:0 1px 5px rgba(0,0,0,0.75)}
 div.audio-player div.time{width:85px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
 body.audio-true div.pad{bottom:45px}

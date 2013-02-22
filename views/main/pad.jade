@@ -44,7 +44,7 @@ html(lang="en", ng-app="NotesApp")
 
 		div.audio-player(ng-controller="AudioPlayerCtrl", class="playing-{{data.playing}}")
 			div.info
-				| oldschool_blues.mp3
+				| {{data.extra.filename || "No file"}}
 			//a.control.back
 			//a.control.forward
 			a.control.play(ng-click="play()")

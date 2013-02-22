@@ -13,7 +13,7 @@ div.attachments.clearfix(ng-show="showAttachments()")
 			a.delete(ng-click="remove()", alt="Delete")
 			
 			div.opts.audio(ng-click="play()")
-				| Audio - {{data.current_time}} / {{data.total_time}}
+				| Audio, {{data.current_time}} / {{data.total_time}}
 			
 			div.opts.video
 				| Video

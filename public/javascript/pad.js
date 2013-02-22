@@ -867,19 +867,26 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, AudioManager) {
 
+		// Observers for AudioManager and VideoManager updates
 
+		function update_audio() {
+			if (AudioManager.data.extra && $scope.attachment.key == AudioManager.data.extra.key)
+				$scope.data = AudioManager.data;
+			else
+				$scope.data = null;
+		}
+		function update_video() {
 
+		}
 
-
-		// Changes to this aren't showing up in the attachment dom
-		$scope.data = AudioManager.data;
-
-		$scope.$on('audio-progress', function() {
-			$scope.$apply();
-		});
-		$scope.$on('audio-timeupdate', function() {
-			$scope.$apply();
-		});
+		if (Utils.isFileType('audio', $scope.attachment)) {
+			$scope.$on('audio-progress', update_audio);
+			$scope.$on('audio-timeupdate', update_audio);
+		}
+		if (Utils.isFileType('video', $scope.attachment)) {
+			$scope.$on('video-progress', update_video);
+			$scope.$on('video-timeupdate', update_video);
+		}
 
 
 
@@ -923,7 +930,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		}
 		$scope.play = function() {
 			if (Utils.isFileType('audio', $scope.attachment)) {
-				AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key);
+				AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.attachment);
 			}
 			else {
 				console.log('Not a playable attachment:', $scope.attachment);
@@ -1004,13 +1011,6 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element, AudioManager) {
 		
 		$scope.data = AudioManager.data;
-
-		$scope.$on('audio-progress', function() {
-			$scope.$apply();
-		});
-		$scope.$on('audio-timeupdate', function() {
-			$scope.$apply();
-		});
 		
 		$scope.play = function() {
 			AudioManager.play();
@@ -1036,48 +1036,52 @@ angular.module('AudioManagerModule', [])
 		};
 
 		$(audio).on('loadedmetadata', function() {
-
 			this.data.total_time = Utils.formatDuration(audio.duration);
-
 			$(audio).on('progress', function() {
 				this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
-				
-
-				// If you end up broadcasting, you can probably get rid of these $rootScope.$apply()s
-				//$rootScope.$apply();
-
-				$rootScope.$broadcast('audio-progress');
-
-
+				$rootScope.$apply(function() {
+					$rootScope.$broadcast('audio-progress');
+				});
 			}.bind(this));
 			$(audio).on('timeupdate', function() {
 				this.data.progress = audio.currentTime / audio.duration * 100;
 				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
-				
-
-				//$rootScope.$apply();
-
-				$rootScope.$broadcast('audio-timeupdate');
-
+				$rootScope.$apply(function() {
+					$rootScope.$broadcast('audio-timeupdate');
+				});
 			}.bind(this));
+		}.bind(this));
 
+		$(audio).on('play', function() {
+			this.data.playing = !audio.paused;
+		}.bind(this));
+
+		$(audio).on('pause', function() {
+			this.data.playing = !audio.paused;
 		}.bind(this));
 
 		this.set = function(src) {
 			this.data.src = src;
-			audio.src = src;
+			if (audio.src != src) {
+				audio.src = src;
+			}
 		}
-		this.play = function(src) {
-			if (src)
+		this.play = function(src, extra) {
+			if (src) {
+				src = encodeURI(src);
 				this.set(src);
-			audio.play();
-			this.data.playing = !audio.paused;
+			}
+			if (extra) {
+				this.data.extra = extra;
+			}
+			if (audio.readyState >= 1)
+				audio.play();
+			else
+				audio.autoplay = true;
 		}
 		this.pause = function() {
 			audio.pause();
-			this.data.playing = !audio.paused;
 		}
-
 	});
 
 
