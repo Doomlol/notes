@@ -1038,10 +1038,12 @@ angular.module('AudioManagerModule', [])
 		$(audio).on('loadedmetadata', function() {
 			this.data.total_time = Utils.formatDuration(audio.duration);
 			$(audio).on('progress', function() {
-				this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
-				$rootScope.$apply(function() {
-					$rootScope.$broadcast('audio-progress');
-				});
+				if (audio.buffered.length > 0) {
+					this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
+					$rootScope.$apply(function() {
+						$rootScope.$broadcast('audio-progress');
+					});
+				}
 			}.bind(this));
 			$(audio).on('timeupdate', function() {
 				this.data.progress = audio.currentTime / audio.duration * 100;
@@ -1074,10 +1076,7 @@ angular.module('AudioManagerModule', [])
 			if (extra) {
 				this.data.extra = extra;
 			}
-			if (audio.readyState >= 1)
-				audio.play();
-			else
-				audio.autoplay = true;
+			audio.play();
 		}
 		this.pause = function() {
 			audio.pause();
