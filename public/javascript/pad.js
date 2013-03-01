@@ -867,8 +867,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, AudioManager) {
 
-		// Observers for AudioManager and VideoManager updates
+		$scope.media = Utils.isFileType('audio') || Utils.isFileType('video');
 
+		// Observers for AudioManager and VideoManager updates
 		function update_audio() {
 			if (AudioManager.data.extra && $scope.attachment.key == AudioManager.data.extra.key)
 				$scope.data = AudioManager.data;
@@ -878,7 +879,6 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		function update_video() {
 
 		}
-
 		if (Utils.isFileType('audio', $scope.attachment)) {
 			$scope.$on('audio-progress', update_audio);
 			$scope.$on('audio-timeupdate', update_audio);
@@ -888,10 +888,6 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			$scope.$on('video-timeupdate', update_video);
 		}
 
-
-
-
-
 		$scope.updateStyle = function() {
 			if (Utils.isFileType('image', $scope.attachment)) {
 				var src_url = 'url(' + $scope.getImageSrc() + ')';
@@ -900,6 +896,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			else {
 				$element.addClass(Utils.getFileType($scope.attachment));
 			}
+			console.log('called updateStyle');
 		}
 		$scope.getImageSrc = function() {
 			if (Utils.isFileType('image', $scope.attachment)) {
@@ -1015,7 +1012,6 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.play = function() {
 			AudioManager.play();
 		}
-		
 		$scope.pause = function() {
 			AudioManager.pause();
 		}
@@ -1056,16 +1052,24 @@ angular.module('AudioManagerModule', [])
 
 		$(audio).on('play', function() {
 			this.data.playing = !audio.paused;
+			$rootScope.$apply(function() {
+				$rootScope.$broadcast('audio-play');
+			});
+			console.log('play event');
 		}.bind(this));
 
 		$(audio).on('pause', function() {
 			this.data.playing = !audio.paused;
+			$rootScope.$apply(function() {
+				$rootScope.$broadcast('audio-pause');
+			});
+			console.log('pause event');
 		}.bind(this));
 
 		this.set = function(src) {
-			this.data.src = src;
-			if (audio.src != src) {
+			if (audio.src != src || this.data.src != src) {
 				audio.src = src;
+				this.data.src = src;
 			}
 		}
 		this.play = function(src, extra) {
