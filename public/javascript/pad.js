@@ -19,6 +19,7 @@ var auth_client;
 function Note(value) {
 	this.value = value;
 	this.uploads = [];
+	this.media_data = null;
 	this.setValue = function(item) {
 		for (var key in this.value) {
 			delete this.value[key];
@@ -678,6 +679,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			else
 				$location.path('');
 		}
+		$scope.getCurrentNote = function() {
+			return $scope.current_note;
+		}
 		$scope.setCurrentNote = function(note) {
 			$scope.current_note = note;
 
@@ -862,39 +866,58 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			}
 		}
 
+		/*
+		$scope.setMediaData = function(data) {
+			if ($scope.note) {
+				$scope.note.media_data = data;
+				console.log('set media data', data);
+			}
+		}
+		*/
+
 		$scope.enqueue(initialize);
 	})
 
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, AudioManager) {
-
-		$scope.media = Utils.isFileType('audio') || Utils.isFileType('video');
-
+	
 		// Observers for AudioManager and VideoManager updates
-		function update_audio() {
-			if (AudioManager.data.extra && $scope.attachment.key == AudioManager.data.extra.key)
+		function update_audio(event_type) {
+			if (AudioManager.data.attachment && $scope.attachment.key == AudioManager.data.attachment.key) {
 				$scope.data = AudioManager.data;
-			else
+				//$scope.setMediaData(AudioManager.data);
+			}
+			else {
 				$scope.data = null;
+				//$scope.setMediaData(null);
+			}
 		}
 		function update_video() {
 
 		}
 		if (Utils.isFileType('audio', $scope.attachment)) {
-			$scope.$on('audio-progress', update_audio);
-			$scope.$on('audio-timeupdate', update_audio);
+			$scope.$on('audio-progress', update_audio.bind(this, 'progress'));
+			$scope.$on('audio-timeupdate', update_audio.bind(this, 'timeupdate'));
+			$scope.$on('audio-play', update_audio.bind(this, 'play'));
+			$scope.$on('audio-pause', update_audio.bind(this, 'pause'));
 		}
 		if (Utils.isFileType('video', $scope.attachment)) {
 			$scope.$on('video-progress', update_video);
 			$scope.$on('video-timeupdate', update_video);
 		}
 
+		$scope.playText = function() {
+			if ($scope.data && $scope.data.playing)
+				return 'Pause';
+			else
+				return 'Play';
+		}
+		$scope.getFileType = function() {
+			return Utils.getFileType($scope.attachment);
+		}
 		$scope.updateStyle = function() {
 			if (Utils.isFileType('image', $scope.attachment)) {
 				var src_url = 'url(' + $scope.getImageSrc() + ')';
 				$element.css({'background-image': src_url});
-			}
-			else {
-				$element.addClass(Utils.getFileType($scope.attachment));
 			}
 			console.log('called updateStyle');
 		}
@@ -925,13 +948,23 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				alert('Error: ' + e);
 			}
 		}
+		$scope.togglePlay = function() {
+			if ($scope.data && $scope.data.playing)
+				$scope.pause();
+			else
+				$scope.play();
+		}
 		$scope.play = function() {
 			if (Utils.isFileType('audio', $scope.attachment)) {
-				AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.attachment);
+				//AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.attachment);
+				AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.note, $scope.attachment);
 			}
 			else {
 				console.log('Not a playable attachment:', $scope.attachment);
 			}
+		}
+		$scope.pause = function() {
+			AudioManager.pause();
 		}
 		$scope.$watch('attachment', function() {
 			$scope.updateStyle();
@@ -1051,35 +1084,40 @@ angular.module('AudioManagerModule', [])
 		}.bind(this));
 
 		$(audio).on('play', function() {
-			this.data.playing = !audio.paused;
+			this.checkPause();
 			$rootScope.$apply(function() {
 				$rootScope.$broadcast('audio-play');
 			});
-			console.log('play event');
 		}.bind(this));
 
 		$(audio).on('pause', function() {
-			this.data.playing = !audio.paused;
+			this.checkPause();
 			$rootScope.$apply(function() {
 				$rootScope.$broadcast('audio-pause');
 			});
-			console.log('pause event');
 		}.bind(this));
 
+		this.checkPause = function() {
+			this.data.playing = !audio.paused;
+			if (this.data.note)
+				this.data.note.audio = this.data.playing;
+		}
 		this.set = function(src) {
 			if (audio.src != src || this.data.src != src) {
 				audio.src = src;
 				this.data.src = src;
+				this.checkPause();
 			}
 		}
-		this.play = function(src, extra) {
+		this.play = function(src, note, attachment) {
 			if (src) {
 				src = encodeURI(src);
 				this.set(src);
 			}
-			if (extra) {
-				this.data.extra = extra;
-			}
+			if (note)
+				this.data.note = note;
+			if (attachment)
+				this.data.attachment = attachment;
 			audio.play();
 		}
 		this.pause = function() {
@@ -1288,50 +1326,3 @@ angular.forEach(settings, function(s) {
 });
 */
 
-
-// Old audio controller
-/*
-	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element, AudioManager) {
-
-		console.log('Audio manager:', AudioManager);
-
-		var player = $($element).find('audio')[0];
-
-		$scope.duration = '0:00';
-		$scope.current_time = '0:00';
-		$scope.progress = 0;
-
-		function metaDataLoaded() {
-
-			$(player).on('progress', function() {
-				var loadedwidth = Math.round((player.buffered.end(player.buffered.length - 1) - player.buffered.start(0)) / player.duration * 100);
-				$($element).find('div.track div.loaded').css({width: loadedwidth + '%'});
-				$scope.$apply();
-			});
-
-			$(player).on('timeupdate', function() {
-				var fillwidth = player.currentTime / player.duration * 100;
-				$($element).find('div.track div.progress').css({width: fillwidth + '%'});
-				$($element).find('div.track div.handle').css({left: fillwidth + '%'});
-				$scope.current_time = Utils.formatDurationProgress(player.duration, player.currentTime);
-				$scope.$apply();
-			});
-		}
-
-		$(player).on('loadedmetadata', function() {
-			metaDataLoaded();
-			$scope.duration = Utils.formatDuration(player.duration);
-			$scope.$apply();
-		});
-
-		$scope.play = function() {
-			player.play();
-			$element.addClass('playing');
-		}
-		$scope.pause = function() {
-			player.pause();
-			$element.removeClass('playing');
-		}
-
-	})
-*/

@@ -277,7 +277,7 @@ div.pad
 					&.uploading-true
 						display block
 
-				&.selected-true
+				&.selected
 
 					div.highlight
 						background #0494DD
@@ -288,6 +288,10 @@ div.pad
 						span
 							&.time
 								color #7EB6D4
+
+				&.audio
+					div.basic
+						background #f9eecb
 
 		div.status
 			background #f9f9f9
@@ -390,10 +394,6 @@ div.pad
 					background-repeat no-repeat
 					box-shadow 0 1px 3px rgba(0,0,0,0.25)
 
-					&.audio,
-					&.video
-						background rgba(255,255,255,0.125)
-
 					div.hover_opts
 						
 						a
@@ -415,35 +415,64 @@ div.pad
 							&:hover
 								background-color #09A8EF
 
-						div.opts
-							position absolute
-							display none
-							left 0
-							right 0
-							bottom 0
-							min-height 20px
-							font-size 11px
+					div.controls
+						position absolute
+						display none
+						top 0
+						left 0
+						right 0
+						bottom 0
+						min-height 20px
+						font-size 11px
+						line-height 20px
+						//background rgba(0,0,0,0.25)
+						cursor pointer
+
+						p
+							position relative
+							margin 40px auto 0
+							padding 0 0 0 13px
+							width 36px
 							line-height 20px
 							text-align center
-							background rgba(0,0,0,0.25)
 
-							//&.audio
+							span.icon
+								position absolute
+								margin 0
+								top 0
+								left 0
+								width 13px
+								height 20px
+								background-image url(http://media.notes.fm/glyphicons-halflings-white.png)
+								background-position 0 0
+								background-repeat no-repeat
 
-							//&.video
+					&.audio,
+					&.video
+						background rgba(255,255,255,0.125)
+
+						div.controls
+							display block
+
+					&.audio
+						div.controls
+							span.icon
+								background-position -25px 3px
+
+					&.video
+						div.controls
+							span.icon
+								background-position -193px 2px
+
+					&.playing
+						div.controls
+							background rgba(4,148,221,0.5)
 
 					&:hover
 						div.hover_opts
 							display block
-
-					&.audio
-						div.opts.audio
-							display block
-
-					&.video
-						div.opts.video
-							display block
-
-
+						div.controls
+							background rgba(4,148,221,0.6)
 
 				div.upload
 					position relative

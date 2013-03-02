@@ -32,9 +32,10 @@ div.pad div.list ul#notes li div.uploads{display:none;padding:0 15px 10px;font-s
 div.pad div.list ul#notes li div.uploads div.bar{margin:0 0 5px;width:100%;height:4px;background:rgba(0,0,0,0.075);}
 div.pad div.list ul#notes li div.uploads div.bar div.progress{height:100%;background:#a2aeb7}
 div.pad div.list ul#notes li div.uploads.uploading-true{display:block}
-div.pad div.list ul#notes li.selected-true div.highlight{background:#0494dd}
-div.pad div.list ul#notes li.selected-true div.basic h2{color:#0494dd}
-div.pad div.list ul#notes li.selected-true div.basic span.time{color:#7eb6d4}
+div.pad div.list ul#notes li.selected div.highlight{background:#0494dd}
+div.pad div.list ul#notes li.selected div.basic h2{color:#0494dd}
+div.pad div.list ul#notes li.selected div.basic span.time{color:#7eb6d4}
+div.pad div.list ul#notes li.audio div.basic{background:#f9eecb}
 div.pad div.list div.status{background:#f9f9f9;}
 div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
@@ -48,14 +49,19 @@ div.pad div.editor note div.attachments{padding:0 5px 5px 0;max-height:105px;ove
 div.pad div.editor note div.attachments::-webkit-scrollbar-track{background:#000}
 div.pad div.editor note div.attachments::-webkit-scrollbar-thumb{background:#444}
 div.pad div.editor note div.attachments attachment{position:relative;float:left;margin:5px 0 0 5px;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);}
-div.pad div.editor note div.attachments attachment.audio,div.pad div.editor note div.attachments attachment.video{background:rgba(255,255,255,0.125)}
 div.pad div.editor note div.attachments attachment div.hover_opts a{display:block;text-decoration:none}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete{position:absolute;top:0;right:0;width:16px;height:16px;color:#eee;background-color:rgba(0,0,0,0.25);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:-311px 1px;background-repeat:no-repeat;}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete:hover{background-color:#09a8ef}
-div.pad div.editor note div.attachments attachment div.hover_opts div.opts{position:absolute;display:none;left:0;right:0;bottom:0;min-height:20px;font-size:11px;line-height:20px;text-align:center;background:rgba(0,0,0,0.25)}
+div.pad div.editor note div.attachments attachment div.controls{position:absolute;display:none;top:0;left:0;right:0;bottom:0;min-height:20px;font-size:11px;line-height:20px;cursor:pointer;}
+div.pad div.editor note div.attachments attachment div.controls p{position:relative;margin:40px auto 0;padding:0 0 0 13px;width:36px;line-height:20px;text-align:center;}
+div.pad div.editor note div.attachments attachment div.controls p span.icon{position:absolute;margin:0;top:0;left:0;width:13px;height:20px;background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:0 0;background-repeat:no-repeat}
+div.pad div.editor note div.attachments attachment.audio,div.pad div.editor note div.attachments attachment.video{background:rgba(255,255,255,0.125);}
+div.pad div.editor note div.attachments attachment.audio div.controls,div.pad div.editor note div.attachments attachment.video div.controls{display:block}
+div.pad div.editor note div.attachments attachment.audio div.controls span.icon{background-position:-25px 3px}
+div.pad div.editor note div.attachments attachment.video div.controls span.icon{background-position:-193px 2px}
+div.pad div.editor note div.attachments attachment.playing div.controls{background:rgba(4,148,221,0.5)}
 div.pad div.editor note div.attachments attachment:hover div.hover_opts{display:block}
-div.pad div.editor note div.attachments attachment.audio div.opts.audio{display:block}
-div.pad div.editor note div.attachments attachment.video div.opts.video{display:block}
+div.pad div.editor note div.attachments attachment:hover div.controls{background:rgba(4,148,221,0.6)}
 div.pad div.editor note div.attachments div.upload{position:relative;float:left;margin:5px 0 0 5px;width:100px;height:100px;text-align:center;color:#eee;background:rgba(255,255,255,0.1);}
 div.pad div.editor note div.attachments div.upload h3{margin:35px 0 3px;font-size:11px;font-weight:normal}
 div.pad div.editor note div.attachments div.upload div.bar{margin:0 auto;width:80%;height:4px;background:rgba(255,255,255,0.25);}

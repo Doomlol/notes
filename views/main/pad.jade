@@ -20,7 +20,7 @@ html(lang="en", ng-app="NotesApp")
 				
 				ul#notes(ng-show="notes.length")
 
-					li(ng-repeat="note in notes", class="selected-{{note.getId() == current_note.getId()}}", rel="note_{{note.getId()}}")
+					li(ng-repeat="note in notes", ng-class="{selected: note.getId()==current_note.getId(), audio: note.audio}", rel="note_{{note.getId()}}")
 						div.highlight
 						div.basic(ng-click="loadNote(note.getId())")
 							h2 {{note.getTitle() || 'Untitled'}}
@@ -44,7 +44,7 @@ html(lang="en", ng-app="NotesApp")
 
 		div.audio-player(ng-controller="AudioPlayerCtrl", class="playing-{{data.playing}}")
 			div.info
-				| {{data.extra.filename || "No file"}}
+				| {{data.attachment.filename || "No file"}}
 			//a.control.back
 			//a.control.forward
 			a.control.play(ng-click="play()")

@@ -8,15 +8,18 @@ div.text
 
 div.attachments.clearfix(ng-show="showAttachments()")
 
-	attachment(ng-repeat="attachment in note.getAttachments()", ng-click="log()")
+	attachment(ng-repeat="attachment in note.getAttachments()", class="{{getFileType()}}", ng-class="{playing: data.playing}")
+		
+		div.controls(ng-click="togglePlay()")
+			p
+				span.icon
+				| {{playText()}}
+
+			
+			//| {{data.current_time}} / {{data.total_time}}
+
 		div.hover_opts
 			a.delete(ng-click="remove()", alt="Delete")
-			
-			div.opts.audio(ng-click="play()")
-				| Audio, {{data.current_time}} / {{data.total_time}}
-			
-			div.opts.video
-				| Video
 	
 	div.upload(ng-repeat="upload in note.uploads")
 		h3 {{upload.count}} files
