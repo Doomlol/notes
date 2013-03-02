@@ -26,7 +26,7 @@ div.pad div.list ul#notes li div.basic span.time{font-size:11px;color:#aaa}
 div.pad div.list ul#notes li div.basic span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
 div.pad div.list ul#notes li div.basic span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
 div.pad div.list ul#notes li div.basic span.delete a:hover{text-decoration:underline}
-div.pad div.list ul#notes li div.basic span.audio,div.pad div.list ul#notes li div.basic span.video{position:absolute;display:none;top:10px;left:10px;width:13px;height:15px;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-position:0 0;background-repeat:no-repeat}
+div.pad div.list ul#notes li div.basic span.audio,div.pad div.list ul#notes li div.basic span.video{position:absolute;display:none;top:10px;left:10px;width:13px;height:15px;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-position:0 0;background-repeat:no-repeat;opacity:.5}
 div.pad div.list ul#notes li div.basic span.audio{background-position:-25px 1px}
 div.pad div.list ul#notes li div.basic span.video{background-position:-193px 1px}
 div.pad div.list ul#notes li div.basic:hover{background:#fcfcfc;}
@@ -54,6 +54,7 @@ div.pad div.editor note div.attachments{padding:0 5px 5px 0;max-height:105px;ove
 div.pad div.editor note div.attachments::-webkit-scrollbar-track{background:#000}
 div.pad div.editor note div.attachments::-webkit-scrollbar-thumb{background:#444}
 div.pad div.editor note div.attachments attachment{position:relative;float:left;margin:5px 0 0 5px;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+div.pad div.editor note div.attachments attachment div.hover_opts{display:none;}
 div.pad div.editor note div.attachments attachment div.hover_opts a{display:block;text-decoration:none}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete{position:absolute;top:0;right:0;width:16px;height:16px;color:#eee;background-color:rgba(0,0,0,0.25);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:-311px 1px;background-repeat:no-repeat;}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete:hover{background-color:#09a8ef}
