@@ -23,6 +23,8 @@ html(lang="en", ng-app="NotesApp")
 					li(ng-repeat="note in notes", ng-class="{selected: note.getId()==current_note.getId(), audio: note.audio}", rel="note_{{note.getId()}}")
 						div.highlight
 						div.basic(ng-click="loadNote(note.getId())")
+							span.audio
+							span.video
 							h2 {{note.getTitle() || 'Untitled'}}
 							span.time {{note.getTime()}}
 							span.delete: a(ng-click="deleteNote(note.getId())") delete
