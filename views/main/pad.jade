@@ -47,8 +47,6 @@ html(lang="en", ng-app="NotesApp")
 		div.audio-player(ng-controller="AudioPlayerCtrl", class="playing-{{data.playing}}")
 			div.info
 				| {{data.attachment.filename || "No file"}}
-			//a.control.back
-			//a.control.forward
 			a.control.play(ng-click="play()")
 			a.control.pause(ng-click="pause()")
 			div.track
@@ -58,7 +56,13 @@ html(lang="en", ng-app="NotesApp")
 			div.time
 				| {{data.current_time}} / {{data.total_time}}
 
-			audio(src="http://storage.notes.fm/QthFifsS7WID7MxNmZWp_14%20A%20Down%20and%20Dusky%20Blonde.mp3")
+		div.video-player(ng-controller="VideoPlayerCtrl", ng-show="data.show", ng-click="hide()", style="display:none;")
+			div.inner
+				video.player
+				div.controls
+
+		div.image-preview(ng-controller="ImagePreviewCtrl", ng-show="data.show", ng-click="hide()", style="display:none;")
+			img(ng-src="{{data.src}}")
 
 	footer
 		script(src="/javascript/jquery.min.js")

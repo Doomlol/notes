@@ -420,6 +420,7 @@ div.pad
 					background-position center center
 					background-repeat no-repeat
 					box-shadow 0 1px 3px rgba(0,0,0,0.25)
+					cursor pointer
 
 					div.hover_opts
 						display none
@@ -453,7 +454,6 @@ div.pad
 						min-height 20px
 						font-size 11px
 						line-height 20px
-						cursor pointer
 
 						p
 							position relative
@@ -800,6 +800,50 @@ div.pad
 
 			&.saved-true
 				background #5edc20
+
+div.image-preview
+	position absolute
+	padding 50px
+	top 0
+	left 0
+	right 0
+	bottom 0
+	background rgba(0,0,0,0.85)
+	z-index 10
+
+	img
+		display block
+		margin 0 auto
+		max-width 100%
+		max-height 100%
+		box-shadow 0 0 25px rgba(0,0,0,0.5)
+
+div.video-player
+	padding 50px
+	position absolute
+	top 0
+	left 0
+	right 0
+	bottom 0
+	background rgba(0,0,0,0.85)
+	z-index 10
+
+	div.inner
+		display -webkit-box
+		display -moz-box
+		display box
+		box-orient vertical
+		margin 0 auto
+		width 640px
+		background rgba(255,255,255,0.25)
+
+		video
+			width 100%
+			background #000
+
+		div.controls
+			height 20px
+			background #000
 
 div.audio-player
 	position absolute

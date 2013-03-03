@@ -53,12 +53,12 @@ div.pad div.editor note div.text textarea.droppable-hover:after{position:absolut
 div.pad div.editor note div.attachments{padding:0 5px 5px 0;max-height:105px;overflow-y:scroll;background-color:rgba(0,0,0,0.5);background:-webkit-gradient(linear,0% 0%,0% 100%,from(#000),to(#222));background:-moz-linear-gradient(top,#000,#222);}
 div.pad div.editor note div.attachments::-webkit-scrollbar-track{background:#000}
 div.pad div.editor note div.attachments::-webkit-scrollbar-thumb{background:#444}
-div.pad div.editor note div.attachments attachment{position:relative;float:left;margin:5px 0 0 5px;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+div.pad div.editor note div.attachments attachment{position:relative;float:left;margin:5px 0 0 5px;width:100px;height:100px;color:#eee;background:rgba(0,0,0,0.5);-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;background-position:center center;background-repeat:no-repeat;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);cursor:pointer;}
 div.pad div.editor note div.attachments attachment div.hover_opts{display:none;}
 div.pad div.editor note div.attachments attachment div.hover_opts a{display:block;text-decoration:none}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete{position:absolute;top:0;right:0;width:16px;height:16px;color:#eee;background-color:rgba(0,0,0,0.25);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:-311px 1px;background-repeat:no-repeat;}
 div.pad div.editor note div.attachments attachment div.hover_opts a.delete:hover{background-color:#09a8ef}
-div.pad div.editor note div.attachments attachment div.controls{position:absolute;display:none;top:0;left:0;right:0;bottom:0;min-height:20px;font-size:11px;line-height:20px;cursor:pointer;}
+div.pad div.editor note div.attachments attachment div.controls{position:absolute;display:none;top:0;left:0;right:0;bottom:0;min-height:20px;font-size:11px;line-height:20px;}
 div.pad div.editor note div.attachments attachment div.controls p{position:relative;margin:40px auto 0;padding:0 0 0 13px;width:36px;line-height:20px;text-align:center;}
 div.pad div.editor note div.attachments attachment div.controls p span.icon{position:absolute;margin:0;top:0;left:0;width:13px;height:20px;background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-position:0 0;background-repeat:no-repeat}
 div.pad div.editor note div.attachments attachment.audio,div.pad div.editor note div.attachments attachment.video{background:rgba(255,255,255,0.125);}
@@ -119,6 +119,12 @@ div.pad note > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,2
 div.pad note > div.opts input[type="text"]:hover,div.pad note > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
 div.pad note > div.opts div.save_status{position:absolute;top:20px;right:15px;width:6px;height:6px;background:#ccc;border-radius:50%;}
 div.pad note > div.opts div.save_status.saved-true{background:#5edc20}
+div.image-preview{position:absolute;padding:50px;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10;}
+div.image-preview img{display:block;margin:0 auto;max-width:100%;max-height:100%;-webkit-box-shadow:0 0 25px rgba(0,0,0,0.5);-moz-box-shadow:0 0 25px rgba(0,0,0,0.5);box-shadow:0 0 25px rgba(0,0,0,0.5)}
+div.video-player{padding:50px;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10;}
+div.video-player div.inner{display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;margin:0 auto;width:320px;background:rgba(255,255,255,0.25);}
+div.video-player div.inner video{width:100%;background:#000}
+div.video-player div.inner div.controls{height:20px;background:#555}
 div.audio-player{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;box-orient:horizontal;padding:0 15px;left:0;right:0;bottom:0;height:30px;background:#333;}
 div.audio-player div.info{width:280px;font-size:11px;line-height:30px;text-align:center;color:rgba(255,255,255,0.66)}
 div.audio-player a.control{display:block;margin:4px 3px 2px;padding:4px;width:16px;height:16px;opacity:.75;background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-repeat:no-repeat;}

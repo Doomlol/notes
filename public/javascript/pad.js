@@ -866,19 +866,10 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			}
 		}
 
-		/*
-		$scope.setMediaData = function(data) {
-			if ($scope.note) {
-				$scope.note.media_data = data;
-				console.log('set media data', data);
-			}
-		}
-		*/
-
 		$scope.enqueue(initialize);
 	})
 
-	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, AudioManager) {
+	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, ImageManager, AudioManager, VideoManager) {
 	
 		// Observers for AudioManager and VideoManager updates
 		function update_audio(event_type) {
@@ -948,19 +939,26 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				alert('Error: ' + e);
 			}
 		}
-		$scope.togglePlay = function() {
-			if ($scope.data && $scope.data.playing)
-				$scope.pause();
-			else
-				$scope.play();
+		$scope.preview = function() {
+			switch (Utils.getFileType($scope.attachment)) {
+				case 'audio':
+				case 'video':
+					($scope.data && $scope.data.playing) ? $scope.pause() : $scope.play();
+					break;
+				case 'image':
+					ImageManager.show('http://storage.notes.fm/' + $scope.attachment.key);
+			}
 		}
 		$scope.play = function() {
-			if (Utils.isFileType('audio', $scope.attachment)) {
-				//AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.attachment);
-				AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.note, $scope.attachment);
-			}
-			else {
-				console.log('Not a playable attachment:', $scope.attachment);
+			switch(Utils.getFileType($scope.attachment)) {
+				case 'audio':
+					AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.note, $scope.attachment);
+					break;
+				case 'video':
+					VideoManager.play('http://storage.notes.fm/' + $scope.attachment.key);
+					break;
+				default:
+					console.log('Not a playable attachment:', $scope.attachment);
 			}
 		}
 		$scope.pause = function() {
@@ -1038,10 +1036,8 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.setPageView(true);
 	})
 
-	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, $element, AudioManager) {
-		
+	.controller('AudioPlayerCtrl', function AudioPlayerCtrl($scope, AudioManager) {
 		$scope.data = AudioManager.data;
-		
 		$scope.play = function() {
 			AudioManager.play();
 		}
@@ -1050,7 +1046,74 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		}
 	})
 
+	// For the inline video element and surrounding DOM - *not* the attachment element
+	.controller ('VideoPlayerCtrl', function VideoPlayerCtrl($scope, VideoManager) {
+		$scope.data = VideoManager.data;
+		$scope.hide = function() {
+			VideoManager.hide();
+		}
+	})
+
+	// For the inline image element and surrounding DOM - *not* the attachment element
+	.controller('ImagePreviewCtrl', function ImagePlayerCtrl($scope, ImageManager) {
+		$scope.data = ImageManager.data;
+		$scope.hide = function() {
+			$scope.data.show = !$scope.data.show;
+		}
+	})
+
 angular.module('AudioManagerModule', [])
+	.service('ImageManager', function($rootScope) {
+		this.data = {
+			src: null,
+			show: false
+		};
+		this.show = function(src) {
+			this.data.src = src;
+			this.data.show = true;
+		}
+	})
+	.service('VideoManager', function($rootScope) {
+		var video = $('video.player')[0];
+		this.data = {
+			show: false,
+			total_time: '0:00',
+			current_time: '0:00',
+			loaded: 0,
+			progress: 0
+		};
+
+		$(video).on('loadedmetadata', function() {
+			$(video).on('progress', function( ){
+				// empty
+			}.bind(this));
+			$(video).on('timeupdate', function() {
+				// empty
+			});
+		}.bind(this));
+
+		$(video).on('play', function() {
+
+		});
+
+		$(video).on('pause', function() {
+
+		});
+
+		this.play = function(src) {
+			if (src)
+				video.src = encodeURI(src);
+			this.data.show = true;
+			video.play();
+		}
+		this.pause = function() {
+			video.pause();
+		}
+		this.hide = function() {
+			this.pause();
+			this.data.show = false;
+		}
+	})
 	.service('AudioManager', function($rootScope) {
 		
 		var audio = document.createElement('audio');
