@@ -836,14 +836,90 @@ div.video-player
 		margin 0 auto
 		width 640px
 		background rgba(255,255,255,0.25)
+		box-shadow 0 0 25px rgba(0,0,0,0.5)
 
 		video
+			display block
 			width 100%
 			background #000
 
 		div.controls
-			height 20px
+			display -webkit-box
+			display -moz-box
+			display box
+			box-orient horizontal
+			padding 0 0 0 5px
+			height 30px
 			background #000
+
+			a.control
+				display block
+				margin 4px 3px 2px
+				padding 4px
+				width 16px
+				height 16px
+				opacity 0.75
+				background-image url(http://media.notes.fm/glyphicons-halflings-white.png)
+				background-repeat no-repeat
+
+				&.play
+					background-position -259px -68px
+
+				&.pause
+					display none
+					background-position -282px -68px
+
+				&:hover
+					opacity 1.0
+
+			div.track
+				position relative
+				box-flex 1
+				margin 13px 0 13px 15px
+				height 4px
+				background rgba(255,255,255,0.15)
+
+				div.loaded,
+				div.progress
+					position absolute
+					top 0
+					left 0
+					bottom 0
+					width 0
+
+				div.loaded
+					background rgba(255,255,255,0.2)
+					border-right 1px solid #999
+
+				div.progress
+					background #A2AEB7
+
+				div.handle
+					position absolute
+					top -4px
+					left 0
+					margin 0 -6px
+					width 12px
+					height 12px
+					background #ccc
+					border-radius 50%
+					box-shadow 0 1px 5px rgba(0,0,0,0.75)
+
+			div.time
+				padding 0 15px 0 25px
+				font-size 11px
+				line-height 30px
+				text-align right
+				color rgba(255,255,255,0.66)
+
+	&.playing-true
+		div.inner
+			div.controls
+				a.control
+					&.play
+						display none
+					&.pause
+						display block
 
 div.audio-player
 	position absolute
@@ -916,8 +992,8 @@ div.audio-player
 			width 0
 
 		div.loaded
-			background #71767A
-			border-right 1px solid #A2AEB7
+			background rgba(255,255,255,0.2)
+			border-right 1px solid #999
 
 		div.progress
 			background #A2AEB7
@@ -934,7 +1010,7 @@ div.audio-player
 			box-shadow 0 1px 5px rgba(0,0,0,0.75)
 
 	div.time
-		width 85px
+		padding-left 25px
 		font-size 11px
 		line-height 30px
 		text-align right

@@ -56,17 +56,25 @@ html(lang="en", ng-app="NotesApp")
 			div.time
 				| {{data.current_time}} / {{data.total_time}}
 
-		div.video-player(ng-controller="VideoPlayerCtrl", ng-show="data.show", ng-click="hide()", style="display:none;")
-			div.inner
+		div.video-player(ng-controller="VideoPlayerCtrl", class="playing-{{data.playing}}", ng-show="data.show", ng-click="hide()", style="display:none;")
+			div.inner(ng-click="cancel($event)")
 				video.player
 				div.controls
+					a.control.play(ng-click="play()")
+					a.control.pause(ng-click="pause($event)")
+					div.track
+						div.loaded(ng-style="{width: data.loaded+'%'}")
+						div.progress(ng-style="{width: data.progress+'%'}")
+						div.handle(ng-style="{left: data.progress+'%'}")
+					div.time
+						| {{data.current_time}} / {{data.total_time}}
 
 		div.image-preview(ng-controller="ImagePreviewCtrl", ng-show="data.show", ng-click="hide()", style="display:none;")
 			img(ng-src="{{data.src}}")
 
 	footer
 		script(src="/javascript/jquery.min.js")
-		script(src="/javascript/angular/angular-1.0.1.min.js")
+		script(src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js")
 		script(src="https://cdn.firebase.com/v0/firebase.js")
 		script(src="https://cdn.firebase.com/v0/firebase-auth-client.js")
 		script(src="https://api.filepicker.io/v1/filepicker.js")

@@ -955,7 +955,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 					AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.note, $scope.attachment);
 					break;
 				case 'video':
-					VideoManager.play('http://storage.notes.fm/' + $scope.attachment.key);
+					VideoManager.show('http://storage.notes.fm/' + $scope.attachment.key);
 					break;
 				default:
 					console.log('Not a playable attachment:', $scope.attachment);
@@ -1049,8 +1049,17 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 	// For the inline video element and surrounding DOM - *not* the attachment element
 	.controller ('VideoPlayerCtrl', function VideoPlayerCtrl($scope, VideoManager) {
 		$scope.data = VideoManager.data;
+		$scope.play = function() {
+			VideoManager.play();
+		}
+		$scope.pause = function() {
+			VideoManager.pause();
+		}
 		$scope.hide = function() {
 			VideoManager.hide();
+		}
+		$scope.cancel = function(event) {
+			event.stopPropagation();
 		}
 	})
 
@@ -1076,38 +1085,48 @@ angular.module('AudioManagerModule', [])
 	.service('VideoManager', function($rootScope) {
 		var video = $('video.player')[0];
 		this.data = {
+			playing: false,
 			show: false,
 			total_time: '0:00',
 			current_time: '0:00',
 			loaded: 0,
 			progress: 0
 		};
-
 		$(video).on('loadedmetadata', function() {
-			$(video).on('progress', function( ){
-				// empty
+			this.data.total_time = Utils.formatDuration(video.duration);
+			$(video).on('progress', function() {
+				this.data.loaded = Math.round((video.buffered.end(video.buffered.length-1) - video.buffered.start(0)) / video.duration * 100);
+				$rootScope.$apply();
 			}.bind(this));
 			$(video).on('timeupdate', function() {
-				// empty
-			});
+				this.data.progress = video.currentTime / video.duration * 100;
+				this.data.current_time = Utils.formatDurationProgress(video.duration, video.currentTime);
+				$rootScope.$apply();
+			}.bind(this));
 		}.bind(this));
-
 		$(video).on('play', function() {
-
-		});
-
+			this.checkPause();
+		}.bind(this));
 		$(video).on('pause', function() {
-
-		});
-
+			this.checkPause();
+		}.bind(this));
+		this.checkPause = function() {
+			this.data.playing = !video.paused;
+			if (this.data.note)
+				this.data.note.video = this.data.playing;
+			$rootScope.$apply();
+		}
 		this.play = function(src) {
-			if (src)
-				video.src = encodeURI(src);
-			this.data.show = true;
+			this.show(src);
 			video.play();
 		}
 		this.pause = function() {
 			video.pause();
+		}
+		this.show = function(src) {
+			if (src)
+				video.src = encodeURI(src);
+			this.data.show = true;
 		}
 		this.hide = function() {
 			this.pause();
@@ -1115,9 +1134,7 @@ angular.module('AudioManagerModule', [])
 		}
 	})
 	.service('AudioManager', function($rootScope) {
-		
 		var audio = document.createElement('audio');
-		
 		this.data = {
 			playing: false,
 			src: null,
@@ -1126,7 +1143,6 @@ angular.module('AudioManagerModule', [])
 			loaded: 0,
 			progress: 0
 		};
-
 		$(audio).on('loadedmetadata', function() {
 			this.data.total_time = Utils.formatDuration(audio.duration);
 			$(audio).on('progress', function() {
@@ -1145,21 +1161,18 @@ angular.module('AudioManagerModule', [])
 				});
 			}.bind(this));
 		}.bind(this));
-
 		$(audio).on('play', function() {
 			this.checkPause();
 			$rootScope.$apply(function() {
 				$rootScope.$broadcast('audio-play');
 			});
 		}.bind(this));
-
 		$(audio).on('pause', function() {
 			this.checkPause();
 			$rootScope.$apply(function() {
 				$rootScope.$broadcast('audio-pause');
 			});
 		}.bind(this));
-
 		this.checkPause = function() {
 			this.data.playing = !audio.paused;
 			if (this.data.note)
