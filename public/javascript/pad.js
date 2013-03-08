@@ -870,7 +870,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 	})
 
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, ImageManager, AudioManager, VideoManager) {
-	
+
 		// Observers for AudioManager and VideoManager updates
 		function update_audio(event_type) {
 			if (AudioManager.data.attachment && $scope.attachment.key == AudioManager.data.attachment.key) {
@@ -1055,6 +1055,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.pause = function() {
 			VideoManager.pause();
 		}
+		$scope.toggle = function() {
+			VideoManager.toggle();
+		}
 		$scope.hide = function() {
 			VideoManager.hide();
 		}
@@ -1083,19 +1086,40 @@ angular.module('AudioManagerModule', [])
 		}
 	})
 	.service('VideoManager', function($rootScope) {
-		var video = $('video.player')[0];
+		var video = $('.video-player video')[0];
+		var track_click = $('.video-player .track-click')[0];
 		this.data = {
 			playing: false,
 			show: false,
 			total_time: '0:00',
 			current_time: '0:00',
+			meta_loaded: false,
 			loaded: 0,
+			buffers: [],
 			progress: 0
 		};
+		$(track_click).on('mousemove', function(event) {
+			if (event.offsetX)
+				$(track_click).find('.pos').css({left: event.offsetX + 'px'});
+		}.bind(this));
+		$(track_click).on('click', function(event) {
+			if (!this.data.meta_loaded)
+				return;
+			var offset = parseInt($(track_click).find('.pos').css('left'));
+			var seconds = offset / $(track_click).width() * video.duration;
+			video.currentTime = seconds;
+		}.bind(this));
+		$(video).on('loadstart', function() {
+			console.log('loadstart');
+			this.data.meta_loaded = false;
+		}.bind(this));
 		$(video).on('loadedmetadata', function() {
+			console.log('loadedmetadata');
+			this.data.meta_loaded = true;
 			this.data.total_time = Utils.formatDuration(video.duration);
 			$(video).on('progress', function() {
 				this.data.loaded = Math.round((video.buffered.end(video.buffered.length-1) - video.buffered.start(0)) / video.duration * 100);
+				this.updateBuffers();
 				$rootScope.$apply();
 			}.bind(this));
 			$(video).on('timeupdate', function() {
@@ -1106,26 +1130,51 @@ angular.module('AudioManagerModule', [])
 		}.bind(this));
 		$(video).on('play', function() {
 			this.checkPause();
+			$rootScope.$apply();
 		}.bind(this));
 		$(video).on('pause', function() {
 			this.checkPause();
+			$rootScope.$apply();
 		}.bind(this));
+		this.updateBuffers = function() {
+			this.data.buffers = [];
+			for (var i = 0; i < video.buffered.length; i++) {
+				var left = video.buffered.start(i) / video.duration * 100;
+				var width = (video.buffered.end(i) - video.buffered.start(i)) / video.duration * 100;
+				this.data.buffers.push({left: left+'%', width: width+'%'});
+			}
+		}
 		this.checkPause = function() {
 			this.data.playing = !video.paused;
 			if (this.data.note)
 				this.data.note.video = this.data.playing;
-			$rootScope.$apply();
+		}
+		this.set = function(src) {
+			if (src)
+				src = encodeURI(src);
+			if (src && (video.src != src || this.data.src != src)) {
+				video.src = src;
+				this.data.src = src;
+				this.checkPause();
+			}
 		}
 		this.play = function(src) {
-			this.show(src);
-			video.play();
+			this.set(src);
+			this.data.show = true;
+			video.autoplay = false;
+			if (this.data.meta_loaded)
+				video.play();
+			else
+				video.autoplay = true;
 		}
 		this.pause = function() {
 			video.pause();
 		}
+		this.toggle = function() {
+			video.paused ? this.play() : this.pause();
+		}
 		this.show = function(src) {
-			if (src)
-				video.src = encodeURI(src);
+			this.set(src);
 			this.data.show = true;
 		}
 		this.hide = function() {
@@ -1266,7 +1315,6 @@ angular.module('components', [])
 					this.uploading = true;
 					this.upload_count = files.length;
 					$(element).removeClass('droppable-hover');
-					console.log('onStart', this.rand, files);
 				},
 				onProgress: function(percentage) {
 					//console.log('onProgress', this.rand, percentage);

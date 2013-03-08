@@ -829,6 +829,7 @@ div.video-player
 	z-index 10
 
 	div.inner
+		position relative
 		display -webkit-box
 		display -moz-box
 		display box
@@ -839,10 +840,21 @@ div.video-player
 		background rgba(255,255,255,0.25)
 		box-shadow 0 0 25px rgba(0,0,0,0.5)
 
+		div.loading
+			position absolute
+			top 0
+			left 0
+			right 0
+			bottom 30px
+			color #eee
+			text-align center
+			background #000 url(http://media.notes.fm/ajax-loader.gif) center center no-repeat
+
 		video
 			display block
 			width 100%
 			background #000
+			cursor pointer
 
 		div.controls
 			display -webkit-box
@@ -873,38 +885,49 @@ div.video-player
 				&:hover
 					opacity 1.0
 
-			div.track
+			div.track-click
 				position relative
 				box-flex 1
-				margin 13px 0 13px 15px
-				height 4px
-				background rgba(255,255,255,0.15)
+				margin-left 15px
+				padding 13px 0
+				cursor pointer
 
-				div.loaded,
-				div.progress
-					position absolute
-					top 0
-					left 0
-					bottom 0
-					width 0
-
-				div.loaded
+				div.track
+					position relative
+					height 4px
 					background rgba(255,255,255,0.2)
-					border-right 1px solid #999
 
-				div.progress
-					background #A2AEB7
+					div.loaded
+						position absolute
+						top 0
+						left 0
+						bottom 0
+						width 0
+						background rgba(255,255,255,0.25)
 
-				div.handle
+					div.handle
+						position absolute
+						top -4px
+						left 0
+						margin 0 -6px
+						width 12px
+						height 12px
+						background #ccc
+						border-radius 50%
+						box-shadow 0 1px 5px rgba(0,0,0,0.75)
+
+				div.pos
 					position absolute
-					top -4px
+					display none
+					width 1px
+					top 7px
 					left 0
-					margin 0 -6px
-					width 12px
-					height 12px
-					background #ccc
-					border-radius 50%
-					box-shadow 0 1px 5px rgba(0,0,0,0.75)
+					bottom 7px
+					background rgba(255,255,255,0.5)
+
+				&:hover
+					div.pos
+						display block
 
 			div.time
 				padding 0 15px 0 25px
@@ -921,6 +944,10 @@ div.video-player
 						display none
 					&.pause
 						display block
+				div.track-click
+					div.track
+						div.handle
+							background #4CB7FD
 
 div.audio-player
 	position absolute
@@ -969,14 +996,6 @@ div.audio-player
 		&:hover
 			opacity 1.0
 
-	&.playing,
-	&.playing-true
-		a.control
-			&.play
-				display none
-			&.pause
-				display block
-
 	div.track
 		position relative
 		box-flex 1
@@ -994,7 +1013,7 @@ div.audio-player
 
 		div.loaded
 			background rgba(255,255,255,0.2)
-			border-right 1px solid #999
+			border-right 1px solid #bbb
 
 		div.progress
 			background #A2AEB7
@@ -1016,6 +1035,19 @@ div.audio-player
 		line-height 30px
 		text-align right
 		color rgba(255,255,255,0.66)
+
+
+	&.playing,
+	&.playing-true
+		a.control
+			&.play
+				display none
+			&.pause
+				display block
+		div.track
+			div.handle
+				background #7FCCFD
+
 
 
 

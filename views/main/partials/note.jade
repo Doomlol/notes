@@ -8,7 +8,7 @@ div.text
 
 div.attachments.clearfix(ng-show="showAttachments()")
 
-	attachment(ng-repeat="attachment in note.getAttachments()", class="{{getFileType()}}", ng-class="{playing: data.playing}", ng-click="preview()")
+	attachment(ng-repeat="attachment in note.getAttachments()", class="{{getFileType()}}", ng-class="{playing: data.playing}", ng-click="preview()", title="{{attachment.filename}}")
 		
 		div.controls
 			p
