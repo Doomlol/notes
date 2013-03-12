@@ -780,6 +780,10 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.saved = true;
 		$scope.save_timeout = null;
 
+		$element.find('.attachments').on('mousewheel', function(event) {
+			this.scrollLeft -= event.originalEvent.wheelDelta;
+		});
+
 		// This controller will likely be instantiated before notes have returned from the db.
 		// So instead of trying to fetch the note immediately (it won't be there), enqueue
 		// the call to do so, then set the note when it's available.
