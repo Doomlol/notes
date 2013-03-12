@@ -735,10 +735,13 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			return $scope.notes.length;
 		}
 		$scope.setPageView = function(val) {
-			if ($location.path() == '/')
+			if ($location.path() == '/') {
 				$scope.page_view = false;
-			else
+				$scope.current_note = null;
+			}
+			else {
 				$scope.page_view = val;
+			}
 		}
 		// Is this function necessary anymore now that you can use the browser back button? Yes,
 		// Probably - what if your first page load is not "/" ?
@@ -781,7 +784,6 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.save_timeout = null;
 
 		$element.find('.attachments').on('mousewheel', function(event) {
-			console.log('mousewheel');
 			this.scrollLeft -= event.originalEvent.wheelDelta;
 		});
 

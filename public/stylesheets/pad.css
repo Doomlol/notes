@@ -114,7 +114,7 @@ div.pad div.editor div.page ul.options.fontfamily li:nth-child(4){font-family:"U
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(5){font-family:"Handlee",sans-serif}
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(6){font-family:"Racing Sans One",sans-serif}
 div.pad div.editor div.page.login input{margin-right:10px}
-div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #eee;-moz-box-sizing:border-box;box-sizing:border-box;}
+div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #e8e8e8;-moz-box-sizing:border-box;box-sizing:border-box;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:inherit;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
 div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-moz-box-flex:1;-webkit-box-flex:1;outline:none}
@@ -183,8 +183,10 @@ body.expanded-true.audio-true div.pad{bottom:30px}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
 div.pad{top:0;left:0;right:0;bottom:0 !important;}
 div.pad div.list{width:auto;right:0;}
-div.pad div.list ul#notes li span.title{font-size:16px}
-div.pad div.list ul#notes li span.time{font-size:14px}
+div.pad div.list ul#notes li h2{font-size:17px;font-weight:normal;line-height:22px}
+div.pad div.list ul#notes li div.basic{padding:12px 15px;}
+div.pad div.list ul#notes li div.basic span.title{font-size:16px}
+div.pad div.list ul#notes li div.basic span.time{font-size:14px}
 div.pad div.list div.status a{font-size:19px;line-height:54px}
 div.pad div.editor{left:100%;right:auto;width:100%;}
 div.pad div.editor note div.text textarea{padding:18px;font-size:17px}
