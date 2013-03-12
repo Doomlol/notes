@@ -781,6 +781,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.save_timeout = null;
 
 		$element.find('.attachments').on('mousewheel', function(event) {
+			console.log('mousewheel');
 			this.scrollLeft -= event.originalEvent.wheelDelta;
 		});
 
