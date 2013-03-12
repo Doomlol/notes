@@ -195,7 +195,7 @@ div.pad
 
 			li
 				position relative
-				border-bottom 1px solid #eee
+				border-bottom 1px solid #e8e8e8
 
 				div.highlight
 					position absolute
@@ -322,6 +322,7 @@ div.pad
 
 		div.status
 			background #f9f9f9
+			background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#f9f9f9))
 
 			a
 				display block
@@ -406,7 +407,6 @@ div.pad
 
 				&::-webkit-scrollbar-thumb
 					background #444
-
 
 				attachment
 					position relative
@@ -525,6 +525,42 @@ div.pad
 						div.progress
 							height 100%
 							background #A2AEB7
+
+				&.light
+					background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#f9f9f9))
+					//background #f9f9f9
+					border-top 1px solid #d8d8d8
+
+					&::-webkit-scrollbar-track
+						background #eee
+
+					&::-webkit-scrollbar-thumb
+						background #ccc
+
+					attachment
+						color #555
+						background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9f9f9), to(#e6e6e6))
+						box-shadow 0 1px 3px rgba(0,0,0,0.5)
+						border-radius 3px
+
+						div.hover_opts
+							a.delete
+								border-radius 0px 3px
+
+						div.controls
+							border-radius 3px
+
+							p
+								span.icon
+									background-image url(http://media.notes.fm/glyphicons-halflings.png)
+
+						&.playing
+							div.controls
+								background rgba(4,148,221,0.35)
+						&:hover
+							div.controls
+								background rgba(4,148,221,0.25)
+
 
 		div.page
 			position absolute
@@ -1170,7 +1206,8 @@ body
 			note
 				div.text
 					textarea
-						font-size 19px
+						padding 18px
+						font-size 17px
 
 		div.list > div.opts,
 		note > div.opts
