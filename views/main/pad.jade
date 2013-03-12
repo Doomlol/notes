@@ -60,6 +60,11 @@ html(lang="en", ng-app="NotesApp")
 			div.inner(ng-click="cancel($event)")
 				div.loading(ng-show="!data.meta_loaded")
 				video.player(ng-click="toggle()")
+				div.info
+					p {{this.data.attachment.filename}}
+					p Buffers: {{data.buffers.length}}
+				div.icon.play Play
+				div.icon.pause Pause
 				div.controls
 					a.control.play(ng-click="play()")
 					a.control.pause(ng-click="pause($event)")

@@ -955,7 +955,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 					AudioManager.play('http://storage.notes.fm/' + $scope.attachment.key, $scope.note, $scope.attachment);
 					break;
 				case 'video':
-					VideoManager.show('http://storage.notes.fm/' + $scope.attachment.key);
+					VideoManager.show('http://storage.notes.fm/' + $scope.attachment.key, $scope.attachment);
 					break;
 				default:
 					console.log('Not a playable attachment:', $scope.attachment);
@@ -1098,44 +1098,58 @@ angular.module('AudioManagerModule', [])
 			buffers: [],
 			progress: 0
 		};
-		$(track_click).on('mousemove', function(event) {
-			if (event.offsetX)
-				$(track_click).find('.pos').css({left: event.offsetX + 'px'});
-		}.bind(this));
-		$(track_click).on('click', function(event) {
-			if (!this.data.meta_loaded)
-				return;
-			var offset = parseInt($(track_click).find('.pos').css('left'));
-			var seconds = offset / $(track_click).width() * video.duration;
-			video.currentTime = seconds;
-		}.bind(this));
-		$(video).on('loadstart', function() {
-			console.log('loadstart');
-			this.data.meta_loaded = false;
-		}.bind(this));
-		$(video).on('loadedmetadata', function() {
-			console.log('loadedmetadata');
-			this.data.meta_loaded = true;
-			this.data.total_time = Utils.formatDuration(video.duration);
-			$(video).on('progress', function() {
+
+		var track_click_handlers = {
+			mousemove: function(event) {
+				var left = event.pageX - $(track_click).offset().left;
+				$(track_click).find('.pos').css({left: left + 'px'});
+			},
+			click: function(event) {
+				var left = event.pageX - $(track_click).offset().left;
+				var seconds = left / $(track_click).width() * video.duration;
+				video.currentTime = seconds;
+			}
+		};
+		for (var handler in track_click_handlers) {
+			$(track_click).on(handler, track_click_handlers[handler].bind(this));
+		}
+
+		var video_handlers = {
+			loadstart: function() {
+				this.data.meta_loaded = false;
+				this.updateBuffers();
+				$rootScope.$apply();
+			},
+			loadedmetadata: function() {
+				this.data.meta_loaded = true;
+				this.data.total_time = Utils.formatDuration(video.duration);
+				$rootScope.$apply();
+			},
+			progress: function() {
+				if (!this.data.meta_loaded)
+					return;
 				this.data.loaded = Math.round((video.buffered.end(video.buffered.length-1) - video.buffered.start(0)) / video.duration * 100);
 				this.updateBuffers();
 				$rootScope.$apply();
-			}.bind(this));
-			$(video).on('timeupdate', function() {
+			},
+			timeupdate: function() {
 				this.data.progress = video.currentTime / video.duration * 100;
 				this.data.current_time = Utils.formatDurationProgress(video.duration, video.currentTime);
 				$rootScope.$apply();
-			}.bind(this));
-		}.bind(this));
-		$(video).on('play', function() {
-			this.checkPause();
-			$rootScope.$apply();
-		}.bind(this));
-		$(video).on('pause', function() {
-			this.checkPause();
-			$rootScope.$apply();
-		}.bind(this));
+			},
+			play: function() {
+				this.checkPause();
+				$rootScope.$apply();
+			},
+			pause: function() {
+				this.checkPause();
+				$rootScope.$apply();
+			}
+		};
+		for (var handler in video_handlers) {
+			$(video).on(handler, video_handlers[handler].bind(this));
+		}
+
 		this.updateBuffers = function() {
 			this.data.buffers = [];
 			for (var i = 0; i < video.buffered.length; i++) {
@@ -1149,7 +1163,7 @@ angular.module('AudioManagerModule', [])
 			if (this.data.note)
 				this.data.note.video = this.data.playing;
 		}
-		this.set = function(src) {
+		this.set = function(src, attachment) {
 			if (src)
 				src = encodeURI(src);
 			if (src && (video.src != src || this.data.src != src)) {
@@ -1157,9 +1171,11 @@ angular.module('AudioManagerModule', [])
 				this.data.src = src;
 				this.checkPause();
 			}
+			if (attachment)
+				this.data.attachment = attachment;
 		}
-		this.play = function(src) {
-			this.set(src);
+		this.play = function(src, attachment) {
+			this.set(src, attachment);
 			this.data.show = true;
 			video.autoplay = false;
 			if (this.data.meta_loaded)
@@ -1173,8 +1189,8 @@ angular.module('AudioManagerModule', [])
 		this.toggle = function() {
 			video.paused ? this.play() : this.pause();
 		}
-		this.show = function(src) {
-			this.set(src);
+		this.show = function(src, attachment) {
+			this.set(src, attachment);
 			this.data.show = true;
 		}
 		this.hide = function() {

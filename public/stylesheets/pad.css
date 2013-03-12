@@ -125,6 +125,10 @@ div.video-player{padding:50px;position:absolute;top:0;left:0;right:0;bottom:0;ba
 div.video-player div.inner{position:relative;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;margin:0 auto;width:640px;max-width:100%;background:rgba(255,255,255,0.25);-webkit-box-shadow:0 0 25px rgba(0,0,0,0.5);-moz-box-shadow:0 0 25px rgba(0,0,0,0.5);box-shadow:0 0 25px rgba(0,0,0,0.5);}
 div.video-player div.inner div.loading{position:absolute;top:0;left:0;right:0;bottom:30px;color:#eee;text-align:center;background:#000 url("http://media.notes.fm/ajax-loader.gif") center center no-repeat}
 div.video-player div.inner video{display:block;width:100%;background:#000;cursor:pointer}
+div.video-player div.inner div.info{position:absolute;padding:5px 0;left:10px;bottom:40px;font-size:11px;color:#eee;background:rgba(0,0,0,0.65);border-radius:3px;opacity:0;-webkit-transition:opacity .15s;-moz-transition:opacity .15s;transition:opacity .15s;}
+div.video-player div.inner div.info p{margin:5px 0;padding:0 12px;line-height:15px}
+div.video-player div.inner div.icon{position:absolute;right:10px;bottom:40px;width:60px;height:40px;font-size:10px;line-height:40px;text-align:center;text-transform:uppercase;color:#eee;background:rgba(0,0,0,0.65);border-radius:3px;opacity:0;-webkit-transition:opacity .15s;-moz-transition:opacity .15s;transition:opacity .15s;}
+div.video-player div.inner div.icon.pause{display:none}
 div.video-player div.inner div.controls{display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;box-orient:horizontal;padding:0 0 0 5px;height:30px;background:#000;}
 div.video-player div.inner div.controls a.control{display:block;margin:4px 3px 2px;padding:4px;width:16px;height:16px;opacity:.75;background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-repeat:no-repeat;}
 div.video-player div.inner div.controls a.control.play{background-position:-259px -68px}
@@ -132,11 +136,14 @@ div.video-player div.inner div.controls a.control.pause{display:none;background-
 div.video-player div.inner div.controls a.control:hover{opacity:1}
 div.video-player div.inner div.controls div.track-click{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin-left:15px;padding:13px 0;cursor:pointer;}
 div.video-player div.inner div.controls div.track-click div.track{position:relative;height:4px;background:rgba(255,255,255,0.2);}
-div.video-player div.inner div.controls div.track-click div.track div.loaded{position:absolute;top:0;left:0;bottom:0;width:0;background:rgba(255,255,255,0.5)}
+div.video-player div.inner div.controls div.track-click div.track div.loaded{position:absolute;top:0;left:0;bottom:0;width:0;background:rgba(255,255,255,0.25)}
 div.video-player div.inner div.controls div.track-click div.track div.handle{position:absolute;top:-4px;left:0;margin:0 -6px;width:12px;height:12px;background:#ccc;border-radius:50%;-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.75);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.75);box-shadow:0 1px 5px rgba(0,0,0,0.75)}
 div.video-player div.inner div.controls div.track-click div.pos{position:absolute;display:none;width:1px;top:7px;left:0;bottom:7px;background:rgba(255,255,255,0.5)}
 div.video-player div.inner div.controls div.track-click:hover div.pos{display:block}
 div.video-player div.inner div.controls div.time{padding:0 15px 0 25px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
+div.video-player div.inner:hover div.info,div.video-player div.inner:hover div.icon{opacity:1}
+div.video-player.playing-true div.inner div.icon.pause{display:block}
+div.video-player.playing-true div.inner div.icon.play{display:none}
 div.video-player.playing-true div.inner div.controls a.control.play{display:none}
 div.video-player.playing-true div.inner div.controls a.control.pause{display:block}
 div.video-player.playing-true div.inner div.controls div.track-click div.track div.handle{background:#4cb7fd}

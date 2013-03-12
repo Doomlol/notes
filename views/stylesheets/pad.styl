@@ -856,6 +856,42 @@ div.video-player
 			background #000
 			cursor pointer
 
+		div.info
+			position absolute
+			padding 5px 0
+			left 10px
+			bottom 40px
+			font-size 11px
+			color #eee
+			background rgba(0,0,0,0.65)
+			border-radius 3px
+			opacity 0
+			transition opacity 0.15s
+
+			p
+				margin 5px 0
+				padding 0 12px
+				line-height 15px
+
+		div.icon
+			position absolute
+			right 10px
+			bottom 40px
+			width 60px
+			height 40px
+			font-size 10px
+			line-height 40px
+			text-align center
+			text-transform uppercase
+			color #eee
+			background rgba(0,0,0,0.65)
+			border-radius 3px
+			opacity 0
+			transition opacity 0.15s
+
+			&.pause
+				display none
+
 		div.controls
 			display -webkit-box
 			display -moz-box
@@ -936,8 +972,17 @@ div.video-player
 				text-align right
 				color rgba(255,255,255,0.66)
 
+		&:hover
+			div.info,
+			div.icon
+				opacity 1.0
+
 	&.playing-true
 		div.inner
+			div.icon.pause
+				display block
+			div.icon.play
+				display none
 			div.controls
 				a.control
 					&.play
