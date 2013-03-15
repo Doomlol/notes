@@ -49,10 +49,12 @@ html(lang="en", ng-app="NotesApp")
 				| {{data.attachment.filename || "No file"}}
 			a.control.play(ng-click="play()")
 			a.control.pause(ng-click="pause()")
-			div.track
-				div.loaded(ng-style="{width: data.loaded+'%'}")
-				div.progress(ng-style="{width: data.progress+'%'}")
-				div.handle(ng-style="{left: data.progress+'%'}")
+			div.track-click
+				div.track
+					div.loaded(ng-repeat="buffer in data.buffers", ng-style="{left: buffer.left, width: buffer.width}")
+					div.progress(ng-style="{width: data.progress+'%'}")
+					div.handle(ng-style="{left: data.progress+'%'}")
+				div.pos
 			div.time
 				| {{data.current_time}} / {{data.total_time}}
 

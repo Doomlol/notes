@@ -1087,38 +1087,49 @@ div.audio-player
 		&:hover
 			opacity 1.0
 
-	div.track
+	div.track-click
 		position relative
 		box-flex 1
-		margin 13px 0 13px 15px
-		height 4px
-		background rgba(255,255,255,0.15)
+		margin-left 15px
+		padding 13px 0
+		cursor pointer
 
-		div.loaded,
-		div.progress
-			position absolute
-			top 0
-			left 0
-			bottom 0
-			width 0
-
-		div.loaded
+		div.track
+			position relative
+			height 4px
 			background rgba(255,255,255,0.2)
-			border-right 1px solid #bbb
 
-		div.progress
-			background #A2AEB7
+			div.loaded
+				position absolute
+				top 0
+				left 0
+				bottom 0
+				width 0
+				background rgba(255,255,255,0.25)
 
-		div.handle
+			div.handle
+				position absolute
+				top -4px
+				left 0
+				margin 0 -6px
+				width 12px
+				height 12px
+				background #ccc
+				border-radius 50%
+				box-shadow 0 1px 5px rgba(0,0,0,0.75)
+
+		div.pos
 			position absolute
-			top -4px
+			display none
+			width 1px
+			top 7px
 			left 0
-			margin 0 -6px
-			width 12px
-			height 12px
-			background #ccc
-			border-radius 50%
-			box-shadow 0 1px 5px rgba(0,0,0,0.75)
+			bottom 7px
+			background rgba(255,255,255,0.5)
+
+		&:hover
+			div.pos
+				display block
 
 	div.time
 		padding-left 25px

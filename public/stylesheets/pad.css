@@ -165,11 +165,12 @@ div.audio-player a.control.play{background-position:-259px -68px}
 div.audio-player a.control.pause{display:none;background-position:-282px -68px}
 div.audio-player a.control.forward{background-position:-355px -68px}
 div.audio-player a.control:hover{opacity:1}
-div.audio-player div.track{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:13px 0 13px 15px;height:4px;background:rgba(255,255,255,0.15);}
-div.audio-player div.track div.loaded,div.audio-player div.track div.progress{position:absolute;top:0;left:0;bottom:0;width:0}
-div.audio-player div.track div.loaded{background:rgba(255,255,255,0.2);border-right:1px solid #bbb}
-div.audio-player div.track div.progress{background:#a2aeb7}
-div.audio-player div.track div.handle{position:absolute;top:-4px;left:0;margin:0 -6px;width:12px;height:12px;background:#ccc;border-radius:50%;-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.75);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.75);box-shadow:0 1px 5px rgba(0,0,0,0.75)}
+div.audio-player div.track-click{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin-left:15px;padding:13px 0;cursor:pointer;}
+div.audio-player div.track-click div.track{position:relative;height:4px;background:rgba(255,255,255,0.2);}
+div.audio-player div.track-click div.track div.loaded{position:absolute;top:0;left:0;bottom:0;width:0;background:rgba(255,255,255,0.25)}
+div.audio-player div.track-click div.track div.handle{position:absolute;top:-4px;left:0;margin:0 -6px;width:12px;height:12px;background:#ccc;border-radius:50%;-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.75);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.75);box-shadow:0 1px 5px rgba(0,0,0,0.75)}
+div.audio-player div.track-click div.pos{position:absolute;display:none;width:1px;top:7px;left:0;bottom:7px;background:rgba(255,255,255,0.5)}
+div.audio-player div.track-click:hover div.pos{display:block}
 div.audio-player div.time{padding-left:25px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
 div.audio-player.playing a.control.play,div.audio-player.playing-true a.control.play{display:none}
 div.audio-player.playing a.control.pause,div.audio-player.playing-true a.control.pause{display:block}
