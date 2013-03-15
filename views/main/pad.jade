@@ -15,25 +15,19 @@ html(lang="en", ng-app="NotesApp")
 			div.list
 				div.opts
 					a#new.btn(ng-click="addNote()") New
-					input(type="text", id="search", placeholder="Search")
+					div.search
+						input(type="text", id="search", placeholder="Search", ng-model="query")
+						a.clear(ng-show="query", ng-click="query=''")
 					a.gear(href="#/settings")
+
+				p.label(ng-show="query && results.length") Results
+				p.label.red(ng-show="query && !results.length") No results
+
+				ul.notes(ng-show="query")
+					li(ng-repeat="note in results", ng-include="'/partials/note-list-item'", ng-class="{selected: note.getId()==current_note.getId(), audio: note.audio}", rel="note_{{note.getId()}}")
 				
-				ul#notes(ng-show="notes.length")
-
-					li(ng-repeat="note in notes", ng-class="{selected: note.getId()==current_note.getId(), audio: note.audio}", rel="note_{{note.getId()}}")
-						div.highlight
-						div.basic(ng-click="loadNote(note.getId())")
-							span.audio
-							span.video
-							h2 {{note.getTitle() || 'Untitled'}}
-							span.time {{note.getTime()}}
-							span.delete: a(ng-click="deleteNote(note.getId())") delete
-
-						div.uploads(class="uploading-{{note.uploads.length > 0}}")
-							div(ng-repeat="upload in note.uploads")
-								h3 {{upload.count}} files
-								div.bar
-									div.progress(ng-style="{width: upload.progress + '%'}")
+				ul.notes(ng-show="!query && notes.length")
+					li(ng-repeat="note in notes", ng-include="'/partials/note-list-item'", ng-class="{selected: note.getId()==current_note.getId(), audio: note.audio}", rel="note_{{note.getId()}}")
 				
 				div.no_notes(ng-show="!notes.length")
 					| No notes
