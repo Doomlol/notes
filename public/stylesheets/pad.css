@@ -42,7 +42,7 @@ div.pad div.list ul#notes li.audio h2,div.pad div.list ul#notes li.video h2{padd
 div.pad div.list ul#notes li.audio div.basic span.audio{display:block}
 div.pad div.list ul#notes li.video div.basic span.video{display:block}
 div.pad div.list div.status{background:#f9f9f9;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));border-top:1px solid #ddd;}
-div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
+div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor note{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;top:0;left:0;right:0;bottom:0;}
@@ -73,9 +73,9 @@ div.pad div.editor note div.attachments div.upload{position:relative;float:left;
 div.pad div.editor note div.attachments div.upload h3{margin:35px 0 3px;font-size:11px;font-weight:normal}
 div.pad div.editor note div.attachments div.upload div.bar{margin:0 auto;width:80%;height:4px;background:rgba(255,255,255,0.25);}
 div.pad div.editor note div.attachments div.upload div.bar div.progress{height:100%;background:#a2aeb7}
-div.pad div.editor note div.attachments.light{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#eee),to(#f9f9f9));border-top:1px solid #d8d8d8;}
-div.pad div.editor note div.attachments.light::-webkit-scrollbar-track{background:#eee;border-top:1px solid #d8d8d8}
-div.pad div.editor note div.attachments.light::-webkit-scrollbar-thumb{background:#ccc}
+div.pad div.editor note div.attachments.light{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#eee),to(#f9f9f9));border-top:1px solid #ccc;}
+div.pad div.editor note div.attachments.light::-webkit-scrollbar-track{background:#eee;border-top:1px solid #d6d6d6}
+div.pad div.editor note div.attachments.light::-webkit-scrollbar-thumb{background:#bbb}
 div.pad div.editor note div.attachments.light attachment{color:#555;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.5);box-shadow:0 1px 3px rgba(0,0,0,0.5);border-radius:3px;}
 div.pad div.editor note div.attachments.light attachment div.hover_opts a.delete{border-radius:0 3px}
 div.pad div.editor note div.attachments.light attachment div.controls{border-radius:3px;}
@@ -114,7 +114,7 @@ div.pad div.editor div.page ul.options.fontfamily li:nth-child(4){font-family:"U
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(5){font-family:"Handlee",sans-serif}
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(6){font-family:"Racing Sans One",sans-serif}
 div.pad div.editor div.page.login input{margin-right:10px}
-div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #e8e8e8;-moz-box-sizing:border-box;box-sizing:border-box;}
+div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #ddd;-moz-box-sizing:border-box;box-sizing:border-box;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:inherit;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
 div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-moz-box-flex:1;-webkit-box-flex:1;outline:none}
@@ -174,7 +174,7 @@ div.audio-player div.track-click:hover div.pos{display:block}
 div.audio-player div.time{padding-left:25px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
 div.audio-player.playing a.control.play,div.audio-player.playing-true a.control.play{display:none}
 div.audio-player.playing a.control.pause,div.audio-player.playing-true a.control.pause{display:block}
-div.audio-player.playing div.track div.handle,div.audio-player.playing-true div.track div.handle{background:#7fccfd}
+div.audio-player.playing div.track-click div.track div.handle,div.audio-player.playing-true div.track-click div.track div.handle{background:#7fccfd}
 body.audio-true div.pad{bottom:45px}
 body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
 body.expanded-true.audio-true div.pad{bottom:30px}

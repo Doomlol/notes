@@ -879,7 +879,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 	.controller('AttachmentCtrl', function AttachmentCtrl($scope, $element, storage, ImageManager, AudioManager, VideoManager) {
 
 		// Observers for AudioManager and VideoManager updates
-		function update_audio(event_type) {
+		function update_audio() {
 			if (AudioManager.data.attachment && $scope.attachment.key == AudioManager.data.attachment.key) {
 				$scope.data = AudioManager.data;
 				//$scope.setMediaData(AudioManager.data);
@@ -893,14 +893,10 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 
 		}
 		if (Utils.isFileType('audio', $scope.attachment)) {
-			$scope.$on('audio-progress', update_audio.bind(this, 'progress'));
-			$scope.$on('audio-timeupdate', update_audio.bind(this, 'timeupdate'));
-			$scope.$on('audio-play', update_audio.bind(this, 'play'));
-			$scope.$on('audio-pause', update_audio.bind(this, 'pause'));
+			$scope.$on('audio-change', update_audio.bind(this));
 		}
 		if (Utils.isFileType('video', $scope.attachment)) {
-			$scope.$on('video-progress', update_video);
-			$scope.$on('video-timeupdate', update_video);
+			$scope.$on('video-change', update_video.bind(this));
 		}
 
 		$scope.playText = function() {
@@ -1234,78 +1230,47 @@ angular.module('AudioManagerModule', [])
 			$(track_click).on(handler, track_click_handlers[handler].bind(this));
 		}
 
-		// This should work perfectly except for updating the actual
-		// attachment element in realtime - that requires the
-		// $rootScope.$broadcast('audio-*'), where * is progress, timeupdate, etc
-
 		var audio_handlers = {
 			loadstart: function() {
 				this.data.meta_loaded = false;
 				this.updateBuffers();
-				$rootScope.$apply();
+				this.broadcastChange($rootScope);
 			},
 			loadedmetadata: function() {
 				this.data.meta_loaded = true;
 				this.data.total_time = Utils.formatDuration(audio.duration);
-				$rootScope.$apply();
+				this.broadcastChange($rootScope);
 			},
 			progress: function() {
 				if (!this.data.meta_loaded)
 					return;
 				this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
 				this.updateBuffers();
-				$rootScope.$apply();
+				this.broadcastChange($rootScope);
 			},
 			timeupdate: function() {
 				this.data.progress = audio.currentTime / audio.duration * 100;
 				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
-				$rootScope.$apply();
+				this.broadcastChange($rootScope);
 			},
 			play: function() {
 				this.checkPause();
-				$rootScope.$apply();
+				this.broadcastChange($rootScope);
 			},
 			pause: function() {
 				this.checkPause();
-				$rootScope.$apply();
+				this.broadcastChange($rootScope);
 			}
 		};
 		for (var handler in audio_handlers) {
 			$(audio).on(handler, audio_handlers[handler].bind(this));
 		}
 
-		/*
-		$(audio).on('loadedmetadata', function() {
-			this.data.total_time = Utils.formatDuration(audio.duration);
-			$(audio).on('progress', function() {
-				if (audio.buffered.length > 0) {
-					this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
-					$rootScope.$apply(function() {
-						$rootScope.$broadcast('audio-progress');
-					});
-				}
-			}.bind(this));
-			$(audio).on('timeupdate', function() {
-				this.data.progress = audio.currentTime / audio.duration * 100;
-				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
-				$rootScope.$apply(function() {
-					$rootScope.$broadcast('audio-timeupdate');
-				});
-			}.bind(this));
-		}.bind(this));
-		$(audio).on('play', function() {
-			this.checkPause();
-			$rootScope.$apply(function() {
-				$rootScope.$broadcast('audio-play');
+		this.broadcastChange = function(scope) {
+			scope.$apply(function() {
+				scope.$broadcast('audio-change');
 			});
-		}.bind(this));
-		$(audio).on('pause', function() {
-			this.checkPause();
-			$rootScope.$apply(function() {
-				$rootScope.$broadcast('audio-pause');
-			});
-		}.bind(this));
-		*/
+		}
 		this.updateBuffers = function() {
 			this.data.buffers = [];
 			for (var i = 0; i < audio.buffered.length; i++) {
