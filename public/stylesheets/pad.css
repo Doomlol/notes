@@ -41,7 +41,7 @@ div.pad div.list ul#notes li.selected div.basic span.time{color:#7eb6d4}
 div.pad div.list ul#notes li.audio h2,div.pad div.list ul#notes li.video h2{padding-left:12px}
 div.pad div.list ul#notes li.audio div.basic span.audio{display:block}
 div.pad div.list ul#notes li.video div.basic span.video{display:block}
-div.pad div.list div.status{background:#f9f9f9;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#eee),to(#f9f9f9));border-top:1px solid #ddd;}
+div.pad div.list div.status{background:#f9f9f9;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));border-top:1px solid #ddd;}
 div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
