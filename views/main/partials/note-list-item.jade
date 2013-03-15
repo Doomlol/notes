@@ -1,0 +1,13 @@
+div.highlight
+div.basic(ng-click="loadNote(note.getId())")
+	span.audio
+	span.video
+	h2 {{note.getTitle() || 'Untitled'}}
+	span.time {{note.getTime()}}
+	span.delete: a(ng-click="deleteNote(note.getId())") delete
+
+div.uploads(class="uploading-{{note.uploads.length > 0}}")
+	div(ng-repeat="upload in note.uploads")
+		h3 {{upload.count}} files
+		div.bar
+			div.progress(ng-style="{width: upload.progress + '%'}")

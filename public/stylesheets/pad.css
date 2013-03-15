@@ -15,32 +15,35 @@ div.pad{position:absolute;top:15px;left:15px;right:15px;bottom:15px;overflow:hid
 div.pad div.main_error{display:none;position:absolute;padding:10px;left:10px;right:10px;bottom:10px;font-size:13px;text-align:center;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:#a00009;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25)}
 div.pad div.list{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;top:0;left:0;bottom:0;width:280px;background:#fff;border-right:1px solid #ddd;}
 div.pad div.list div.no_notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding:40px 20px;text-align:center;color:#bbb;background:#fff}
-div.pad div.list ul#notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
-div.pad div.list ul#notes li{position:relative;border-bottom:1px solid #e8e8e8;}
-div.pad div.list ul#notes li div.highlight{position:absolute;top:0;left:0;bottom:0;width:2px;z-index:1}
-div.pad div.list ul#notes li h2{margin:0 40px 0 0;font-size:12px;font-weight:bold;line-height:17px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
-div.pad div.list ul#notes li h3{margin:0 0 2px;font-size:11px;font-weight:normal;color:#888}
-div.pad div.list ul#notes li div.basic{position:relative;padding:10px 15px;background:#f9f9f9;cursor:pointer;}
-div.pad div.list ul#notes li div.basic span{display:block;}
-div.pad div.list ul#notes li div.basic span.time{font-size:11px;color:#aaa}
-div.pad div.list ul#notes li div.basic span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
-div.pad div.list ul#notes li div.basic span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
-div.pad div.list ul#notes li div.basic span.delete a:hover{text-decoration:underline}
-div.pad div.list ul#notes li div.basic span.audio,div.pad div.list ul#notes li div.basic span.video{position:absolute;display:none;top:10px;left:10px;width:13px;height:15px;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-position:0 0;background-repeat:no-repeat;opacity:.5}
-div.pad div.list ul#notes li div.basic span.audio{background-position:-25px 1px}
-div.pad div.list ul#notes li div.basic span.video{background-position:-193px 1px}
-div.pad div.list ul#notes li div.basic:hover{background:#fcfcfc;}
-div.pad div.list ul#notes li div.basic:hover span.delete{display:block}
-div.pad div.list ul#notes li div.uploads{display:none;padding:0 15px 10px;font-size:11px;background:#f9f9f9;overflow:hidden;}
-div.pad div.list ul#notes li div.uploads div.bar{margin:0 0 5px;width:100%;height:4px;background:rgba(0,0,0,0.075);}
-div.pad div.list ul#notes li div.uploads div.bar div.progress{height:100%;background:#a2aeb7}
-div.pad div.list ul#notes li div.uploads.uploading-true{display:block}
-div.pad div.list ul#notes li.selected div.highlight{background:#0494dd}
-div.pad div.list ul#notes li.selected div.basic h2{color:#0494dd}
-div.pad div.list ul#notes li.selected div.basic span.time{color:#7eb6d4}
-div.pad div.list ul#notes li.audio h2,div.pad div.list ul#notes li.video h2{padding-left:12px}
-div.pad div.list ul#notes li.audio div.basic span.audio{display:block}
-div.pad div.list ul#notes li.video div.basic span.video{display:block}
+div.pad div.list p.label{margin:0;padding:0 15px;font-size:13px;line-height:30px;color:#eee;background:#333;}
+div.pad div.list p.label.red{background:#ac000c}
+div.pad div.list ul.notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
+div.pad div.list ul.notes li{position:relative;border-bottom:1px solid #e8e8e8;}
+div.pad div.list ul.notes li div.highlight{position:absolute;top:0;left:0;bottom:0;width:2px;z-index:1}
+div.pad div.list ul.notes li h2{margin:0 40px 0 0;font-size:12px;font-weight:bold;line-height:17px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+div.pad div.list ul.notes li h3{margin:0 0 2px;font-size:11px;font-weight:normal;color:#888}
+div.pad div.list ul.notes li div.basic{position:relative;padding:10px 15px;background:#f9f9f9;cursor:pointer;}
+div.pad div.list ul.notes li div.basic span{display:block;}
+div.pad div.list ul.notes li div.basic span.time{font-size:11px;color:#aaa}
+div.pad div.list ul.notes li div.basic span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
+div.pad div.list ul.notes li div.basic span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
+div.pad div.list ul.notes li div.basic span.delete a:hover{text-decoration:underline}
+div.pad div.list ul.notes li div.basic span.audio,div.pad div.list ul.notes li div.basic span.video{position:absolute;display:none;top:10px;left:10px;width:13px;height:15px;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-position:0 0;background-repeat:no-repeat;opacity:.5}
+div.pad div.list ul.notes li div.basic span.audio{background-position:-25px 1px}
+div.pad div.list ul.notes li div.basic span.video{background-position:-193px 1px}
+div.pad div.list ul.notes li div.basic:hover{background:#fcfcfc;}
+div.pad div.list ul.notes li div.basic:hover span.delete{display:block}
+div.pad div.list ul.notes li div.uploads{display:none;padding:0 15px 10px;font-size:11px;background:#f9f9f9;overflow:hidden;}
+div.pad div.list ul.notes li div.uploads div.bar{margin:0 0 5px;width:100%;height:4px;background:rgba(0,0,0,0.075);}
+div.pad div.list ul.notes li div.uploads div.bar div.progress{height:100%;background:#a2aeb7}
+div.pad div.list ul.notes li div.uploads.uploading-true{display:block}
+div.pad div.list ul.notes li.selected div.highlight{background:#0494dd}
+div.pad div.list ul.notes li.selected div.basic h2{color:#0494dd}
+div.pad div.list ul.notes li.selected div.basic span.time{color:#7eb6d4}
+div.pad div.list ul.notes li.audio h2,div.pad div.list ul.notes li.video h2{padding-left:12px}
+div.pad div.list ul.notes li.audio div.basic span.audio{display:block}
+div.pad div.list ul.notes li.video div.basic span.video{display:block}
+div.pad div.list ul.notes.label{opacity:1}
 div.pad div.list div.status{background:#f9f9f9;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));border-top:1px solid #ddd;}
 div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;border-top:1px solid #eee;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
@@ -114,17 +117,20 @@ div.pad div.editor div.page ul.options.fontfamily li:nth-child(4){font-family:"U
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(5){font-family:"Handlee",sans-serif}
 div.pad div.editor div.page ul.options.fontfamily li:nth-child(6){font-family:"Racing Sans One",sans-serif}
 div.pad div.editor div.page.login input{margin-right:10px}
-div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #e8e8e8;-moz-box-sizing:border-box;box-sizing:border-box;}
+div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;display:box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #e8e8e8;-moz-box-sizing:border-box;box-sizing:border-box;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:inherit;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
-div.pad div.list > div.opts input[type="text"]{display:block;margin:0 0 0 8px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;-moz-box-flex:1;-webkit-box-flex:1;outline:none}
+div.pad div.list > div.opts div.search{position:relative;display:-webkit-box;display:-moz-box;display:box;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin-left:8px;}
+div.pad div.list > div.opts div.search a.clear{position:absolute;top:7px;right:9px;width:16px;height:16px;border-radius:3px;background-color:#bbb;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-repeat:no-repeat;background-position:-311px 1px;opacity:.6;}
+div.pad div.list > div.opts div.search a.clear:hover{opacity:.75}
+div.pad div.list > div.opts div.search input[type="text"]{display:block;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding-right:28px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;outline:none}
 div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:100%;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;-moz-background-size:auto 16px;background-size:auto 16px;opacity:.4;}
 div.pad div.list > div.opts a.gear:hover{opacity:.6}
 div.pad note > div.opts{position:relative;}
 div.pad note > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);-webkit-transform:rotate(-45deg) translate(-2px,11px);-moz-transform:rotate(-45deg) translate(-2px,11px);transform:rotate(-45deg) translate(-2px,11px);display:none;}
 div.pad note > div.opts div.back:before{display:block;content:'';width:20px;height:6px;background:#888}
 div.pad note > div.opts div.back:after{display:block;content:'';width:6px;height:14px;background:#888}
-div.pad note > div.opts input[type="text"]{display:block;margin:0;padding-right:20px;height:18px;line-height:18px;border:1px solid transparent;background:none;-moz-box-flex:1;-webkit-box-flex:1;outline:none;}
+div.pad note > div.opts input[type="text"]{display:block;margin:0;padding-right:20px;height:18px;line-height:18px;border:1px solid transparent;background:none;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;outline:none;}
 div.pad note > div.opts input[type="text"]:hover{border:1px solid rgba(230,230,230,0.5);border-top:1px solid rgba(205,205,205,0.5);background:rgba(255,255,255,0.5)}
 div.pad note > div.opts input[type="text"]:hover,div.pad note > div.opts input[type="text"]:focus{border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;background:#fff}
 div.pad note > div.opts div.save_status{position:absolute;top:20px;right:15px;width:6px;height:6px;background:#ccc;border-radius:50%;}
@@ -184,10 +190,10 @@ body.expanded-true.audio-true div.pad{bottom:30px}
 @media (max-width: 800px){a.btn{padding:0 12px;font-size:14px;line-height:36px}
 div.pad{top:0;left:0;right:0;bottom:0 !important;}
 div.pad div.list{width:auto;right:0;}
-div.pad div.list ul#notes li h2{font-size:17px;font-weight:normal;line-height:22px}
-div.pad div.list ul#notes li div.basic{padding:12px 15px;}
-div.pad div.list ul#notes li div.basic span.title{font-size:16px}
-div.pad div.list ul#notes li div.basic span.time{font-size:14px}
+div.pad div.list ul.notes li h2{font-size:17px;font-weight:normal;line-height:22px}
+div.pad div.list ul.notes li div.basic{padding:12px 15px;}
+div.pad div.list ul.notes li div.basic span.title{font-size:16px}
+div.pad div.list ul.notes li div.basic span.time{font-size:14px}
 div.pad div.list div.status a{font-size:19px;line-height:54px}
 div.pad div.editor{left:100%;right:auto;width:100%;}
 div.pad div.editor note div.text textarea{padding:18px;font-size:17px}

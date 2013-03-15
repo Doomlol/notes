@@ -646,6 +646,8 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				else
 					$scope.unauthorized();
 			});
+			// Observers
+			$scope.$watch('query', search.bind(this));
 		}
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
@@ -752,6 +754,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.toggleExpand = function() {
 			$scope.expanded = !$scope.expanded;
 		}
+
+		// Signing in
+
 		$scope.authorized = function(user) {
 			console.log('authorized');
 			$scope.signed_in = true;
@@ -772,6 +777,22 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			$scope.user = {};
 			storage.local();
 			$scope.refresh();
+		}
+
+		// Search
+
+		function search(new_query, old_query) {
+			$scope.results = [];
+			for (var i = 0; i < $scope.notes.length; i++) {
+				var regexp = new RegExp(new_query, 'i');
+				var note = $scope.notes[i];
+				if (note.getTitle().match(regexp)) {
+					$scope.results.push(note);
+				}
+				else if (note.getBody().match(regexp)) {
+					$scope.results.push(note);
+				}
+			}
 		}
 
 		$scope.initialize();
@@ -1354,6 +1375,14 @@ angular.module('components', [])
 			restrict: 'E',
 			controller: 'NoteCtrl',
 			templateUrl: '/partials/note'
+		}
+	})
+	// This should get the value of the "partials" attribute
+	// from attrs, and to templateUrl: /partials/{{that value}}
+	.directive('partial', function() {
+		return {
+			restrict: 'A',
+			templateUrl: '/partials/note-list-item'
 		}
 	})
 	.directive('attachment', function() {
