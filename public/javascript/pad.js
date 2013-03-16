@@ -687,6 +687,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		}
 		$scope.setCurrentNote = function(note) {
 			$scope.current_note = note;
+			$scope.scrollToCurrent();
 
 			// Now make sure the reference in $scope.notes matches this one
 			for (var i = 0; i < $scope.notes.length; i++) {
@@ -694,6 +695,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 					$scope.notes[i] = $scope.current_note;
 				}
 			}
+		}
+		$scope.scrollToCurrent = function() {
+			console.log('implement this scrollToCurrent function');
 		}
 		$scope.addNote = function() {
 			var note = storage.add({
@@ -750,7 +754,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				}
 				else if (prev) {
 					$scope.loadNote(notes[i].getId());
-					break;
+					return;
 				}
 			}
 			if (notes.length)
@@ -764,7 +768,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				}
 				else if (prev) {
 					$scope.loadNote(notes[i].getId());
-					break;
+					return;
 				}
 			}
 			if (notes.length)
@@ -863,6 +867,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				id: note_id,
 				replace: $scope.getNote(note_id),
 				success: function(note) {
+					// We may have selected another note in the meantime
+					if (!(note.getId() == $scope.getCurrentNote().getId()))
+						return;
 					$scope.setCurrentNote($scope.note);
 					$scope.watchChanges();
 					$scope.loaded = true;
