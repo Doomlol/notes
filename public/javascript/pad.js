@@ -841,6 +841,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.setPageView(true);
 		$scope.saved = true;
 		$scope.save_timeout = null;
+		$scope.loaded = false;
 
 		$element.find('.attachments').on('mousewheel', function(event) {
 			this.scrollLeft -= event.originalEvent.wheelDelta;
@@ -860,12 +861,17 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				success: function(note) {
 					$scope.setCurrentNote($scope.note);
 					$scope.watchChanges();
+					$scope.loaded = true;
 					$scope.$apply();
 				},
 				failure: function() {
 					$location.path('/notfound/' + $routeParams.note_id);
 					$scope.$apply();
 				}
+			});
+			$scope.setCurrentNote($scope.note);
+			$scope.$watch('loaded', function(loaded) {
+				$element.find('input, textarea').attr('disabled', !loaded);
 			});
 		}
 

@@ -400,6 +400,9 @@ div.pad
 					box-sizing border-box
 					transition background 0.25s ease-out
 
+					&[disabled]
+						color #aaa
+
 					&.droppable-hover
 						background #eff5fc
 
@@ -781,6 +784,9 @@ div.pad
 
 			&[type="text"]
 				padding 5px
+
+			&[disabled]
+				color #aaa
 
 	div.list > div.opts
 		div.search
