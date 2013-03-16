@@ -753,6 +753,8 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 					break;
 				}
 			}
+			if (notes.length)
+				$scope.firstNote();
 		}
 		$scope.prevNote = function() {
 			var notes = $scope.query ? $scope.results : $scope.notes;
@@ -765,6 +767,8 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 					break;
 				}
 			}
+			if (notes.length)
+				$scope.firstNote();
 		}
 		$scope.setPageView = function(val) {
 			if ($location.path() == '/') {
