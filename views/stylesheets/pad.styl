@@ -648,8 +648,12 @@ div.pad
 				-webkit-tap-highlight-color rgba(255,0,0,0.5)
 
 			h3
-				margin-top 40px
+				margin 40px 0 0
 				font-size 14px
+
+			p.sub
+				margin-top 0
+				color #888
 
 			form
 				margin 15px 0
@@ -785,7 +789,7 @@ div.pad
 			display -moz-box
 			display box
 			box-flex 1
-			margin-left 8px
+			margin 0 8px
 
 			a.clear
 				position absolute
@@ -804,6 +808,7 @@ div.pad
 
 			input[type="text"]
 				display block
+				margin 0
 				box-flex 1
 				padding-right 28px
 				height 18px
@@ -820,15 +825,22 @@ div.pad
 
 		a.gear
 			display block
-			margin-left 8px
-			width 16px
+			width 18px
 			height 100%
-			background url(/images/gear-black.png) center center no-repeat
-			background-size auto 16px
-			opacity 0.4
+			//background url(/images/gear-black.png) center center no-repeat
+			//background-size auto 16px
+			//background-color rgba(0,0,0,0.03)
+			background-image url(http://media.notes.fm/glyphicons-halflings.png)
+			background-position -358px -136px
+			background-repeat no-repeat
+			border-radius 3px
+			opacity 0.8
 
 			&:hover
-				opacity 0.6
+				background-color rgba(0,0,0,0.05)
+
+			&:active
+				background-color rgba(0,0,0,0.07)
 			
 
     

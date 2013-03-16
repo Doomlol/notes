@@ -94,7 +94,8 @@ div.pad div.editor div.page ::-webkit-input-placeholder,div.pad div.editor div.p
 div.pad div.editor div.page a{color:#4f99ce;text-decoration:none;border-bottom:1px solid #d5dee5;}
 div.pad div.editor div.page a:hover{border-bottom:1px solid #82909a}
 div.pad div.editor div.page h2{margin:0;padding:10px 0 6px;font-size:16px;line-height:30px;border-bottom:1px solid #eee;-webkit-tap-highlight-color:rgba(255,0,0,0.5)}
-div.pad div.editor div.page h3{margin-top:40px;font-size:14px}
+div.pad div.editor div.page h3{margin:40px 0 0;font-size:14px}
+div.pad div.editor div.page p.sub{margin-top:0;color:#888}
 div.pad div.editor div.page form{margin:15px 0}
 div.pad div.editor div.page del{color:#ccc}
 div.pad div.editor div.page ul.radioset{display:inline-block;margin:0 0 0 -3px;padding:0;list-style:none;}
@@ -120,13 +121,14 @@ div.pad div.editor div.page.login input{margin-right:10px}
 div.pad div.list > div.opts,div.pad note > div.opts{display:-webkit-box;display:-moz-box;display:box;padding:8px;width:100%;height:47px;background:#f6f6f6;border-bottom:1px solid #ddd;-moz-box-sizing:border-box;box-sizing:border-box;}
 div.pad div.list > div.opts input,div.pad note > div.opts input{font-family:inherit;}
 div.pad div.list > div.opts input[type="text"],div.pad note > div.opts input[type="text"]{padding:5px}
-div.pad div.list > div.opts div.search{position:relative;display:-webkit-box;display:-moz-box;display:box;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin-left:8px;}
+div.pad div.list > div.opts div.search{position:relative;display:-webkit-box;display:-moz-box;display:box;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0 8px;}
 div.pad div.list > div.opts div.search a.clear{position:absolute;top:7px;right:9px;width:16px;height:16px;border-radius:3px;background-color:rgba(0,0,0,0.1);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-repeat:no-repeat;background-position:-311px 1px;}
 div.pad div.list > div.opts div.search a.clear:hover{background-color:#09a8ef}
-div.pad div.list > div.opts div.search input[type="text"]{display:block;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding-right:28px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;outline:none}
+div.pad div.list > div.opts div.search input[type="text"]{display:block;margin:0;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding-right:28px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;outline:none}
 div.pad div.list > div.opts div.search.invalid input[type="text"]{border:1px solid #eabfbf;border-top:1px solid #de9c9c;background:#f5e1e1}
-div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:100%;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;-moz-background-size:auto 16px;background-size:auto 16px;opacity:.4;}
-div.pad div.list > div.opts a.gear:hover{opacity:.6}
+div.pad div.list > div.opts a.gear{display:block;width:18px;height:100%;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-position:-358px -136px;background-repeat:no-repeat;border-radius:3px;opacity:.8;}
+div.pad div.list > div.opts a.gear:hover{background-color:rgba(0,0,0,0.05)}
+div.pad div.list > div.opts a.gear:active{background-color:rgba(0,0,0,0.07)}
 div.pad note > div.opts{position:relative;}
 div.pad note > div.opts div.back{margin-right:8px;width:20px;height:20px;-webkit-transform:rotate(-45deg) translate(-2px,11px);-webkit-transform:rotate(-45deg) translate(-2px,11px);-moz-transform:rotate(-45deg) translate(-2px,11px);transform:rotate(-45deg) translate(-2px,11px);display:none;}
 div.pad note > div.opts div.back:before{display:block;content:'';width:20px;height:6px;background:#888}
