@@ -1364,6 +1364,19 @@ angular.module('components', [])
 			controller: 'AttachmentCtrl'
 		}
 	})
+	// Sort of copied from src of ngClick directive
+	.directive('esc', function($parse) {
+		return function(scope, element, attrs) {
+			var fn = $parse(attrs.esc);
+			element.bind('keydown', function(event) {
+				if (event.keyCode == 27) {
+					scope.$apply(function() {
+						fn(scope, {$event:event});
+					});
+				}
+			})
+		}
+	})
 	.directive('autoFocus', function() {
 		return function(scope, element, attrs) {
 			scope.el = $(element[0]);
