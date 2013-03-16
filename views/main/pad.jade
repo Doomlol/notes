@@ -16,7 +16,7 @@ html(lang="en", ng-app="NotesApp")
 				div.opts
 					a#new.btn(ng-click="addNote()") New
 					div.search(ng-class="search_invalid")
-						input(type="text", id="search", placeholder="Search regex", ng-model="query", esc="query=''")
+						input(type="text", id="search", placeholder="Search regex", ng-model="query", enter="firstNote()", esc="query=''", down="nextNote()", up="prevNote()")
 						a.clear(ng-show="query", ng-click="query=''")
 					a.gear(href="#/settings")
 

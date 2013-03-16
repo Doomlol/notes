@@ -632,6 +632,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		var queue = [];
 
 		$scope.notes = [];
+		$scope.results = [];
 		$scope.page_view = false;
 		$scope.expanded = false;
 		$scope.signed_in = false;
@@ -735,6 +736,35 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		}
 		$scope.getTotalNotes = function() {
 			return $scope.notes.length;
+		}
+		$scope.firstNote = function() {
+			var note = $scope.query ? $scope.results[0] : $scope.notes[0];
+			if (note)
+				$scope.loadNote(note.getId());
+		}
+		$scope.nextNote = function() {
+			var notes = $scope.query ? $scope.results : $scope.notes;
+			for (var i = 0, prev = false; i < notes.length; i++) {
+				if (!prev && notes[i].getId() == $scope.current_note.getId()) {
+					prev = true;
+				}
+				else if (prev) {
+					$scope.loadNote(notes[i].getId());
+					break;
+				}
+			}
+		}
+		$scope.prevNote = function() {
+			var notes = $scope.query ? $scope.results : $scope.notes;
+			for (var i = notes.length-1, prev = false; i >= 0; i--) {
+				if (!prev && notes[i].getId() == $scope.current_note.getId()) {
+					prev = true;
+				}
+				else if (prev) {
+					$scope.loadNote(notes[i].getId());
+					break;
+				}
+			}
 		}
 		$scope.setPageView = function(val) {
 			if ($location.path() == '/') {
@@ -1364,19 +1394,6 @@ angular.module('components', [])
 			controller: 'AttachmentCtrl'
 		}
 	})
-	// Sort of copied from src of ngClick directive
-	.directive('esc', function($parse) {
-		return function(scope, element, attrs) {
-			var fn = $parse(attrs.esc);
-			element.bind('keydown', function(event) {
-				if (event.keyCode == 27) {
-					scope.$apply(function() {
-						fn(scope, {$event:event});
-					});
-				}
-			})
-		}
-	})
 	.directive('autoFocus', function() {
 		return function(scope, element, attrs) {
 			scope.el = $(element[0]);
@@ -1389,7 +1406,7 @@ angular.module('components', [])
 					if (text_length)
 						unwatch_textchange();
 				}
-			})
+			});
 		}
 	})
 	.directive('droppable', function() {
@@ -1491,6 +1508,26 @@ angular.module('components', [])
 			filepicker.makeDropPane($(element), drop_pane_options);
 		}
 	});
+
+// Events for keys, like esc="do_something()"
+var key_directives = {enter: 13, esc: 27, up: 38, down: 40};
+angular.forEach(key_directives, function(val, key) {
+	angular.module('components')
+		.directive(key, function($parse) {
+			return function(scope, element, attrs) {
+				var fn = $parse(attrs[key]);
+				element.on('keydown', function(event) {
+					if (event.keyCode == val) {
+						event.preventDefault();
+						scope.$apply(function() {
+							fn(scope, {$event:event});
+						});
+					}
+				});
+			}
+		})
+});
+
 
 
 angular.module('NotesApp', ['controllers', 'components'])
