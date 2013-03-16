@@ -124,6 +124,7 @@ div.pad div.list > div.opts div.search{position:relative;display:-webkit-box;dis
 div.pad div.list > div.opts div.search a.clear{position:absolute;top:7px;right:9px;width:16px;height:16px;border-radius:3px;background-color:rgba(0,0,0,0.1);background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-repeat:no-repeat;background-position:-311px 1px;}
 div.pad div.list > div.opts div.search a.clear:hover{background-color:#09a8ef}
 div.pad div.list > div.opts div.search input[type="text"]{display:block;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding-right:28px;height:18px;line-height:18px;border:1px solid #e6e6e6;border-top:1px solid #cdcdcd;outline:none}
+div.pad div.list > div.opts div.search.invalid input[type="text"]{border:1px solid #eabfbf;border-top:1px solid #de9c9c;background:#f5e1e1}
 div.pad div.list > div.opts a.gear{display:block;margin-left:8px;width:16px;height:100%;background:url("/images/gear-black.png") center center no-repeat;-webkit-background-size:auto 16px;-moz-background-size:auto 16px;background-size:auto 16px;opacity:.4;}
 div.pad div.list > div.opts a.gear:hover{opacity:.6}
 div.pad note > div.opts{position:relative;}

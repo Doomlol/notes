@@ -784,7 +784,15 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		function search(new_query, old_query) {
 			$scope.results = [];
 			for (var i = 0; i < $scope.notes.length; i++) {
-				var regexp = new RegExp(new_query, 'i');
+				try {
+					var regexp = new RegExp(new_query, 'i');
+					$scope.search_invalid = null;
+				}
+				catch (e) {
+					$scope.search_invalid = 'invalid';
+					$scope.results = [];
+					break;
+				}
 				var note = $scope.notes[i];
 				if (note.getTitle().match(regexp)) {
 					$scope.results.push(note);
