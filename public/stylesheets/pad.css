@@ -44,13 +44,13 @@ div.pad div.list ul.notes li.audio h2,div.pad div.list ul.notes li.video h2{padd
 div.pad div.list ul.notes li.audio div.basic span.audio{display:block}
 div.pad div.list ul.notes li.video div.basic span.video{display:block}
 div.pad div.list ul.notes.label{opacity:1}
-div.pad div.list div.status{background:#f9f9f9;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));border-top:1px solid #ddd;}
+div.pad div.list div.status{background:#f9f9f9;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));border-top:1px solid #d6d6d6;}
 div.pad div.list div.status a{display:block;font-size:11px;line-height:27px;text-align:center;color:#527791;text-decoration:none;-webkit-transition-property:background,border-color;-moz-transition-property:background,border-color;transition-property:background,border-color;-webkit-transition-duration:.25s;-moz-transition-duration:.25s;transition-duration:.25s;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;transition-timing-function:ease-out;}
 div.pad div.list div.status a:hover{background:#e3eefb;border-color:#d2e5f9}
 div.pad div.editor{position:absolute;top:0;left:281px;right:0;bottom:0;}
 div.pad div.editor note{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;box-orient:vertical;top:0;left:0;right:0;bottom:0;}
 div.pad div.editor note div.text{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;}
-div.pad div.editor note div.text textarea{position:absolute;margin:0;padding:12px;width:100%;height:100%;font-family:inherit;font-size:13px;color:#555;border:none;outline:none;overflow-y:auto;resize:none;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background .25s ease-out;-moz-transition:background .25s ease-out;transition:background .25s ease-out;}
+div.pad div.editor note div.text textarea{position:absolute;margin:0;padding:12px;width:100%;height:100%;font-family:inherit;font-size:13px;color:#555;background:#fff;border:none;outline:none;overflow-y:auto;resize:none;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:background .25s ease-out;-moz-transition:background .25s ease-out;transition:background .25s ease-out;}
 div.pad div.editor note div.text textarea[disabled]{color:#aaa}
 div.pad div.editor note div.text textarea.droppable-hover{background:#eff5fc;}
 div.pad div.editor note div.text textarea.droppable-hover:after{position:absolute;top:40px;left:40px;width:100px;height:100px;background:rgba(0,0,0,0.75);border-radius:5px;content:"."}
@@ -80,10 +80,9 @@ div.pad div.editor note div.attachments div.upload div.bar div.progress{height:1
 div.pad div.editor note div.attachments.light{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#eee),to(#f9f9f9));border-top:1px solid #ccc;}
 div.pad div.editor note div.attachments.light::-webkit-scrollbar-track{background:#eee;border-top:1px solid #d6d6d6}
 div.pad div.editor note div.attachments.light::-webkit-scrollbar-thumb{background:#bbb}
-div.pad div.editor note div.attachments.light attachment{color:#555;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#f9f9f9),to(#e6e6e6));-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.5);box-shadow:0 1px 3px rgba(0,0,0,0.5);border-radius:3px;}
+div.pad div.editor note div.attachments.light attachment{text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#aaa),to(#888));border-radius:3px;}
 div.pad div.editor note div.attachments.light attachment div.hover_opts a.delete{border-radius:0 3px}
 div.pad div.editor note div.attachments.light attachment div.controls{border-radius:3px;}
-div.pad div.editor note div.attachments.light attachment div.controls p span.icon{background-image:url("http://media.notes.fm/glyphicons-halflings.png")}
 div.pad div.editor note div.attachments.light attachment.playing div.controls{background:rgba(4,148,221,0.35)}
 div.pad div.editor note div.attachments.light attachment:hover div.controls{background:rgba(4,148,221,0.25)}
 div.pad div.editor div.page{position:absolute;padding:0 20px 20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
