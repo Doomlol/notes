@@ -24,8 +24,9 @@ div.pad div.list ul.notes li h2{margin:0 40px 0 0;font-size:12px;font-weight:bol
 div.pad div.list ul.notes li h3{margin:0 0 2px;font-size:11px;font-weight:normal;color:#888}
 div.pad div.list ul.notes li div.basic{position:relative;padding:10px 15px;background:#f9f9f9;cursor:pointer;}
 div.pad div.list ul.notes li div.basic span{display:block;}
+div.pad div.list ul.notes li div.basic span.attachments{position:absolute;top:10px;right:15px;font-size:11px;color:#aaa}
 div.pad div.list ul.notes li div.basic span.time{font-size:11px;color:#aaa}
-div.pad div.list ul.notes li div.basic span.delete{position:absolute;top:0;right:0;bottom:0;padding:0 10px;line-height:50px;display:none;}
+div.pad div.list ul.notes li div.basic span.delete{position:absolute;right:15px;bottom:10px;display:none;}
 div.pad div.list ul.notes li div.basic span.delete a{font-size:10px;text-decoration:none;color:#aaa;}
 div.pad div.list ul.notes li div.basic span.delete a:hover{text-decoration:underline}
 div.pad div.list ul.notes li div.basic span.audio,div.pad div.list ul.notes li div.basic span.video{position:absolute;display:none;top:10px;left:10px;width:13px;height:15px;background-image:url("http://media.notes.fm/glyphicons-halflings.png");background-position:0 0;background-repeat:no-repeat;opacity:.5}

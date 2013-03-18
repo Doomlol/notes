@@ -61,6 +61,9 @@ function Note(value) {
 	this.getAttachments = function() {
 		return this.value.attachments || {};
 	};
+	this.getAttachmentsLength = function() {
+		return Object.keys(this.getAttachments()).length;
+	};
 	this.getAttachmentKey = function(attachment) {
 		if (!this.value.attachments)
 			return null;
@@ -685,6 +688,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.getCurrentNote = function() {
 			return $scope.current_note;
 		}
+		// Why does this get called twice on a note load?
 		$scope.setCurrentNote = function(note) {
 			$scope.current_note = note;
 			$scope.scrollToCurrent();
