@@ -700,8 +700,26 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				}
 			}
 		}
+		// This is prob called multiple times per note load... it also appears
+		// to be called before any notes are in the DOM (thus that return there); why?
 		$scope.scrollToCurrent = function() {
-			console.log('implement this scrollToCurrent function');
+			// Get the visible notes ul (ul.notes for results also exists & may be hidden)
+			var list_el = $('ul.notes:not([style*="none"])');
+			var note_el = list_el.find('li[rel="note_' + $scope.current_note.getId() + '"]');
+			if (!note_el || !list_el || !note_el.length || !list_el.length)
+				return;
+			var note_position = note_el.position().top;
+			var note_height = note_el.height();
+			var list_offset = list_el.scrollTop();
+			var list_height = list_el.height();
+			if (note_position + note_height > list_height) {
+				var top = list_el.scrollTop() - (list_height - (note_position + note_height));
+				list_el.scrollTop(top);
+			}
+			else if (note_position < 0) {
+				var top = list_el.scrollTop() + note_position;
+				list_el.scrollTop(top);
+			}
 		}
 		$scope.addNote = function() {
 			var note = storage.add({

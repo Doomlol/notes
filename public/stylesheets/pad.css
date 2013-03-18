@@ -17,7 +17,7 @@ div.pad div.list{position:absolute;display:-webkit-box;display:-moz-box;display:
 div.pad div.list div.no_notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;padding:40px 20px;text-align:center;color:#bbb;background:#fff}
 div.pad div.list p.label{margin:0;padding:0 15px;font-family:verdana,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;line-height:24px;text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#0ab4f5),to(#049ee7));}
 div.pad div.list p.label.red{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#dd0915),to(#d00407))}
-div.pad div.list ul.notes{-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
+div.pad div.list ul.notes{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin:0;padding:0;list-style:none;overflow-y:auto;overflow-x:hidden;}
 div.pad div.list ul.notes li{position:relative;border-bottom:1px solid #e8e8e8;}
 div.pad div.list ul.notes li div.highlight{position:absolute;top:0;left:0;bottom:0;width:2px;z-index:1}
 div.pad div.list ul.notes li h2{margin:0 40px 0 0;font-size:12px;font-weight:bold;line-height:17px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
