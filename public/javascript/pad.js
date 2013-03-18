@@ -53,7 +53,7 @@ function Note(value) {
 		return this.value.title || '';
 	};
 	this.getBody = function() {
-		return this.value.body;
+		return this.value.body || '';
 	};
 	this.getTime = function() {
 		return Utils.formatDate(this.value.updated_at);

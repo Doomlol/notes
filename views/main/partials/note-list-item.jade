@@ -3,7 +3,7 @@ div.basic(ng-click="loadNote(note.getId())")
 	span.audio
 	span.video
 	h2 {{note.getTitle() || 'Untitled'}}
-	span.attachments(ng-show="note.getAttachmentsLength()") {{note.getAttachmentsLength()}}
+	span.attachments {{note.getAttachmentsLength() || ''}}
 	span.time {{note.getTime()}}
 	span.delete: a(ng-click="deleteNote(note.getId())") delete
 
