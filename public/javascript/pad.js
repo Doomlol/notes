@@ -641,6 +641,8 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.signed_in = false;
 		$scope.user = {};
 
+		window.xx = $scope;
+
 		$scope.initialize = function() {
 			auth_client = new FirebaseAuthClient(base_ref, function(error, user) {
 				if (error)

@@ -17,14 +17,14 @@ html(lang="en", ng-app="NotesApp")
 					a#new.btn(ng-click="addNote()") New
 					div.search(ng-class="search_invalid")
 						input(type="text", id="search", placeholder="Search regex", ng-model="query", enter="firstNote()", esc="query=''", down="nextNote()", up="prevNote()")
-						a.clear(ng-show="query", ng-click="query=''")
+						a.clear(ng-show="!!query", ng-click="query=''")
 					a.gear(href="#/settings")
 
 				p.label(ng-show="query && results.length") Results
 				p.label.red(ng-show="query && !results.length && !search_invalid") No results
 				p.label.red(ng-show="query && !results.length && search_invalid") Invalid regex
 
-				ul.notes(ng-show="query")
+				ul.notes(ng-show="!!query")
 					li(ng-repeat="note in results", ng-include="'/partials/note-list-item'", ng-class="{selected: note.getId()==current_note.getId(), audio: note.audio}", rel="note_{{note.getId()}}")
 				
 				ul.notes(ng-show="!query && notes.length")
