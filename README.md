@@ -1,3 +1,3 @@
 # Notes.fm
 
-A site for simple note-taking
+A site for simple note-taking.
