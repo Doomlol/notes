@@ -74,10 +74,11 @@ div.pad div.editor note div.attachments attachment.playing div.controls{backgrou
 div.pad div.editor note div.attachments attachment:last-child{margin-right:5px}
 div.pad div.editor note div.attachments attachment:hover div.hover_opts{display:block}
 div.pad div.editor note div.attachments attachment:hover div.controls{background:rgba(4,148,221,0.6)}
-div.pad div.editor note div.attachments div.upload{position:relative;float:left;margin:5px 0 0 5px;width:100px;height:100px;text-align:center;color:#eee;background:rgba(255,255,255,0.1);}
-div.pad div.editor note div.attachments div.upload h3{margin:35px 0 3px;font-size:11px;font-weight:normal}
-div.pad div.editor note div.attachments div.upload div.bar{margin:0 auto;width:80%;height:4px;background:rgba(255,255,255,0.25);}
-div.pad div.editor note div.attachments div.upload div.bar div.progress{height:100%;background:#a2aeb7}
+div.pad div.editor note div.attachments div.upload{position:relative;display:inline-block;margin:5px 0 0 5px;width:100px;height:100px;text-align:center;color:#eee;background:rgba(255,255,255,0.5);-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 1px rgba(0,0,0,0.25);box-shadow:0 1px 1px rgba(0,0,0,0.25);}
+div.pad div.editor note div.attachments div.upload div.absolute{position:absolute;top:0;left:0;right:0;bottom:0;}
+div.pad div.editor note div.attachments div.upload div.absolute h3{margin:35px 0 3px;font-size:11px;font-weight:normal}
+div.pad div.editor note div.attachments div.upload div.absolute div.bar{margin:0 auto;width:80%;height:4px;background:rgba(255,255,255,0.25);}
+div.pad div.editor note div.attachments div.upload div.absolute div.bar div.progress{height:100%;background:#a2aeb7}
 div.pad div.editor note div.attachments.light{background:-webkit-gradient(linear,0% 0%,0% 100%,from(#eee),to(#f9f9f9));border-top:1px solid #ccc;}
 div.pad div.editor note div.attachments.light::-webkit-scrollbar-track{background:#eee;border-top:1px solid #d6d6d6}
 div.pad div.editor note div.attachments.light::-webkit-scrollbar-thumb{background:#bbb}
@@ -86,6 +87,9 @@ div.pad div.editor note div.attachments.light attachment div.hover_opts a.delete
 div.pad div.editor note div.attachments.light attachment div.controls{border-radius:3px;}
 div.pad div.editor note div.attachments.light attachment.playing div.controls{background:rgba(4,148,221,0.35)}
 div.pad div.editor note div.attachments.light attachment:hover div.controls{background:rgba(4,148,221,0.25)}
+div.pad div.editor note div.attachments.light div.upload{text-shadow:0 1px 1px rgba(0,0,0,0.25);color:#fff;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#aaa),to(#888));border-radius:3px;}
+div.pad div.editor note div.attachments.light div.upload div.absolute div.bar{background:#bbb;border-right:1px solid #999;-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.25);box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+div.pad div.editor note div.attachments.light div.upload div.absolute div.bar div.progress{background:#fff}
 div.pad div.editor div.page{position:absolute;padding:0 20px 20px;top:0;left:0;right:0;bottom:0;background:#fff;overflow-y:auto;}
 div.pad div.editor div.page input,div.pad div.editor div.page textarea,div.pad div.editor div.page select{margin:0;padding:0 6px;font-size:13px;line-height:24px;color:#555;border:1px solid #ddd;box-sizing:border-box;outline:none}
 div.pad div.editor div.page input{padding:4px 6px;line-height:16px;}

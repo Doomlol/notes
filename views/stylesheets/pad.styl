@@ -539,28 +539,36 @@ div.pad
 
 				div.upload
 					position relative
-					float left
+					display inline-block
 					margin 5px 0 0 5px
 					width 100px
 					height 100px
 					text-align center
 					color #eee
-					background rgba(255,255,255,0.1)
+					background rgba(255,255,255,0.5)
+					box-shadow 0 1px 1px rgba(0,0,0,0.25)
 
-					h3
-						margin 35px 0 3px
-						font-size 11px
-						font-weight normal
+					div.absolute
+						position absolute
+						top 0 
+						left 0
+						right 0
+						bottom 0
 
-					div.bar
-						margin 0 auto
-						width 80%
-						height 4px
-						background rgba(255,255,255,0.25)
+						h3
+							margin 35px 0 3px
+							font-size 11px
+							font-weight normal
 
-						div.progress
-							height 100%
-							background #A2AEB7
+						div.bar
+							margin 0 auto
+							width 80%
+							height 4px
+							background rgba(255,255,255,0.25)
+
+							div.progress
+								height 100%
+								background #A2AEB7
 
 				&.light
 					background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#f9f9f9))
@@ -601,6 +609,20 @@ div.pad
 							div.controls
 								background rgba(4,148,221,0.25)
 
+					div.upload
+						text-shadow 0 1px 1px rgba(0,0,0,0.25)
+						color #fff
+						background -webkit-gradient(linear,0% 0%,0% 100%,from(#aaa),to(#888))
+						border-radius 3px
+
+						div.absolute
+							div.bar
+								background #bbb
+								border-right 1px solid #999
+								box-shadow 0 1px 3px rgba(0,0,0,0.25)
+
+								div.progress
+									background #fff
 
 		div.page
 			position absolute

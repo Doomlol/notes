@@ -8,7 +8,14 @@ div.text
 
 div.attachments.light.clearfix(ng-show="showAttachments()")
 
-	attachment(ng-repeat="attachment in note.getAttachments()", class="{{getFileType()}}", ng-class="{playing: data.playing}", ng-click="preview()", title="{{attachment.filename}}")
+	attachment(
+			ng-repeat="attachment in note.getAttachments()",
+			ng-class="{playing: data.playing}",
+			ng-click="preview()",
+			ng-style="{backgroundImage: src_url}",
+			class="{{getFileType()}}",
+			title="{{attachment.filename}}"
+		)
 		
 		div.controls
 			p
@@ -19,6 +26,7 @@ div.attachments.light.clearfix(ng-show="showAttachments()")
 			a.delete(ng-click="remove()", alt="Delete")
 	
 	div.upload(ng-repeat="upload in note.uploads")
-		h3 {{upload.count}} files
-		div.bar
-			div.progress(ng-style="{width: upload.progress + '%'}")
+		div.absolute
+			h3 {{upload.count}} files
+			div.bar
+				div.progress(ng-style="{width: upload.progress + '%'}")

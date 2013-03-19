@@ -687,13 +687,13 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			else
 				$location.path('');
 		}
-		$scope.getCurrentNote = function() {
-			return $scope.current_note;
-		}
 		// Why does this get called twice on a note load?
 		$scope.setCurrentNote = function(note) {
 			$scope.current_note = note;
 			$scope.scrollToCurrent();
+
+			if (!$scope.currentNoteLoaded())
+				return;
 
 			// Now make sure the reference in $scope.notes matches this one
 			for (var i = 0; i < $scope.notes.length; i++) {
@@ -702,10 +702,18 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				}
 			}
 		}
+		$scope.getCurrentNote = function() {
+			return $scope.current_note;
+		}
+		$scope.currentNoteLoaded = function() {
+			return !!($scope.current_note && $scope.current_note.value);
+		}
 		// This is prob called multiple times per note load... it also appears
 		// to be called before any notes are in the DOM (thus that return there); why?
 		$scope.scrollToCurrent = function() {
 			// Get the visible notes ul (ul.notes for results also exists & may be hidden)
+			if (!$scope.currentNoteLoaded())
+				return;
 			var list_el = $('ul.notes:not([style*="none"])');
 			var note_el = list_el.find('li[rel="note_' + $scope.current_note.getId() + '"]');
 			if (!note_el || !list_el || !note_el.length || !list_el.length)
@@ -980,24 +988,16 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 
 		// Observers for AudioManager and VideoManager updates
 		function update_audio() {
-			if (AudioManager.data.attachment && $scope.attachment.key == AudioManager.data.attachment.key) {
+			if (AudioManager.data.attachment && $scope.attachment.key == AudioManager.data.attachment.key)
 				$scope.data = AudioManager.data;
-				//$scope.setMediaData(AudioManager.data);
-			}
-			else {
+			else
 				$scope.data = null;
-				//$scope.setMediaData(null);
-			}
 		}
 		function update_video() {
 
 		}
-		if (Utils.isFileType('audio', $scope.attachment)) {
-			$scope.$on('audio-change', update_audio.bind(this));
-		}
-		if (Utils.isFileType('video', $scope.attachment)) {
-			$scope.$on('video-change', update_video.bind(this));
-		}
+		if (Utils.isFileType('audio', $scope.attachment)) $scope.$on('audio-change', update_audio.bind(this));
+		if (Utils.isFileType('video', $scope.attachment)) $scope.$on('video-change', update_video.bind(this));
 
 		$scope.playText = function() {
 			if ($scope.data && $scope.data.playing)
@@ -1009,11 +1009,8 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			return Utils.getFileType($scope.attachment);
 		}
 		$scope.updateStyle = function() {
-			if (Utils.isFileType('image', $scope.attachment)) {
-				var src_url = 'url(' + $scope.getImageSrc() + ')';
-				$element.css({'background-image': src_url});
-			}
-			console.log('called updateStyle');
+			if (Utils.isFileType('image', $scope.attachment))
+				$scope.src_url = 'url(' + $scope.getImageSrc() + ')';
 		}
 		$scope.getImageSrc = function() {
 			if (Utils.isFileType('image', $scope.attachment)) {
