@@ -606,10 +606,9 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 	.service('settings', function($rootScope, localStorageService) {
 
 		var storage_prefix = 'setting-';
-		var settings = ['type', 'startup', 'fontfamily', 'theme', 'expanded'];
+		var recognized_settings = ['type', 'startup', 'fontfamily', 'theme', 'expanded'];
 
-		// Putting something on $rootScope probably isn't the right way to do this
-		$rootScope.settings = {};
+		this.settings = {};
 
 		function settingsChange(setting, new_value, old_value) {
 			if (new_value == old_value)
@@ -619,10 +618,10 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 		function val(setting) {
 			return this.settings[setting];
 		}
-		angular.forEach(settings, function(s) {
-			$rootScope.settings[s] = localStorageService.get(s, {prefix: storage_prefix});
-			$rootScope.$watch(val.bind($rootScope,s), settingsChange.bind(this,s));
-		});
+		angular.forEach(recognized_settings, function(s) {
+			this.settings[s] = localStorageService.get(s, {prefix: storage_prefix});
+			$rootScope.$watch(val.bind(this,s), settingsChange.bind(this,s));
+		}.bind(this));
 	});
 
 // Controllers
@@ -641,8 +640,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.expanded = false;
 		$scope.signed_in = false;
 		$scope.user = {};
-
-		window.xx = $scope;
+		$scope.settings = settings.settings;
 
 		$scope.initialize = function() {
 			auth_client = new FirebaseAuthClient(base_ref, function(error, user) {
@@ -839,6 +837,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			// setting first, doesn't just set to sync automatically
 			storage.sync();
 			storage.setUser($scope.user.id);
+			$scope.enqueue($scope.postAuthorize);
 			$scope.refresh();
 		}
 		$scope.authError = function(error) {
@@ -850,7 +849,30 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			$scope.signed_in = false;
 			$scope.user = {};
 			storage.local();
+			$scope.enqueue($scope.postAuthorize);
 			$scope.refresh();
+		}
+		$scope.postAuthorize = function() {
+			if ($location.path() != '/')
+				return;
+			switch($scope.settings.startup) {
+				case undefined:
+				case 1:
+					console.log('welcome page...');
+					$scope.menu();
+					break;
+				case 2:
+					console.log('first note...');
+					$scope.firstNote();
+					break;
+				case 3:
+					console.log('new note...');
+					$scope.addNote();
+					break;
+				case 4:
+					console.log('last viewed note... (not implemented)');
+					break;
+			}
 		}
 
 		// Search

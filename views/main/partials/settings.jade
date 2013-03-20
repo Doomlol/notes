@@ -17,7 +17,7 @@ div.page
 				input(type="radio", ng-model="settings.type", name="type", value="2")
 				| Use synced settings
 
-	h3 On startup, load...
+	h3 On startup, load... {{settings.startup || 'Nothing!'}}
 	p.sub: em Unimplemented
 
 	// Do this with ng-repeat somehow
