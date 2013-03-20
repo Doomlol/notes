@@ -1247,7 +1247,6 @@ angular.module('AudioManagerModule', [])
 			loadstart: function() {
 				this.data.meta_loaded = false;
 				this.updateBuffers();
-				$rootScope.$broadcast('audio-play');
 				this.broadcastChange($rootScope);
 			},
 			loadedmetadata: function() {
@@ -1314,6 +1313,7 @@ angular.module('AudioManagerModule', [])
 			if (attachment)
 				this.data.attachment = attachment;
 			audio.play();
+			$rootScope.$broadcast('audio-play');
 		}
 		this.pause = function() {
 			audio.pause();
