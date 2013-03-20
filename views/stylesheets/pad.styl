@@ -1054,7 +1054,6 @@ div.video-player
 
 				&.play
 					background-position -259px -68px
-
 				&.pause
 					display none
 					background-position -282px -68px
@@ -1144,9 +1143,11 @@ div.audio-player
 	padding 0 15px
 	left 0
 	right 0
-	bottom 0
+	bottom -30px
 	height 30px
 	background #333
+	transition-property top, left, right, bottom, opacity
+	transition-duration 0.5s
 
 	div.info
 		width 280px
@@ -1168,16 +1169,15 @@ div.audio-player
 
 		&.back
 			background-position -211px -68px
-
 		&.play
 			background-position -259px -68px
-
 		&.pause
 			display none
 			background-position -282px -68px
-
 		&.forward
 			background-position -355px -68px
+		&.hide
+			background-position -308px -116px
 
 		&:hover
 			opacity 1.0
@@ -1227,7 +1227,7 @@ div.audio-player
 				display block
 
 	div.time
-		padding-left 25px
+		padding 0 5px 0 25px
 		font-size 11px
 		line-height 30px
 		text-align right
@@ -1253,18 +1253,20 @@ div.audio-player
 
 body
 
-	&.audio-true
+	&.audio
 		div.pad
 			bottom 45px
+		div.audio-player
+			bottom 0
 
-	&.expanded-true
+	&.expanded
 		div.pad
 			top 0
 			left 0
 			right 0
 			bottom 0
 
-		&.audio-true
+		&.audio
 			div.pad
 				bottom 30px
 
@@ -1374,8 +1376,7 @@ body
 	div.audio-player
 		display none
 
-	body.view-note,
-	body.view-note-true
+	body.page_view
 		div.pad
 			div.list,
 			div.editor

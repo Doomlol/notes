@@ -655,6 +655,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			// Observers
 			$scope.$watch('query', search.bind(this));
 		}
+		$scope.set = function(key, value) {
+			$scope[key] = value;
+		}
 		// In the future make it so that getAll accepts a param of 'fields', which is an array,
 		// and specifies what properties of each item you want.  this way you can specify id, title,
 		// and updated_at, and not get the body for every single note
@@ -993,9 +996,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			else
 				$scope.data = null;
 		}
-		function update_video() {
-
-		}
+		function update_video() {}
 		if (Utils.isFileType('audio', $scope.attachment)) $scope.$on('audio-change', update_audio.bind(this));
 		if (Utils.isFileType('video', $scope.attachment)) $scope.$on('video-change', update_video.bind(this));
 
@@ -1144,6 +1145,11 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.pause = function() {
 			AudioManager.pause();
 		}
+		$scope.hide = function() {
+			AudioManager.hide();
+		}
+		$scope.$on('audio-play', function() { $scope.set('show_audio', true); });
+		$scope.$on('audio-hide', function() { $scope.set('show_audio', false); });
 	})
 
 	// For the inline video element and surrounding DOM - *not* the attachment element
@@ -1183,6 +1189,115 @@ angular.module('AudioManagerModule', [])
 		this.show = function(src) {
 			this.data.src = src;
 			this.data.show = true;
+		}
+	})
+	.service('AudioManager', function($rootScope) {
+		var audio = document.createElement('audio');
+		var track_click = $('.audio-player .track-click')[0];
+		this.data = {
+			playing: false,
+			src: null,
+			total_time: '0:00',
+			current_time: '0:00',
+			meta_loaded: false,
+			loaded: 0,
+			progress: 0,
+			buffers: []
+		};
+
+		var track_click_handlers = {
+			mousemove: function(event) {
+				var left = event.pageX - $(track_click).offset().left;
+				$(track_click).find('.pos').css({left: left + 'px'});
+			},
+			click: function(event) {
+				var left = event.pageX - $(track_click).offset().left;
+				var seconds = left / $(track_click).width() * audio.duration;
+				audio.currentTime = seconds;
+			}
+		};
+		for (var handler in track_click_handlers) {
+			$(track_click).on(handler, track_click_handlers[handler].bind(this));
+		}
+
+		var audio_handlers = {
+			loadstart: function() {
+				this.data.meta_loaded = false;
+				this.updateBuffers();
+				$rootScope.$broadcast('audio-play');
+				this.broadcastChange($rootScope);
+			},
+			loadedmetadata: function() {
+				this.data.meta_loaded = true;
+				this.data.total_time = Utils.formatDuration(audio.duration);
+				this.broadcastChange($rootScope);
+			},
+			progress: function() {
+				if (!this.data.meta_loaded)
+					return;
+				this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
+				this.updateBuffers();
+				this.broadcastChange($rootScope);
+			},
+			timeupdate: function() {
+				this.data.progress = audio.currentTime / audio.duration * 100;
+				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
+				this.broadcastChange($rootScope);
+			},
+			play: function() {
+				this.checkPause();
+				this.broadcastChange($rootScope);
+			},
+			pause: function() {
+				this.checkPause();
+				this.broadcastChange($rootScope);
+			}
+		};
+		for (var handler in audio_handlers) {
+			$(audio).on(handler, audio_handlers[handler].bind(this));
+		}
+
+		this.broadcastChange = function(scope) {
+			scope.$broadcast('audio-change');
+			scope.$apply();
+		}
+		this.updateBuffers = function() {
+			this.data.buffers = [];
+			for (var i = 0; i < audio.buffered.length; i++) {
+				var left = audio.buffered.start(i) / audio.duration * 100;
+				var width = (audio.buffered.end(i) - audio.buffered.start(i)) / audio.duration * 100;
+				this.data.buffers.push({left: left+'%', width: width+'%'});
+			}
+		}
+		this.checkPause = function() {
+			this.data.playing = !audio.paused;
+			if (this.data.note)
+				this.data.note.audio = this.data.playing;
+		}
+		this.set = function(src) {
+			if (audio.src != src || this.data.src != src) {
+				audio.src = src;
+				this.data.src = src;
+				this.checkPause();
+			}
+		}
+		this.play = function(src, note, attachment) {
+			if (src) {
+				src = encodeURI(src);
+				this.set(src);
+			}
+			if (note)
+				this.data.note = note;
+			if (attachment)
+				this.data.attachment = attachment;
+			audio.play();
+		}
+		this.pause = function() {
+			audio.pause();
+		}
+		this.hide = function() {
+			this.pause();
+			$rootScope.$broadcast('audio-hide');
 		}
 	})
 	.service('VideoManager', function($rootScope) {
@@ -1298,111 +1413,6 @@ angular.module('AudioManagerModule', [])
 			this.data.show = false;
 		}
 	})
-	.service('AudioManager', function($rootScope) {
-		var audio = document.createElement('audio');
-		var track_click = $('.audio-player .track-click')[0];
-		this.data = {
-			playing: false,
-			src: null,
-			total_time: '0:00',
-			current_time: '0:00',
-			meta_loaded: false,
-			loaded: 0,
-			progress: 0,
-			buffers: []
-		};
-
-		var track_click_handlers = {
-			mousemove: function(event) {
-				var left = event.pageX - $(track_click).offset().left;
-				$(track_click).find('.pos').css({left: left + 'px'});
-			},
-			click: function(event) {
-				var left = event.pageX - $(track_click).offset().left;
-				var seconds = left / $(track_click).width() * audio.duration;
-				audio.currentTime = seconds;
-			}
-		};
-		for (var handler in track_click_handlers) {
-			$(track_click).on(handler, track_click_handlers[handler].bind(this));
-		}
-
-		var audio_handlers = {
-			loadstart: function() {
-				this.data.meta_loaded = false;
-				this.updateBuffers();
-				this.broadcastChange($rootScope);
-			},
-			loadedmetadata: function() {
-				this.data.meta_loaded = true;
-				this.data.total_time = Utils.formatDuration(audio.duration);
-				this.broadcastChange($rootScope);
-			},
-			progress: function() {
-				if (!this.data.meta_loaded)
-					return;
-				this.data.loaded = Math.round((audio.buffered.end(audio.buffered.length-1) - audio.buffered.start(0)) / audio.duration * 100);
-				this.updateBuffers();
-				this.broadcastChange($rootScope);
-			},
-			timeupdate: function() {
-				this.data.progress = audio.currentTime / audio.duration * 100;
-				this.data.current_time = Utils.formatDurationProgress(audio.duration, audio.currentTime);
-				this.broadcastChange($rootScope);
-			},
-			play: function() {
-				this.checkPause();
-				this.broadcastChange($rootScope);
-			},
-			pause: function() {
-				this.checkPause();
-				this.broadcastChange($rootScope);
-			}
-		};
-		for (var handler in audio_handlers) {
-			$(audio).on(handler, audio_handlers[handler].bind(this));
-		}
-
-		this.broadcastChange = function(scope) {
-			scope.$apply(function() {
-				scope.$broadcast('audio-change');
-			});
-		}
-		this.updateBuffers = function() {
-			this.data.buffers = [];
-			for (var i = 0; i < audio.buffered.length; i++) {
-				var left = audio.buffered.start(i) / audio.duration * 100;
-				var width = (audio.buffered.end(i) - audio.buffered.start(i)) / audio.duration * 100;
-				this.data.buffers.push({left: left+'%', width: width+'%'});
-			}
-		}
-		this.checkPause = function() {
-			this.data.playing = !audio.paused;
-			if (this.data.note)
-				this.data.note.audio = this.data.playing;
-		}
-		this.set = function(src) {
-			if (audio.src != src || this.data.src != src) {
-				audio.src = src;
-				this.data.src = src;
-				this.checkPause();
-			}
-		}
-		this.play = function(src, note, attachment) {
-			if (src) {
-				src = encodeURI(src);
-				this.set(src);
-			}
-			if (note)
-				this.data.note = note;
-			if (attachment)
-				this.data.attachment = attachment;
-			audio.play();
-		}
-		this.pause = function() {
-			audio.pause();
-		}
-	});
 
 
 // The things inside this could be chained to the 'NotesApp' module contents,

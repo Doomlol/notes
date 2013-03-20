@@ -172,13 +172,14 @@ div.video-player.playing-true div.inner div.icon.play{display:none}
 div.video-player.playing-true div.inner div.controls a.control.play{display:none}
 div.video-player.playing-true div.inner div.controls a.control.pause{display:block}
 div.video-player.playing-true div.inner div.controls div.track-click div.track div.handle{background:#4cb7fd}
-div.audio-player{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;box-orient:horizontal;padding:0 15px;left:0;right:0;bottom:0;height:30px;background:#333;}
+div.audio-player{position:absolute;display:-webkit-box;display:-moz-box;display:box;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;box-orient:horizontal;padding:0 15px;left:0;right:0;bottom:-30px;height:30px;background:#333;-webkit-transition-property:top,left,right,bottom,opacity;-moz-transition-property:top,left,right,bottom,opacity;transition-property:top,left,right,bottom,opacity;-webkit-transition-duration:.5s;-moz-transition-duration:.5s;transition-duration:.5s;}
 div.audio-player div.info{width:280px;font-size:11px;line-height:30px;text-align:center;color:rgba(255,255,255,0.66)}
 div.audio-player a.control{display:block;margin:4px 3px 2px;padding:4px;width:16px;height:16px;opacity:.75;background-image:url("http://media.notes.fm/glyphicons-halflings-white.png");background-repeat:no-repeat;}
 div.audio-player a.control.back{background-position:-211px -68px}
 div.audio-player a.control.play{background-position:-259px -68px}
 div.audio-player a.control.pause{display:none;background-position:-282px -68px}
 div.audio-player a.control.forward{background-position:-355px -68px}
+div.audio-player a.control.hide{background-position:-308px -116px}
 div.audio-player a.control:hover{opacity:1}
 div.audio-player div.track-click{position:relative;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;margin-left:15px;padding:13px 0;cursor:pointer;}
 div.audio-player div.track-click div.track{position:relative;height:4px;background:rgba(255,255,255,0.2);}
@@ -186,13 +187,14 @@ div.audio-player div.track-click div.track div.loaded{position:absolute;top:0;le
 div.audio-player div.track-click div.track div.handle{position:absolute;top:-4px;left:0;margin:0 -6px;width:12px;height:12px;background:#ccc;border-radius:50%;-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.75);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.75);box-shadow:0 1px 5px rgba(0,0,0,0.75)}
 div.audio-player div.track-click div.pos{position:absolute;display:none;width:1px;top:7px;left:0;bottom:7px;background:rgba(255,255,255,0.5)}
 div.audio-player div.track-click:hover div.pos{display:block}
-div.audio-player div.time{padding-left:25px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
+div.audio-player div.time{padding:0 5px 0 25px;font-size:11px;line-height:30px;text-align:right;color:rgba(255,255,255,0.66)}
 div.audio-player.playing a.control.play,div.audio-player.playing-true a.control.play{display:none}
 div.audio-player.playing a.control.pause,div.audio-player.playing-true a.control.pause{display:block}
 div.audio-player.playing div.track-click div.track div.handle,div.audio-player.playing-true div.track-click div.track div.handle{background:#7fccfd}
-body.audio-true div.pad{bottom:45px}
-body.expanded-true div.pad{top:0;left:0;right:0;bottom:0}
-body.expanded-true.audio-true div.pad{bottom:30px}
+body.audio div.pad{bottom:45px}
+body.audio div.audio-player{bottom:0}
+body.expanded div.pad{top:0;left:0;right:0;bottom:0}
+body.expanded.audio div.pad{bottom:30px}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:#eee}
 ::-webkit-scrollbar-thumb{background:#ccc}
@@ -215,5 +217,5 @@ div.pad note > div.opts input[type="text"]{padding-right:28px}
 div.pad note > div.opts div.save_status{top:23px;right:20px;width:8px;height:8px}
 div.image-preview,div.video-player{padding:25px}
 div.audio-player{display:none}
-body.view-note div.pad div.list,body.view-note-true div.pad div.list,body.view-note div.pad div.editor,body.view-note-true div.pad div.editor{-webkit-transform:translateX(-100%);-moz-transform:translateX(-100%);transform:translateX(-100%)}
+body.page_view div.pad div.list,body.page_view div.pad div.editor{-webkit-transform:translateX(-100%);-moz-transform:translateX(-100%);transform:translateX(-100%)}
 }
