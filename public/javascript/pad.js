@@ -606,8 +606,9 @@ angular.module('NotesHelperModule', ['LocalStorageModule', 'IndexedDBModule', 'F
 	.service('settings', function($rootScope, localStorageService) {
 
 		var storage_prefix = 'setting-';
-		var settings = ['type', 'startup', 'fontfamily', 'theme'];
+		var settings = ['type', 'startup', 'fontfamily', 'theme', 'expanded'];
 
+		// Putting something on $rootScope probably isn't the right way to do this
 		$rootScope.settings = {};
 
 		function settingsChange(setting, new_value, old_value) {

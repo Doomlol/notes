@@ -9,7 +9,7 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="stylesheet", type="text/css", href="/stylesheets/pad.css")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
-	body(ng-controller="MainCtrl", class="font-{{settings.fontfamily}} theme-{{settings.theme}}", ng-class="{page_view:page_view, expanded:expanded, audio:show_audio}")
+	body(ng-controller="MainCtrl", class="font-{{settings.fontfamily}} theme-{{settings.theme}}", ng-class="{page_view:page_view, expanded:settings.expanded, audio:show_audio}")
 		div.pad
 			div.main_error
 			div.list
