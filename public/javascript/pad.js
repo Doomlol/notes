@@ -643,7 +643,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.settings = settings.settings;
 
 		$scope.initialize = function() {
-			auth_client = new FirebaseAuthClient(base_ref, function(error, user) {
+			auth_client = new FirebaseAuthClient(base_ref, function auth_cb(error, user) {
 				if (error)
 					$scope.authError(error);
 				else if (user)
@@ -1128,16 +1128,13 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			console.log('doing signup');
 			var email = $('#email_input').val();
 			var password = $('#password_input').val();
-			var authClient = new FirebaseAuthClient(base_ref);
 			if (!Utils.validate_email(email)) {
 				$scope.email_error = true;
 				return;
 			}
-			authClient.createUser(email, password, function(error, user) {
-				// Once firebase fixes 'error' to handle invalid email addresses,
-				// you'll need to switch on 'error == whatever'
+			auth_client.createUser(email, password, function(error, user) {
 				if (error) {
-					console.log('error signing up');
+					console.log('error signing up. error:', errpr);
 					$scope.signup_error = true;
 				}
 				else {
