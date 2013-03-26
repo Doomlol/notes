@@ -1133,6 +1133,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				return;
 			}
 			auth_client.createUser(email, password, function(error, user) {
+				console.log('createUser called back');
 				if (error) {
 					console.log('error signing up. error:', errpr);
 					$scope.signup_error = true;
