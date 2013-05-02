@@ -14,7 +14,8 @@ html(lang="en", ng-app="NotesApp")
 			div.main_error
 			div.list
 				div.opts
-					a#new.btn(ng-click="addNote()") New
+					//a#new.btn(ng-click="addNote()") New
+					a#new.btn(href="#/new") New
 					div.search(ng-class="search_invalid")
 						input(type="text", id="search", placeholder="Search regex", ng-model="query", enter="firstNote()", esc="query=''", down="nextNote()", up="prevNote()")
 						a.clear(ng-show="!!query", ng-click="query=''")

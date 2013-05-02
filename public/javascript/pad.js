@@ -902,6 +902,10 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.initialize();
 	})
 
+	.controller('NewNoteCtrl', function NewNoteCtrl($scope) {
+		$scope.enqueue($scope.addNote);
+	})
+
 	.controller('NoteCtrl', function NoteCtrl($scope, $element, $location, $routeParams, storage) {
 
 		$scope.setPageView(true);
@@ -1620,6 +1624,10 @@ angular.module('NotesApp', ['controllers', 'components'])
 			.when('/settings', {
 				templateUrl: '/partials/settings',
 				controller: 'SettingsCtrl'
+			})
+			.when('/new', {
+				templateUrl: '/partials/loading',
+				controller: 'NewNoteCtrl'
 			})
 			.when('/', {
 				templateUrl: '/partials/hello',
