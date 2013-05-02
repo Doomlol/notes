@@ -409,16 +409,17 @@ angular.module('FirebaseModule', [])
 
 				// Whether we're calling storage.get, or it's a remote db update,
 				// update the value of the note
-				note.updateValue(snapshot.val());
+				var snapshot_val = snapshot.val();
+				note.updateValue(snapshot_val);
 
 				// If we called storage.get, call the callback. Don't $apply - let that happen
 				// in the callback. Consider calling $apply if opts.success does not exist
 				if (!once) {
-					if (note.value && opts.success) {
+					if (snapshot_val && opts.success) {
 						//console.log('firebase.get success');
 						opts.success(note);
 					}
-					else if (!note.value && opts.failure) {
+					else if (!snapshot_val && opts.failure) {
 						console.log('firebase.get failure');
 						opts.failure();
 					}
@@ -1604,7 +1605,8 @@ angular.forEach(key_directives, function(val, key) {
 
 
 angular.module('NotesApp', ['controllers', 'components'])
-	.config(function($routeProvider) {
+	.config(function($routeProvider, $locationProvider) {
+		$locationProvider.html5Mode(true);
 		$routeProvider
 			.when('/note/:note_id', {
 				template: '<note></note>'
@@ -1634,8 +1636,8 @@ angular.module('NotesApp', ['controllers', 'components'])
 				controller: 'PageCtrl'
 			})
 			.otherwise({
-				//redirectTo: '/'
-				template: "Content does not exist"
+				redirectTo: '/'
+				//template: "Content does not exist"
 			});
 	});
 

@@ -15,11 +15,11 @@ html(lang="en", ng-app="NotesApp")
 			div.list
 				div.opts
 					//a#new.btn(ng-click="addNote()") New
-					a#new.btn(href="#/new") New
+					a#new.btn(href="/new") New
 					div.search(ng-class="search_invalid")
 						input(type="text", id="search", placeholder="Search regex", ng-model="query", enter="firstNote()", esc="query=''", down="nextNote()", up="prevNote()")
 						a.clear(ng-show="!!query", ng-click="query=''")
-					a.gear(href="#/settings")
+					a.gear(href="/settings")
 
 				p.label(ng-show="query && results.length") Results
 				p.label.red(ng-show="query && !results.length && !search_invalid") No results
@@ -35,8 +35,8 @@ html(lang="en", ng-app="NotesApp")
 					| No notes
 
 				div.status
-					a(ng-show="signed_in", href="#/login") Synced &mdash; {{user.email}}
-					a(ng-hide="signed_in", href="#/login") Local &mdash; Sign in
+					a(ng-show="signed_in", href="/login") Synced &mdash; {{user.email}}
+					a(ng-hide="signed_in", href="/login") Local &mdash; Sign in
 
 			div.editor(ng-view)
 
