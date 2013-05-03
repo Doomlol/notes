@@ -674,10 +674,11 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		// the queue won't be released. does that work?
 		$scope.enqueue = function(f) {
 			queue.push(f);
-			if ($scope.notes.length)
+			if ($scope.released)
 				$scope.releaseQueue();
 		}
 		$scope.releaseQueue = function() {
+			$scope.released = true;
 			while(queue.length)
 				queue.shift()();
 		}
