@@ -139,16 +139,42 @@ a.btn
 		background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0ab4f5), to(#049ee7))
 		background -moz-linear-gradient(top, #0ab4f5, #049ee7)
 
+div.loader
+	position fixed
+	margin 0 0 0 -60px
+	padding 8px 10px
+	top 10px
+	left 50%
+	width 100px
+	text-align center
+	text-shadow 0 1px 3px rgba(0,0,0,0.5)
+	//color #fff
+	//background #09c
+	background #fff
+	border-radius 3px
+	box-shadow 0 1px 3px rgba(0,0,0,0.25)
+	z-index 2
+
+	&.loaded
+		display none
+		//opacity 0
+		//transition opacity 0.25s ease-out
+
+
 div.pad
 	position absolute
+	display none
 	top 15px
 	left 15px
 	right 15px
 	bottom 15px
 	overflow hidden
 	box-shadow 0 1px 3px rgba(0,0,0,0.25)
-	transition-property top, left, right, bottom
+	transition-property top, left, right, bottom, opacity
 	transition-duration 0.5s
+
+	&.loaded
+		display block
 
 	div.main_error
 		display none

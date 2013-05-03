@@ -10,7 +10,9 @@ html(lang="en", ng-app="NotesApp")
 		link(rel="shortcut icon", href="/images/favicon.png")
 
 	body(ng-controller="MainCtrl", class="font-{{settings.fontfamily}} theme-{{settings.theme}}", ng-class="{page_view:page_view, expanded:settings.expanded, audio:show_audio}")
-		div.pad
+		div.loader(ng-class="{loaded:loaded}")
+			| Loading...
+		div.pad(ng-class="{loaded:loaded}")
 			div.main_error
 			div.list
 				div.opts

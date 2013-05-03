@@ -654,6 +654,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			});
 			// Observers
 			$scope.$watch('query', search.bind(this));
+			$scope.loaded = true;
 		}
 		$scope.set = function(key, value) {
 			$scope[key] = value;
@@ -877,7 +878,6 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		}
 
 		// Search
-
 		function search(new_query, old_query) {
 			$scope.results = [];
 			for (var i = 0; i < $scope.notes.length; i++) {
