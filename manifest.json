@@ -1,0 +1,13 @@
+{
+	"name": "Notes.fm",
+	"description": "A simple note-taking client",
+	"version": "0.1",
+	"app": {
+		"background": {
+			"scripts": []
+		}
+	},
+	"icons": {
+		
+	}
+}

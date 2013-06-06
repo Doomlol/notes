@@ -833,7 +833,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		// Signing in
 
 		$scope.authorized = function(user) {
-			console.log('authorized');
+			console.log('authorized. user:', user);
 			$scope.signed_in = true;
 			$scope.user = user;
 			// In the future this should be a call to a method that checks the sync/local
@@ -900,6 +900,17 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				}
 			}
 		}
+
+		/*
+		$scope.regexSearch = function(note) {
+			try {
+				var regexp = new RegExp($scope.query, 'i');
+			}
+			catch (e) {
+				console.log('regex is invalid');
+			}
+			return regexp.test(note.getTitle()) || regexp.test(note.getBody());
+		}*/
 
 		$scope.initialize();
 	})
@@ -1116,15 +1127,18 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			$scope.logging_in = !$scope.logging_in;
 		}
 		$scope.go = function() {
-			$scope.logging_in ? $scope.signIn() : $scope.signUp();
+			$scope.logging_in ? $scope.signIn('password') : $scope.signUp();
 		}
-		$scope.signIn = function() {
-			console.log('signing in...');
-			auth_client.login('password', {
-				rememberMe: true,
-				email: $('#email_input').val(),
-				password: $('#password_input').val()
-			});
+		$scope.signIn = function(method) {
+			console.log('Signing in with', method);
+			var options = {
+				rememberMe: true
+			};
+			if (method == 'password') {
+				options.email = $('#email_input').val();
+				options.password = $('#password_input').val();
+			}
+			auth_client.login(method, options);
 		}
 		$scope.signOut = function() {
 			console.log('sign out');
@@ -1485,102 +1499,116 @@ angular.module('components', [])
 		}
 	})
 	.directive('droppable', function() {
-
 		return function(scope, element, attrs) {
-
 			if (attrs.droppable !== 'true' || !scope.supportsAttachments())
 				return;
 
-			var picker = {
+			var conversion_options = [
+				{format: 'jpg', quality: 65, fit: 'crop', width: 100, height: 100},
+				{format: 'jpg', quality: 65, fit: 'crop', width: 40, height: 40}
+			];
+			function dragenter(e) {
+				$(element).addClass('droppable-hover');
+			}
+			function dragleave(e) {
+				$(element).removeClass('droppable-hover');
+			}
+			function dragover(e) {
+				e.preventDefault();
+			}
+			function drop(e) {
+				e.preventDefault();
+				$(element).removeClass('droppable-hover');
+				var data = {
+					id: Math.random(),
+					index: 0,
+					files: e.originalEvent.dataTransfer.files,
+					progres: 0
+				};
+				scope.note.uploads.push(data);
+				filepicker.store(
+					data.files[0],
+					upload_success.bind(data),
+					upload_error.bind(data),
+					upload_progress.bind(data)
+				);
+			}
 
-				// Since there's no way to identify multiple uploads, right now
-				// we can only allow one at a time
-				uploading: false,
-				upload_count: 0,
-				rand: Math.round(Math.random()*1000),
-				thumbs: {},
-				uploaded_fpfiles: null,
-				conversion_options: [
-					{format: 'jpg', quality: 65, fit: 'crop', width: 100, height: 100},
-					{format: 'jpg', quality: 65, fit: 'crop', width: 40, height: 40}
-				],
-				dragEnter: function() {
-					$(element).addClass('droppable-hover');
-				},
-				dragLeave: function() {
-					$(element).removeClass('droppable-hover');
-				},
-				onStart: function(files) {
-					this.uploading = true;
-					this.upload_count = files.length;
-					$(element).removeClass('droppable-hover');
-				},
-				onProgress: function(percentage) {
-					//console.log('onProgress', this.rand, percentage);
-					if (scope.note) {
-						scope.note.uploads = [
-							{count: this.upload_count, progress: percentage}
-						];
-						scope.$apply();
+			// "this" refers to the data object
+			function upload_progress(percentage) {
+				if (scope.note) {
+					for (var i = 0; i < scope.note.uploads.length; i++) {
+						var upload = scope.note.uploads[i];
+						if (upload.id == this.id)
+							upload.progress = percentage;
 					}
-				},
-				onSuccess: function(fpfiles) {
-					this.uploading = false;
-					if (scope.note) {
-						scope.note.uploads = [];
-					}
-					console.log('onSuccess', this.rand, fpfiles);
-					this.uploaded_fpfiles = fpfiles;
-					this.thumbs_remaining = (fpfiles.length * this.conversion_options.length);
+					scope.$apply();
+				}
+			}
 
-					// For every image uploaded
-					for (var i = 0; i < fpfiles.length; i++) {
-						var orig_fpfile = fpfiles[i];
-
-						// If it's an image, generate thumbs for each size
-						if (Utils.isFileType('image', orig_fpfile)) {
-							for (var j = 0; j < this.conversion_options.length; j++) {
-								var options = this.conversion_options[j];
-								filepicker.convert(
-									orig_fpfile,
-									options,
-									this.thumbConverted.bind(this, options, orig_fpfile)
-								);
-							}
-						}
-						// Otherwise, just attach it to the note
-						else {
-							scope.attach([orig_fpfile]);
-						}
-					}
-				},
-				onError: function(type, message) {
-					this.uploading = false;
-					console.log('onError', this.rand, type, message);
-				},
-				thumbConverted: function(options, orig_fpfile, new_fpfile) {
-					console.log('thumbConverted');
-					if (!this.thumbs[orig_fpfile.key])
-						this.thumbs[orig_fpfile.key] = {};
-					this.thumbs[orig_fpfile.key][options.width] = new_fpfile;
-					if (Object.keys(this.thumbs[orig_fpfile.key]).length == this.conversion_options.length) {
-						orig_fpfile.thumbs = this.thumbs[orig_fpfile.key];
-						console.log('calling scope.attach with', [orig_fpfile]);
-						scope.attach([orig_fpfile]);
+			// "this" refers to the data object
+			function upload_success(FPFile) {
+				// If the uploaded file is an image type, process thumbnails first
+				if (Utils.isFileType('image', FPFile)) {
+					for (var i = 0; i < conversion_options.length; i++) {
+						var options = conversion_options[i];
+						filepicker.convert(
+							FPFile,
+							options,
+							thumbConverted.bind(this, options, FPFile)
+						);
 					}
 				}
-			};
-			var drop_pane_options = {
-				multiple:        true,
-				store_location:  'S3',
-				dragEnter:       picker.dragEnter.bind(picker),
-				dragLeave:       picker.dragLeave.bind(picker),
-				onStart:         picker.onStart.bind(picker),
-				onProgress:      picker.onProgress.bind(picker),
-				onSuccess:       picker.onSuccess.bind(picker),
-				onError:         picker.onError.bind(picker)
-			};
-			filepicker.makeDropPane($(element), drop_pane_options);
+				// If the uploaded file isn't an image, just attach it to the note
+				else {
+					scope.attach([FPFile]);
+				}
+				// If there are more files in this set, process them
+				if (this.index < this.files.length-1) {
+					this.index = this.index + 1;
+					filepicker.store(
+						this.files[this.index],
+						upload_success.bind(this),
+						upload_error.bind(this),
+						upload_progress.bind(this)
+					);
+				}
+				// If there are no more files in this set, remove the set from note.uploads
+				else {
+					if (scope.note) {
+						for (var i = 0; i < scope.note.uploads.length; i++) {
+							var upload = scope.note.uploads[i];
+							if (upload.id == this.id) {
+								scope.note.uploads = scope.note.uploads.slice(0,i).concat(scope.note.uploads.slice(i+1));
+								break;
+							}
+						}
+					}
+					scope.$apply();
+				}
+			}
+
+			// "this" refers to the data object
+			function upload_error(FPError) {
+				console.log('upload error', FPError);
+			}
+
+			// "this" should be the data object
+			function thumbConverted(options, orig_fpfile, new_fpfile) {
+				this.thumbs = this.thumbs || {};
+				this.thumbs[orig_fpfile.key] = this.thumbs[orig_fpfile.key] || {};
+				this.thumbs[orig_fpfile.key][options.width] = new_fpfile;
+				if (Object.keys(this.thumbs[orig_fpfile.key]).length == conversion_options.length) {
+					orig_fpfile.thumbs = this.thumbs[orig_fpfile.key];
+					console.log('calling scope.attach with', [orig_fpfile]);
+					scope.attach([orig_fpfile]);
+				}
+			}
+
+			$(element).on('dragenter', dragenter);
+			$(element).on('dragleave', dragleave);
+			$(element).on('dragover', dragover);
+			$(element).on('drop', drop);
 		}
 	});
 

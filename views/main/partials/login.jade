@@ -7,7 +7,7 @@ div.page.login
 
 	div(ng-show="signed_in")
 		p Congrats, you're signed in.
-		p {{user.email}} (id: {{user.id}})
+		p {{user.username || user.email}} (id: {{user.id}}, method: {{user.provider}})
 		a(ng-click="signOut()") Sign out
 
 	// Sign in
@@ -33,6 +33,11 @@ div.page.login
 			input(ng-show="logging_in", type="submit", value="Sign in")
 			input(ng-hide="logging_in", type="submit", value="Create")
 
+		p: a(ng-click="signIn('github')") Sign in with GitHub
+		p: a(ng-click="signIn('twitter')") Sign in with Twitter
+		p: a(ng-click="signIn('facebook')") Sign in with Facebook
+
+		br
 		p
 			a(ng-show="logging_in", ng-click="toggleLogin()") Sign up instead
 			a(ng-hide="logging_in", ng-click="toggleLogin()") Sign in instead

@@ -27,6 +27,6 @@ div.attachments.light.clearfix(ng-show="showAttachments()")
 	
 	div.upload(ng-repeat="upload in note.uploads")
 		div.absolute
-			h3 {{upload.count}} files
+			h3 {{upload.index+1}}/{{upload.files.length}} files
 			div.bar
 				div.progress(ng-style="{width: upload.progress + '%'}")

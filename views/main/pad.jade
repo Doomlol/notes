@@ -37,8 +37,8 @@ html(lang="en", ng-app="NotesApp")
 					| No notes
 
 				div.status
-					a(ng-show="signed_in", href="/login") Synced &mdash; {{user.email}}
-					a(ng-hide="signed_in", href="/login") Local &mdash; Sign in
+					a(ng-show="signed_in", href="/login") {{user.username || user.email}} ({{user.provider}})
+					a(ng-hide="signed_in", href="/login") Sign in
 
 			div.editor(ng-view)
 

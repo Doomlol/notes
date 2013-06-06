@@ -9,6 +9,6 @@ div.basic(ng-click="loadNote(note.getId())")
 
 div.uploads(class="uploading-{{note.uploads.length > 0}}")
 	div(ng-repeat="upload in note.uploads")
-		h3 {{upload.count}} files
+		h3 {{upload.index+1}}/{{upload.files.length}} files
 		div.bar
 			div.progress(ng-style="{width: upload.progress + '%'}")
