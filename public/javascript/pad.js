@@ -485,7 +485,6 @@ angular.module('FirebaseModule', [])
 			});
 		};
 		this.edit = function(opts) {
-			console.log('edit opts', opts);
 			var item = opts.item;
 			this.user_ref.child(item.id).update(item, function(error, dummy) {
 				// does opts need to be bound to this function for confusion not to occur?
@@ -833,7 +832,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		// Signing in
 
 		$scope.authorized = function(user) {
-			console.log('authorized. user:', user);
+			console.log('authorized');
 			$scope.signed_in = true;
 			$scope.user = user;
 			// In the future this should be a call to a method that checks the sync/local
@@ -967,23 +966,19 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			$scope.saved = false;
 			$scope.timeoutSave();
 		}
-
 		// Watch the body and save when changes are made
 		$scope.watchChanges = function() {
 			$scope.$watch('note.getTitle()', noteChange);
 			$scope.$watch('note.getBody()', noteChange);
 		}
-
 		// Allow for two seconds to pass before saving
 		$scope.timeoutSave = function() {
 			clearTimeout($scope.save_timeout);
 			$scope.save_timeout = setTimeout($scope.save, 2000);
 		}
-
 		$scope.supportsAttachments = function() {
 			return storage.synced;
 		}
-
 		// Used in the template to determine whether to show or hide attachments box.
 		// This function is messy - why's it called like 6 times on a note load?
 		$scope.showAttachments = function() {
