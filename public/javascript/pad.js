@@ -642,6 +642,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		$scope.user = {};
 		$scope.settings = settings.settings;
 
+		$scope.$on('$routeChangeStart', function() { /* do nothing */ });
+		$scope.$on('$routeChangeSuccess', function() { /* do nothing */ });
+
 		$scope.initialize = function() {
 			auth_client = new FirebaseAuthClient(base_ref, function auth_cb(error, user) {
 				if (error)
@@ -651,9 +654,9 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 				else
 					$scope.unauthorized();
 			});
+			$scope.loaded = true;
 			// Observers
 			$scope.$watch('query', search.bind(this));
-			$scope.loaded = true;
 		}
 		$scope.set = function(key, value) {
 			$scope[key] = value;
@@ -900,14 +903,10 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			}
 		}
 
-		/*
-		$scope.regexSearch = function(note) {
-			try {
-				var regexp = new RegExp($scope.query, 'i');
-			}
-			catch (e) {
-				console.log('regex is invalid');
-			}
+		// Used with filter
+		/* $scope.regexSearch = function(note) {
+			try { var regexp = new RegExp($scope.query, 'i'); }
+			catch (e) { console.log('regex is invalid'); }
 			return regexp.test(note.getTitle()) || regexp.test(note.getBody());
 		}*/
 
