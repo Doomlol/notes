@@ -404,6 +404,7 @@ angular.module('FirebaseModule', [])
 			var note_ref = this.user_ref.child(opts.id);
 			var once = false;
 			note_ref.off('value');
+			note_ref.update({viewed_at: Utils.getCurrentTimestamp()});
 			note_ref.on('value', function(snapshot) {
 				//console.log('ref.on callback fired');
 
@@ -813,6 +814,30 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 			if (notes.length)
 				$scope.firstNote();
 		}
+		$scope.lastViewedNote = function() {
+			var note = null;
+			angular.forEach($scope.notes, function(n, key) {
+				var viewed_at = n.getValue().viewed_at || 0;
+				if (!note || viewed_at > note.getValue().viewed_at)
+					note = n;
+			})
+			if (note) {
+				$scope.loadNote(note.getId());
+				console.log('lastViewedNote:', note.getValue());
+			}
+		}
+		$scope.lastUpdatedNote = function() {
+			var note = null;
+			angular.forEach($scope.notes, function(n, key) {
+				var updated_at = n.getValue().updated_at || 0;
+				if (!note || updated_at > note.getValue().updated_at)
+					note = n;
+			});
+			if (note) {
+				$scope.loadNote(note.getId());
+				console.log('lastUpdatedNote:', note.getValue());
+			}
+		}
 		$scope.setPageView = function(val) {
 			if ($location.path() == '/') {
 				$scope.page_view = false;
@@ -875,7 +900,12 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 					$scope.addNote();
 					break;
 				case 4:
-					console.log('last viewed note... (not implemented)');
+					console.log('last viewed note...');
+					$scope.lastViewedNote();
+					break;
+				case 5:
+					console.log('last updated note...');
+					$scope.lastUpdatedNote();
 					break;
 			}
 		}
@@ -989,6 +1019,7 @@ angular.module('controllers', ['NotesHelperModule', 'AudioManagerModule'])
 		// Save the current note
 		$scope.save = function() {
 			if ($scope.note) {
+				$scope.note.value.updated_at = Utils.getCurrentTimestamp();
 				storage.edit({
 					item: $scope.note.getContent(),
 					success: function() {
